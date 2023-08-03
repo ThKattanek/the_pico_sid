@@ -13,7 +13,9 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
-  main.c
+  main.c /
+  sid.c /
+  sid.h
 )
 
 # Make the stdio functions use USB rather than the serial pins
