@@ -1,0 +1,9 @@
+ 
+ SID   |  GPIO      | DIR
+ ------+------------+-----
+ RES   |  2         | IN
+ CKL   |  3         | IN
+ RW    |  4         | IN
+ CS    |  5         | IN
+ A0-A4 |  6 - 10    | IN
+ D0-D7 |  11 - 18   | IN
