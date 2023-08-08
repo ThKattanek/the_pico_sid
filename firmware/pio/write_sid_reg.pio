@@ -1,0 +1,43 @@
+//////////////////////////////////////////////////
+//                                              //
+// ThePicoSID                                   //
+// von Thorsten Kattanek                        //
+//                                              //
+// #file: /pio/write_sid_reg.pio                //
+//                                              //
+// https://github.com/ThKattanek/the_pico_sid   //
+//                                              //
+//////////////////////////////////////////////////;
+
+.program write_sid_reg
+	pull block
+	out y,1
+
+.wrap_target
+
+
+
+  ; Funktioniert und erzeugt einen IRQ bei fallender Flanke (Direkt GPIO5)
+    wait 0 pin 5
+    irq 0
+    wait 1 pin 5
+
+.wrap             
+
+% c-sdk {
+// this is a raw helper function for use by the user which sets up the GPIO output, and configures the SM to output on a particular pin
+
+void write_sid_reg_program_init(PIO pio, uint sm, uint offset, uint cs_pin) {
+   pio_gpio_init(pio, cs_pin);
+
+   pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 1, false);
+   pio_sm_config c = write_sid_reg_program_get_default_config(offset);
+
+    sm_config_set_in_shift(&c,
+                           false, // don't shift right
+                           false, // don't autopush
+                           32);   // push threshold (doesn't matter)
+
+   pio_sm_init(pio, sm, offset, &c);
+}
+%}
