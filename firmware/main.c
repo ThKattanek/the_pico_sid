@@ -26,7 +26,6 @@ const uint RW_PIN = 4;
 const uint CS_PIN = 5;
 
 volatile static bool reset_state = true;
-
 int main() {
     bi_decl(bi_program_description("The Pico SID"));
     bi_decl(bi_1pin_with_name(PICO_DEFAULT_LED_PIN, "On-board LED"));
@@ -35,7 +34,7 @@ int main() {
     bi_decl(bi_1pin_with_name(RW_PIN, "C64 SID RW"));
     bi_decl(bi_1pin_with_name(CS_PIN, "C64 SID Chip Select"));
 
-    stdio_init_all();
+    stdio_init_all();	
 
 	// PIO Program initialize
 	PIO pio = pio0;
@@ -43,10 +42,7 @@ int main() {
 	uint offset = pio_add_program(pio, &write_sid_reg_program);
 	uint sm = pio_claim_unused_sm(pio, true);
 
-	write_sid_reg_program_init(pio, sm, offset, CS_PIN);
-	pio_sm_set_enabled(pio, sm, true);
-
-	pio->txf[sm] = 0;	
+	write_sid_reg_program_init(pio, sm, offset, CLK_PIN, CS_PIN);
 	
 	printf("The Pico SID by Thorsten Kattanek\n");
  

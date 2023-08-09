@@ -10,34 +10,50 @@
 //////////////////////////////////////////////////;
 
 .program write_sid_reg
-	pull block
-	out y,1
 
+	set y, 0x01		;CLK = 1 and RW = 0
+	
 .wrap_target
+wait_to_cs_low:
+	jmp pin wait_to_cs_low
+ 
+	out isr, 2
+	in pins, 2
+	mov x, isr
+	jmp x!=y, wait_to_cs_high
 
-
-
-  ; Funktioniert und erzeugt einen IRQ bei fallender Flanke (Direkt GPIO5)
-    wait 0 pin 5
     irq 0
-    wait 1 pin 5
 
+wait_to_cs_high:
+	jmp pin wait_to_cs_low
+	jmp wait_to_cs_high
 .wrap             
 
 % c-sdk {
 // this is a raw helper function for use by the user which sets up the GPIO output, and configures the SM to output on a particular pin
 
-void write_sid_reg_program_init(PIO pio, uint sm, uint offset, uint cs_pin) {
-   pio_gpio_init(pio, cs_pin);
-
-   pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 1, false);
+void write_sid_reg_program_init(PIO pio, uint sm, uint offset, uint clk_pin, uint cs_pin) {
+   
    pio_sm_config c = write_sid_reg_program_get_default_config(offset);
 
-    sm_config_set_in_shift(&c,
+   // config CLK and RW Signal
+   sm_config_set_in_pins(&c, clk_pin);
+   pio_gpio_init(pio, clk_pin);
+   pio_gpio_init(pio, clk_pin + 1);
+   pio_sm_set_consecutive_pindirs(pio, sm, clk_pin, 2, GPIO_IN);
+
+   // config CS Signal
+   pio_gpio_init(pio, cs_pin);
+   pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 1, GPIO_IN);   
+   sm_config_set_jmp_pin(&c, cs_pin);
+
+
+	sm_config_set_in_shift(&c,
                            false, // don't shift right
                            false, // don't autopush
-                           32);   // push threshold (doesn't matter)
+                           2);   // push threshold (doesn't matter)
 
    pio_sm_init(pio, sm, offset, &c);
+   pio_sm_set_enabled(pio, sm, true);
 }
 %}
