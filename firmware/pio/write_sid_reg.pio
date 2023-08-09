@@ -23,7 +23,7 @@ wait_to_cs_low:
 	jmp x!=y, wait_to_cs_high
 
 	in pins, 15
-	push block
+	push
 	out isr, 15
 
     irq 0
