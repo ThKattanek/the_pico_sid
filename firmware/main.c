@@ -99,7 +99,7 @@ void PWMMInterruptHandler()
 	float out_sample2 = OscGetOutput(&sid1.Osc[1]) / (float)0xfff;
 	float out_sample3 = OscGetOutput(&sid1.Osc[2]) / (float)0xfff;
 
-	float out_sample = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x3ff;
+	float out_sample = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x7ff;
 
 	pwm_set_gpio_level(AUDIO_PIN, out_sample);
 }
@@ -125,8 +125,8 @@ void InitPWMAudio(uint audio_out_gpio)
      *  3.9f  for 44,355 KHz
      */
 	pwm_config_set_clkdiv_mode(&config, PWM_DIV_FREE_RUNNING);
-    pwm_config_set_clkdiv(&config, 3.9f); 
-    pwm_config_set_wrap(&config, 1023); 		// 10 Bit
+    pwm_config_set_clkdiv(&config, 1.98f); 
+    pwm_config_set_wrap(&config, 2047); 		// 11 Bit
     pwm_init(audio_pin_slice, &config, true);
 
     pwm_set_gpio_level(audio_out_gpio, 0);
