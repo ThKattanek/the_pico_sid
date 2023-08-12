@@ -11,6 +11,9 @@
 
 #include <stdio.h>
 #include <pico/stdlib.h>
+#include <hardware/irq.h>
+#include <hardware/pwm.h>
+#include <hardware/sync.h>
 #include <hardware/gpio.h>
 #include <hardware/pio.h>
 #include <hardware/clocks.h>
@@ -18,20 +21,24 @@
 
 #include "write_sid_reg.pio.h"
 
-#include "./sid.h"
+#include "sid.h"
 
-const uint RES_PIN = 2;
-const uint CS_PIN = 3;
-const uint CLK_PIN = 4;
-const uint RW_PIN = 5;
+#define RES_PIN 2
+#define CS_PIN 3
+#define CLK_PIN 4
+#define RW_PIN 5
 
-const uint A0_PIN = 6;
-const uint A1_PIN = 7;
-const uint A2_PIN = 8;
-const uint A3_PIN = 9;
-const uint A4_PIN = 10;
+#define AUDIO_PIN 28
 
 volatile static bool reset_state = true;
+
+bool AudioCallback();
+void InitPWMAudio(uint audio_out_gpio);
+
+float *sound_buffer;
+
+SID sid1;
+
 int main() {
     bi_decl(bi_program_description("The Pico SID"));
     bi_decl(bi_1pin_with_name(PICO_DEFAULT_LED_PIN, "On-board LED"));
@@ -40,9 +47,9 @@ int main() {
     bi_decl(bi_1pin_with_name(RW_PIN, "C64 SID RW"));
     bi_decl(bi_1pin_with_name(CS_PIN, "C64 SID Chip Select"));
 
-	set_sys_clock_khz(125000, true);
+	set_sys_clock_khz(176000, true);
 
-    stdio_init_all();	
+	stdio_init_all();	
 
 	// PIO Program initialize
 	PIO pio = pio0;
@@ -50,27 +57,77 @@ int main() {
 	uint offset = pio_add_program(pio, &write_sid_reg_program);
 	uint sm = pio_claim_unused_sm(pio, true);
 
-	write_sid_reg_program_init(pio, sm, offset, CLK_PIN, CS_PIN);	//CLK_PIN + RW + A0-A4 +
-	
-	printf("The Pico SID by Thorsten Kattanek\n");
- 
-    SidReset();
+	write_sid_reg_program_init(pio, sm, offset, CLK_PIN, CS_PIN);	//CLK_PIN + RW_PIN + A0-A4 + D0-D7 all PIN Count is 15
 
-	uint8_t old = 0;
+	InitPWMAudio(AUDIO_PIN);
+	
+	printf("The Pico SID by Thorsten Kattanek 1\n");
 
     while (1)
     {
 		while (!(pio->irq & (1<<0))); 		// wait for irq 1 fro either of the pio programs
     		pio_interrupt_clear(pio, 0); 	// clear the irq so we can wait for it again
 		
-		// uint16_t value = pio->rxf[sm]; 
-
-		uint8_t value = (pio->rxf[sm] >> 7) & 0xff; 
-
-		if(((old+1)&0xff) != value)
-			printf("ERROR%2.2X\n", value);
-		old = value;
-
-		//printf("SID REG: %2.2X <-'%d'\n", (value >> 2) & 0x1f, (value >> 7) & 0xff);
+		uint16_t value = pio->rxf[sm];
+		SidWriteReg(&sid1, value >> 2, value >> 7);
     }
+}
+
+void PWMMInterruptHandler() 
+{
+    pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN));   
+
+#ifdef SID_CYCLE_EXACT
+
+	for(int i=0; i<22; i++)
+	{
+		OscOneCycle(&sid1.Osc[0]);
+		OscOneCycle(&sid1.Osc[1]);
+		OscOneCycle(&sid1.Osc[2]);
+	}
+
+#else
+
+	OscExecuteCycles(&sid1.Osc[0], 22);
+	OscExecuteCycles(&sid1.Osc[1], 22);
+	OscExecuteCycles(&sid1.Osc[2], 22);
+
+#endif
+
+	// 10 Bit Sample schreiben	
+	float out_sample1 = OscGetOutput(&sid1.Osc[0]) / (float)0xfff;
+	float out_sample2 = OscGetOutput(&sid1.Osc[1]) / (float)0xfff;
+	float out_sample3 = OscGetOutput(&sid1.Osc[2]) / (float)0xfff;
+
+	float out_sample = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x3ff;
+
+	pwm_set_gpio_level(AUDIO_PIN, out_sample);
+}
+
+void InitPWMAudio(uint audio_out_gpio)
+{
+	gpio_set_function(audio_out_gpio, GPIO_FUNC_PWM);
+	int audio_pin_slice = pwm_gpio_to_slice_num(audio_out_gpio);
+
+	// Setup PWM interrupt to fire when PWM cycle is complete
+    pwm_clear_irq(audio_pin_slice);
+    pwm_set_irq_enabled(audio_pin_slice, true);
+    // set the handle function above
+    irq_set_exclusive_handler(PWM_IRQ_WRAP, PWMMInterruptHandler); 
+    irq_set_enabled(PWM_IRQ_WRAP, true);
+
+    // Setup PWM for audio output
+    pwm_config config = pwm_get_default_config();
+    /* Base clock 176,000,000 Hz divide by wrap 1023 then the clock divider further divides
+     * So clkdiv should be as follows for given sample rate
+     *  15.6f for 11,089 KHz
+     *  7.8f  for 22,177 KHz
+     *  3.9f  for 44,355 KHz
+     */
+	pwm_config_set_clkdiv_mode(&config, PWM_DIV_FREE_RUNNING);
+    pwm_config_set_clkdiv(&config, 3.9f); 
+    pwm_config_set_wrap(&config, 1023); 		// 10 Bit
+    pwm_init(audio_pin_slice, &config, true);
+
+    pwm_set_gpio_level(audio_out_gpio, 0);
 }
