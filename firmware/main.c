@@ -86,6 +86,10 @@ void PWMMInterruptHandler()
 		OscOneCycle(&sid1.Osc[0]);
 		OscOneCycle(&sid1.Osc[1]);
 		OscOneCycle(&sid1.Osc[2]);
+
+		EnvOneCycle(&sid1.Env[0]);
+		EnvOneCycle(&sid1.Env[1]);
+		EnvOneCycle(&sid1.Env[2]);
 	}
 
 #else
@@ -94,6 +98,10 @@ void PWMMInterruptHandler()
 	OscExecuteCycles(&sid1.Osc[1], 22);
 	OscExecuteCycles(&sid1.Osc[2], 22);
 
+	EnvExecuteCycles(&sid1.Env[0], 22);
+	EnvExecuteCycles(&sid1.Env[1], 22);
+	EnvExecuteCycles(&sid1.Env[2], 22);
+
 #endif
 
 	// 10 Bit Sample schreiben	
@@ -101,7 +109,12 @@ void PWMMInterruptHandler()
 	float out_sample2 = OscGetOutput(&sid1.Osc[1]) / (float)0xfff;
 	float out_sample3 = OscGetOutput(&sid1.Osc[2]) / (float)0xfff;
 
+	out_sample1 *= EnvGetOutput(&sid1.Env[0]) / (float)0xff;
+	out_sample2 *= EnvGetOutput(&sid1.Env[1]) / (float)0xff;
+	out_sample3 *= EnvGetOutput(&sid1.Env[2]) / (float)0xff;
+
 	float out_sample = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x7ff * sid1.VolumeOut;
+	//float out_sample = ((out_sample1 + out_sample2)/ 2.0f) * 0x7ff * sid1.VolumeOut;
 
 	pwm_set_gpio_level(AUDIO_PIN, out_sample);
 }

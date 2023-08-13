@@ -12,11 +12,11 @@
 #include "osc.h"
 #include "waves.h"
 
-inline void OscReset(OSC *osc)
+inline void OscReset(OSC* osc)
 {
     osc->FrequenzCounter = 0;
 	osc->FrequenzCounterOld = 0;
-    osc->ShiftRegister = 0x7FFFF8;
+    osc->ShiftRegister = 0x7ffff8;
     osc->FrequenzAdd = 0;
     osc->PulseCompare = 0;
     osc->WaveForm = 0;
@@ -39,16 +39,17 @@ inline void OscSetControlBits(OSC* osc, uint8_t ctrlbits)
         osc->FrequenzCounter = 0;
     	osc->ShiftRegister = 0;
     }
-    else if(osc->TestBit) osc->ShiftRegister = 0x7FFFF8;
+    else if(osc->TestBit) 
+		osc->ShiftRegister = 0x7FFFF8;
 
     osc->TestBit = (ctrlbits & 0x08) >> 3;
     osc->RingBit = (ctrlbits & 0x04) >> 2;
     osc->SyncBit = (ctrlbits & 0x02) >> 1;	
 }
 
-void OscSetPulesCompare(OSC* osc, uint16_t pulsecompare)
+inline void OscSetPulesCompare(OSC* osc, uint16_t pulsecompare)
 {
-    osc->PulseCompare = pulsecompare & 0xFFF;
+    osc->PulseCompare = pulsecompare & 0xfff;
 }
 
 inline uint16_t OscGetDreieck(OSC* osc)
@@ -62,7 +63,7 @@ inline uint16_t OscGetDreieck(OSC* osc)
 #endif
 		MSB = osc->FrequenzCounter & 0x800000;
 
-    return ((MSB)?(~osc->FrequenzCounter >> 11) : (osc->FrequenzCounter >> 11)) & 0xFFF;
+    return ((MSB)?(~osc->FrequenzCounter >> 11) : (osc->FrequenzCounter >> 11)) & 0xfff;
 }
 
 inline uint16_t OscGetOutput(OSC* osc)
@@ -101,7 +102,7 @@ inline void OscOneCycle(OSC* osc)
     {
         osc->FrequenzCounterOld = osc->FrequenzCounter;
         osc->FrequenzCounter += osc->FrequenzAdd;
-        osc->FrequenzCounter &= 0xFFFFFF;
+        osc->FrequenzCounter &= 0xffffff;
     }
 
     osc->FrequenzCounterMsbRising = !(osc->FrequenzCounterOld & 0x800000) && (osc->FrequenzCounter & 0x800000);
@@ -109,7 +110,7 @@ inline void OscOneCycle(OSC* osc)
     if(!(osc->FrequenzCounterOld & 0x080000) && (osc->FrequenzCounter & 0x080000))
     {
         osc->Bit0 = ((osc->ShiftRegister >> 22) ^ (osc->ShiftRegister >> 17)) & 0x01;
-        osc->ShiftRegister = ((osc->ShiftRegister << 1) & 0x7FFFFF) | osc->Bit0;
+        osc->ShiftRegister = ((osc->ShiftRegister << 1) & 0x7fffff) | osc->Bit0;
     }
 
 	OSC* osc_source = osc->OscSource;
@@ -118,9 +119,7 @@ inline void OscOneCycle(OSC* osc)
     /// Oscilltor mit Source Sycronisieren ?? ///
 #ifndef DISABLE_SYNC
     if (osc->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc->SyncBit && osc_source->FrequenzCounterMsbRising))
-    {
         osc_destination->FrequenzCounter = 0;
-    }
 #endif
 }
 
@@ -130,7 +129,7 @@ inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
     {
         osc->FrequenzCounterOld = osc->FrequenzCounter;
         osc->FrequenzCounter += osc->FrequenzAdd * cycles;
-        osc->FrequenzCounter &= 0xFFFFFF;
+        osc->FrequenzCounter &= 0xffffff;
     }
 
     osc->FrequenzCounterMsbRising = !(osc->FrequenzCounterOld & 0x800000) && (osc->FrequenzCounter & 0x800000);
@@ -138,7 +137,7 @@ inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
     if(!(osc->FrequenzCounterOld & 0x080000) && (osc->FrequenzCounter & 0x080000))
     {
         osc->Bit0 = ((osc->ShiftRegister >> 22) ^ (osc->ShiftRegister >> 17)) & 0x01;
-        osc->ShiftRegister = ((osc->ShiftRegister << 1) & 0x7FFFFF) | osc->Bit0;
+        osc->ShiftRegister = ((osc->ShiftRegister << 1) & 0x7fffff) | osc->Bit0;
     }
 
 	OSC* osc_source = osc->OscSource;
@@ -147,8 +146,6 @@ inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
     /// Oscilltor mit Source Sycronisieren ?? ///
 #ifndef DISABLE_SYNC
     if (osc->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc->SyncBit && osc_source->FrequenzCounterMsbRising))
-    {
         osc_destination->FrequenzCounter = 0;
-    }
 #endif
 }

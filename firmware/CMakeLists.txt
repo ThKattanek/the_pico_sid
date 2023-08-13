@@ -22,6 +22,8 @@ add_executable(${PROJECT_NAME}
   sid.h /
   osc.c /
   osc.h /
+  env.c /
+  env.h
 )
 
 pico_generate_pio_header(${PROJECT_NAME}

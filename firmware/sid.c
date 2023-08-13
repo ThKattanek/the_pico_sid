@@ -51,9 +51,9 @@ inline void SidReset(SID *sid)
 	OscReset(&sid->Osc[1]);
 	OscReset(&sid->Osc[2]);
 
-    //ENV[0]->Reset();
-    //ENV[1]->Reset();
-    //ENV[2]->Reset();
+	EnvReset(&sid->Env[0]);
+	EnvReset(&sid->Env[1]);
+	EnvReset(&sid->Env[2]);
 
     //Filter->Reset();	
 }
@@ -83,13 +83,13 @@ inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
     case 4: // Steuerregister Stimme 1
         sid->Ctrl0 = value;
 		OscSetControlBits(&sid->Osc[0], sid->Ctrl0);
-        //ENV[0]->SetKeyBit(value & 0x01);
+		EnvSetKeyBit(&sid->Env[0], value & 0x01);
         break;
     case 5: // Attack & Decay Stimme 1
-        //ENV[0]->SetAttackDecay(value);
+        EnvSetAttackDecay(&sid->Env[0], value);
         break;
     case 6: // Sustain & Release Stimme 1
-        //ENV[0]->SetSustainRelease(value);
+        EnvSetSustainRelease(&sid->Env[0], value);
         break;
     case 7: // Oszillatorfrequenz LoByte Stimme 2
         sid->Freq1Lo = value;
@@ -110,13 +110,13 @@ inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
     case 11: // Steuerregister Stimme 2
         sid->Ctrl1 = value;
         OscSetControlBits(&sid->Osc[1], sid->Ctrl1);
-        //ENV[1]->SetKeyBit(wert & 0x01);
+		EnvSetKeyBit(&sid->Env[1], value & 0x01);
         break;
     case 12: // Attack & Decay Stimme 2
-        //ENV[1]->SetAttackDecay(value);
+		EnvSetAttackDecay(&sid->Env[1], value);
         break;
     case 13: // Sustain & Release Stimme 2
-        //ENV[1]->SetSustainRelease(value);
+        EnvSetSustainRelease(&sid->Env[1], value);
         break;
     case 14: // Oszillatorfrequenz LoByte Stimme 3
         sid->Freq2Lo = value;
@@ -137,13 +137,13 @@ inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
     case 18: // Steuerregister Stimme 3
         sid->Ctrl2 = value;
         OscSetControlBits(&sid->Osc[2], sid->Ctrl2);
-        //ENV[2]->SetKeyBit(wert & 0x01);
+		EnvSetKeyBit(&sid->Env[2], value & 0x01);
         break;
-    case 19: // Attack & Decay Stimme 2
-        //ENV[2]->SetAttackDecay(value);
+    case 19: // Attack & Decay Stimme 3
+        EnvSetAttackDecay(&sid->Env[2], value);
         break;
-    case 20: // Sustain & Release Stimme 2
-        //ENV[2]->SetSustainRelease(value);
+    case 20: // Sustain & Release Stimme 3
+		EnvSetSustainRelease(&sid->Env[2], value);
         break;
     case 21: // Filterfrequenz LoByte
         sid->FilterFreqLo = value;
