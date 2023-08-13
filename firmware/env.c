@@ -148,6 +148,170 @@ inline void EnvOneCycle(ENV* env)
 
 inline void EnvExecuteCycles(ENV* env, uint8_t cycles)
 {
+	///////////////////// VOICE 1 //////////////////// 
+
+	env->RateCounter += cycles;
+	if(env->RateCounter & 0x8000) 
+	{
+		env->RateCounter += cycles;
+		env->RateCounter &= 0x7fff;
+	}
+
+	if(env->RateCounter >= env->RatePeriod)
+	{
+        env->RateCounter -= env->RateCounter;
+
+		env->ExponentialCounter++;
+        if(env->State == ATTACK || env->ExponentialCounter == env->ExponentialCounterPeriod)
+        {
+            env->ExponentialCounter = 0;
+
+            if(!env->HoldZero)
+            {
+                switch(env->State)
+                {
+                case ATTACK:
+					env->EnvCounter++;
+                    env->EnvCounter &= 0xff;
+                    if(env->EnvCounter == 0xff)
+                    {
+                        env->State = DECAY_SUSTAIN;
+                        env->RatePeriod = RateCounterPeriod[env->Decay];
+                    }
+                    break;
+
+                case DECAY_SUSTAIN:
+                    if(env->EnvCounter != SustainLevel[env->Sustain])
+					{
+						env->EnvCounter--;
+					}
+                    break;
+
+                case RELEASE:
+					env->EnvCounter--;
+                    env->EnvCounter &= 0xff;
+                    break;
+                }
+
+                switch(env->EnvCounter)
+                {
+                case 0xFF:
+                    env->ExponentialCounterPeriod = 1;
+                    break;
+
+                case 0x5D:
+                    env->ExponentialCounterPeriod = 2;
+                    break;
+
+                case 0x36:
+                    env->ExponentialCounterPeriod = 4;
+                    break;
+
+                case 0x1A:
+                    env->ExponentialCounterPeriod = 8;
+                    break;
+
+                case 0x0E:
+                    env->ExponentialCounterPeriod = 16;
+                    break;
+
+                case 0x06:
+                    env->ExponentialCounterPeriod = 30;
+                    break;
+
+                case 0x00:
+                    env->ExponentialCounterPeriod = 1;
+                    env->HoldZero = true;
+                    break;
+                }
+            }
+        }
+    }
+
+	///////////////////// VOICE 2 //////////////////// 
+
+	env++;
+	env->RateCounter += cycles;
+	if(env->RateCounter & 0x8000) 
+	{
+		env->RateCounter += cycles;
+		env->RateCounter &= 0x7fff;
+	}
+
+	if(env->RateCounter >= env->RatePeriod)
+	{
+        env->RateCounter -= env->RateCounter;
+
+		env->ExponentialCounter++;
+        if(env->State == ATTACK || env->ExponentialCounter == env->ExponentialCounterPeriod)
+        {
+            env->ExponentialCounter = 0;
+
+            if(!env->HoldZero)
+            {
+                switch(env->State)
+                {
+                case ATTACK:
+					env->EnvCounter++;
+                    env->EnvCounter &= 0xff;
+                    if(env->EnvCounter == 0xff)
+                    {
+                        env->State = DECAY_SUSTAIN;
+                        env->RatePeriod = RateCounterPeriod[env->Decay];
+                    }
+                    break;
+
+                case DECAY_SUSTAIN:
+                    if(env->EnvCounter != SustainLevel[env->Sustain])
+					{
+						env->EnvCounter--;
+					}
+                    break;
+
+                case RELEASE:
+					env->EnvCounter--;
+                    env->EnvCounter &= 0xff;
+                    break;
+                }
+
+                switch(env->EnvCounter)
+                {
+                case 0xFF:
+                    env->ExponentialCounterPeriod = 1;
+                    break;
+
+                case 0x5D:
+                    env->ExponentialCounterPeriod = 2;
+                    break;
+
+                case 0x36:
+                    env->ExponentialCounterPeriod = 4;
+                    break;
+
+                case 0x1A:
+                    env->ExponentialCounterPeriod = 8;
+                    break;
+
+                case 0x0E:
+                    env->ExponentialCounterPeriod = 16;
+                    break;
+
+                case 0x06:
+                    env->ExponentialCounterPeriod = 30;
+                    break;
+
+                case 0x00:
+                    env->ExponentialCounterPeriod = 1;
+                    env->HoldZero = true;
+                    break;
+                }
+            }
+        }
+    }
+
+	///////////////////// VOICE 3 //////////////////// 
+
+	env++;
 	env->RateCounter += cycles;
 	if(env->RateCounter & 0x8000) 
 	{

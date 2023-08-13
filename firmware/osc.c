@@ -125,6 +125,8 @@ inline void OscOneCycle(OSC* osc)
 
 inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
 {
+	///////////////////// VOICE 1 ////////////////////
+
     if(!osc->TestBit)
     {
         osc->FrequenzCounterOld = osc->FrequenzCounter;
@@ -142,6 +144,60 @@ inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
 
 	OSC* osc_source = osc->OscSource;
 	OSC* osc_destination = osc->OscDestination;
+
+    /// Oscilltor mit Source Sycronisieren ?? ///
+#ifndef DISABLE_SYNC
+    if (osc->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc->SyncBit && osc_source->FrequenzCounterMsbRising))
+        osc_destination->FrequenzCounter = 0;
+#endif
+
+	///////////////////// VOICE 2 ////////////////////
+
+	osc++;
+    if(!osc->TestBit)
+    {
+        osc->FrequenzCounterOld = osc->FrequenzCounter;
+        osc->FrequenzCounter += osc->FrequenzAdd * cycles;
+        osc->FrequenzCounter &= 0xffffff;
+    }
+
+    osc->FrequenzCounterMsbRising = !(osc->FrequenzCounterOld & 0x800000) && (osc->FrequenzCounter & 0x800000);
+
+    if(!(osc->FrequenzCounterOld & 0x080000) && (osc->FrequenzCounter & 0x080000))
+    {
+        osc->Bit0 = ((osc->ShiftRegister >> 22) ^ (osc->ShiftRegister >> 17)) & 0x01;
+        osc->ShiftRegister = ((osc->ShiftRegister << 1) & 0x7fffff) | osc->Bit0;
+    }
+
+	osc_source = osc->OscSource;
+	osc_destination = osc->OscDestination;
+
+    /// Oscilltor mit Source Sycronisieren ?? ///
+#ifndef DISABLE_SYNC
+    if (osc->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc->SyncBit && osc_source->FrequenzCounterMsbRising))
+        osc_destination->FrequenzCounter = 0;
+#endif
+
+	///////////////////// VOICE 3 ////////////////////
+	
+	osc++;
+    if(!osc->TestBit)
+    {
+        osc->FrequenzCounterOld = osc->FrequenzCounter;
+        osc->FrequenzCounter += osc->FrequenzAdd * cycles;
+        osc->FrequenzCounter &= 0xffffff;
+    }
+
+    osc->FrequenzCounterMsbRising = !(osc->FrequenzCounterOld & 0x800000) && (osc->FrequenzCounter & 0x800000);
+
+    if(!(osc->FrequenzCounterOld & 0x080000) && (osc->FrequenzCounter & 0x080000))
+    {
+        osc->Bit0 = ((osc->ShiftRegister >> 22) ^ (osc->ShiftRegister >> 17)) & 0x01;
+        osc->ShiftRegister = ((osc->ShiftRegister << 1) & 0x7fffff) | osc->Bit0;
+    }
+
+	osc_source = osc->OscSource;
+	osc_destination = osc->OscDestination;
 
     /// Oscilltor mit Source Sycronisieren ?? ///
 #ifndef DISABLE_SYNC
