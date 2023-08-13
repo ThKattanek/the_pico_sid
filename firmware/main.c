@@ -94,10 +94,10 @@ void PWMMInterruptHandler()
 
 #else
 
-for(int i=0; i<11; i++)
+for(int i=0; i<4; i++)
 {
-	OscExecuteCycles(&sid1.Osc[0], 2);
-	EnvExecuteCycles(&sid1.Env[0], 2);
+	OscExecuteCycles(&sid1.Osc[0], 5);
+	EnvExecuteCycles(&sid1.Env[0], 5);
 }
 
 #endif
