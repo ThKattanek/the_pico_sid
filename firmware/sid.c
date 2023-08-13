@@ -10,7 +10,19 @@
 //////////////////////////////////////////////////
 
 #include "sid.h"
-#include "waves.h"
+
+inline void SidInit(SID *sid)
+{
+	sid->Osc[0].OscSource = &(sid->Osc[2]);
+	sid->Osc[1].OscSource = &(sid->Osc[0]);
+	sid->Osc[2].OscSource = &(sid->Osc[1]);
+
+	sid->Osc[0].OscDestination = &(sid->Osc[1]);
+	sid->Osc[1].OscDestination = &(sid->Osc[2]);
+	sid->Osc[2].OscDestination = &(sid->Osc[0]);
+
+	SidReset(sid);
+}
 
 inline void SidReset(SID *sid)
 {
@@ -33,153 +45,17 @@ inline void SidReset(SID *sid)
     sid->FilterFreqLo = 0;
     sid->FilterFreqHi = 0;
 
+	sid->VolumeOut = 0.0f;
+
 	OscReset(&sid->Osc[0]);
 	OscReset(&sid->Osc[1]);
 	OscReset(&sid->Osc[2]);
-
-    //sid->osc[0]->Reset();
-    //sid->osc[1]->Reset();
-    //sid->osc[2]->Reset();
 
     //ENV[0]->Reset();
     //ENV[1]->Reset();
     //ENV[2]->Reset();
 
     //Filter->Reset();	
-}
-
-inline void OscReset(OSC *osc)
-{
-    osc->FrequenzCounter = 0;
-    osc->ShiftRegister = 0x7FFFF8;
-    osc->FrequenzAdd = 0;
-    osc->PulseCompare = 0;
-    osc->WaveForm = 0;
-    osc->TestBit = false;
-    osc->RingBit = false;
-    osc->SyncBit = false;
-}
-
-inline void OscSetFrequenz(OSC *osc, uint16_t frequency)
-{
-	osc->FrequenzAdd = frequency;
-}
-
-inline void OscSetControlBits(OSC *osc, uint8_t ctrlbits)
-{
-    osc->WaveForm = ctrlbits>>4;
-
-    if(ctrlbits & 0x08)
-    {
-        osc->FrequenzCounter = 0;
-    	osc->ShiftRegister = 0;
-    }
-
-    else if(osc->TestBit) osc->ShiftRegister = 0x7FFFF8;
-    osc->TestBit = (ctrlbits & 0x08) >> 3;
-    osc->RingBit = (ctrlbits & 0x04) >> 2;
-    osc->SyncBit = (ctrlbits & 0x02) >> 1;	
-}
-
-void OscSetPulesCompare(OSC *osc, uint16_t pulsecompare)
-{
-    osc->PulseCompare = pulsecompare & 0xFFF;
-}
-
-inline uint16_t OscGetDreieck(OSC *osc)
-{
-    unsigned int MSB;
-	/*
-    if((osc->RingBit == true) && (osc->OSCSource != 0))
-        MSB = (osc->FrequenzCounter ^ osc->OSCSource->FrequenzCounter) & 0x800000;
-
-    else*/ MSB = osc->FrequenzCounter & 0x800000;
-
-    return ((MSB)?(~osc->FrequenzCounter>>11):(osc->FrequenzCounter>>11)) & 0xFFF;
-}
-
-inline uint16_t OscGetOutput(OSC *osc)
-{
-    if(osc->WaveForm == 0) return 0;
-
-    switch(osc->WaveForm)
-    {
-    /// Die 4 Grundwellenformen ///
-    case 1: // Dreieck
-        return OscGetDreieck(osc);
-    case 2: // Saegezahn
-        return osc->FrequenzCounter>>12;
-    case 3: // Mischform Saegezahn/Dreieck (Wave0)
-        return wave0[osc->FrequenzCounter>>12]<<4;
-    case 4: // Rechteck
-        if(osc->PulseCompare == 0xFFF) return 0xFFF;
-        return ((osc->FrequenzCounter>>12) >= osc->PulseCompare)?0xFFF:0x000;
-    case 5: // Mischform
-        return ((wave1[OscGetDreieck(osc)>>1]<<4) & (((osc->FrequenzCounter>>12) >= osc->PulseCompare)?0xFFF:0x000));;
-    case 6: // Mischform S�gezahn/Dreieck
-        return ((wave2[osc->FrequenzCounter>>12]<<4) & (((osc->FrequenzCounter>>12) >= osc->PulseCompare)?0xFFF:0x000));
-    case 7: // Mischform S�gezahn/Dreieck
-        return ((wave3[osc->FrequenzCounter>>12]<<4) & (((osc->FrequenzCounter>>12) >= osc->PulseCompare)?0xFFF:0x000));
-    case 8: // Rauschen
-        return ((osc->ShiftRegister&0x400000)>>11)|((osc->ShiftRegister&0x100000)>>10)|((osc->ShiftRegister&0x010000)>>7)|((osc->ShiftRegister&0x002000)>>5)|((osc->ShiftRegister&0x000800)>>4)|((osc->ShiftRegister&0x000080)>>1)|((osc->ShiftRegister&0x000010)<<1)|((osc->ShiftRegister&0x000004)<< 2);
-    /// Mischwellenformen ///
-    default:
-        return 0;
-    }
-}
-
-inline void OscOneCycle(OSC *osc)
-{
-    if(!osc->TestBit)
-    {
-        osc->FrequenzCounterOld = osc->FrequenzCounter;
-        osc->FrequenzCounter += osc->FrequenzAdd;
-        osc->FrequenzCounter &= 0xFFFFFF;
-    }
-
-    osc->FrequenzCounterMsbRising = !(osc->FrequenzCounterOld&0x800000)&&(osc->FrequenzCounter&0x800000);
-
-    if(!(osc->FrequenzCounterOld&0x080000)&&(osc->FrequenzCounter&0x080000))
-    {
-        osc->Bit0 = ((osc->ShiftRegister>>22)^(osc->ShiftRegister>>17))&0x01;
-        osc->ShiftRegister = ((osc->ShiftRegister<<1) & 0x7FFFFF) | osc->Bit0;
-    }
-
-
-    /// Oscilltor mit Source Sycronisieren ?? ///
-	/*
-    if (FrequenzCounterMsbRising && OSCDestination->SyncBit && !(SyncBit && OSCSource->FrequenzCounterMsbRising))
-    {
-        OSCDestination->FrequenzCounter = 0;
-    }
-	*/
-}
-
-inline void OscExecuteCycles(OSC *osc, uint8_t cycles)
-{
-    if(!osc->TestBit)
-    {
-        osc->FrequenzCounterOld = osc->FrequenzCounter;
-        osc->FrequenzCounter += osc->FrequenzAdd * cycles;
-        osc->FrequenzCounter &= 0xFFFFFF;
-    }
-
-    osc->FrequenzCounterMsbRising = !(osc->FrequenzCounterOld&0x800000)&&(osc->FrequenzCounter&0x800000);
-
-    if(!(osc->FrequenzCounterOld&0x080000)&&(osc->FrequenzCounter&0x080000))
-    {
-        osc->Bit0 = ((osc->ShiftRegister>>22)^(osc->ShiftRegister>>17))&0x01;
-        osc->ShiftRegister = ((osc->ShiftRegister<<1) & 0x7FFFFF) | osc->Bit0;
-    }
-
-
-    /// Oscilltor mit Source Sycronisieren ?? ///
-	/*
-    if (FrequenzCounterMsbRising && OSCDestination->SyncBit && !(SyncBit && OSCSource->FrequenzCounterMsbRising))
-    {
-        OSCDestination->FrequenzCounter = 0;
-    }
-	*/
 }
 
 inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
@@ -282,6 +158,7 @@ inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
         break;
     case 24: // FilterControl2
         //Filter->SetControl2(value);
+		sid->VolumeOut = (value & 0x0f) / (float)0x0f;
         break;
     default:
         break;

@@ -19,7 +19,9 @@ pico_sdk_init()
 add_executable(${PROJECT_NAME}
   main.c /
   sid.c /
-  sid.h
+  sid.h /
+  osc.c /
+  osc.h /
 )
 
 pico_generate_pio_header(${PROJECT_NAME}

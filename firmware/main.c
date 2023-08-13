@@ -59,6 +59,8 @@ int main() {
 
 	write_sid_reg_program_init(pio, sm, offset, CLK_PIN, CS_PIN);	//CLK_PIN + RW_PIN + A0-A4 + D0-D7 all PIN Count is 15
 
+	SidInit(&sid1);
+
 	InitPWMAudio(AUDIO_PIN);
 	
 	printf("The Pico SID by Thorsten Kattanek 1\n");
@@ -69,7 +71,7 @@ int main() {
     		pio_interrupt_clear(pio, 0); 	// clear the irq so we can wait for it again
 		
 		uint16_t value = pio->rxf[sm];
-		SidWriteReg(&sid1, value >> 2, value >> 7);
+		SidWriteReg(&sid1, value >> 2, (value >> 7) & 0xff);
     }
 }
 
@@ -99,7 +101,7 @@ void PWMMInterruptHandler()
 	float out_sample2 = OscGetOutput(&sid1.Osc[1]) / (float)0xfff;
 	float out_sample3 = OscGetOutput(&sid1.Osc[2]) / (float)0xfff;
 
-	float out_sample = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x7ff;
+	float out_sample = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x7ff * sid1.VolumeOut;
 
 	pwm_set_gpio_level(AUDIO_PIN, out_sample);
 }

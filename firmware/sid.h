@@ -9,26 +9,15 @@
 //                                              //
 //////////////////////////////////////////////////
 
-#ifndef SIDCLASS_H
-#define SIDCLASS_H
+#ifndef SID_H
+#define SID_H
 
 #include <pico/stdlib.h>
 
+#include "osc.h"
+
 #define SID_CYCLE_EXACT
-struct OSC
-{
-    uint32_t	FrequenzCounter;
-    uint32_t	FrequenzCounterOld;
-    bool		FrequenzCounterMsbRising;   /// (True wenn MSB von 0 nach 1 wechselt ansonsten False)
-    uint32_t	ShiftRegister;
-    uint32_t	Bit0;
-    uint16_t	FrequenzAdd;
-    uint16_t	PulseCompare;
-    uint8_t		WaveForm;
-    bool		TestBit;
-    bool		RingBit;
-    bool		SyncBit;
-}typedef OSC;
+
 struct SID
 {
 	// Alle IO Register ///
@@ -51,19 +40,14 @@ struct SID
 	uint8_t   FilterFreqLo;
 	uint8_t   FilterFreqHi;
 
-OSC	Osc[3];
+	OSC		  Osc[3];
+	float	  VolumeOut;
+
+	
 }typedef SID;
 
+void SidInit(SID *sid);
 void SidReset(SID *sid);
 void SidWriteReg(SID *sid, uint8_t address, uint8_t value);
-
-void OscReset(OSC *osc);
-void OscSetFrequenz(OSC *osc, uint16_t frequency);
-void OscSetControlBits(OSC *osc, uint8_t ctrlbits);
-void OscSetPulesCompare(OSC *osc, uint16_t pulsecompare);
-uint16_t OscGetDreieck(OSC *osc);
-uint16_t OscGetOutput(OSC *osc);
-void OscOneCycle(OSC *osc);
-void OscExecuteCycles(OSC *osc, uint8_t cycles);
 
 #endif // SID_H
