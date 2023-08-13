@@ -55,10 +55,11 @@ inline uint16_t OscGetDreieck(OSC* osc)
 {
     unsigned int MSB;
 	OSC* osc_source = osc->OscSource;
-
+#ifndef DISABLE_RINGMOD
     if(osc->RingBit == true)
         MSB = (osc->FrequenzCounter ^ osc_source->FrequenzCounter) & 0x800000;
     else
+#endif
 		MSB = osc->FrequenzCounter & 0x800000;
 
     return ((MSB)?(~osc->FrequenzCounter >> 11) : (osc->FrequenzCounter >> 11)) & 0xFFF;
@@ -115,10 +116,12 @@ inline void OscOneCycle(OSC* osc)
 	OSC* osc_destination = osc->OscDestination;
 
     /// Oscilltor mit Source Sycronisieren ?? ///
+#ifndef DISABLE_SYNC
     if (osc->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc->SyncBit && osc_source->FrequenzCounterMsbRising))
     {
         osc_destination->FrequenzCounter = 0;
     }
+#endif
 }
 
 inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
@@ -142,8 +145,10 @@ inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
 	OSC* osc_destination = osc->OscDestination;
 
     /// Oscilltor mit Source Sycronisieren ?? ///
+#ifndef DISABLE_SYNC
     if (osc->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc->SyncBit && osc_source->FrequenzCounterMsbRising))
     {
         osc_destination->FrequenzCounter = 0;
     }
+#endif
 }

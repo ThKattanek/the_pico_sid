@@ -14,6 +14,9 @@
 
 #include <pico/stdlib.h>
 
+#define DISABLE_RINGMOD
+#define DISABLE_SYNC
+
 struct OSC
 {
     uint32_t	FrequenzCounter;
