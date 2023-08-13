@@ -1,0 +1,16 @@
+Disassembler Listing wurde mit Emu64 5.1.0 erzeugt
+-------------------------------------------------
+Von: $C000 Bis: $C019 Quelle: C64
+
+$C000 $A9 $0B      LDA #$0B
+$C002 $8D $00 $D4  STA $D400        // voice1 frequenz auf 0x000b stellen
+$C005 $A9 $F0      LDA #$F0         
+$C007 $8D $06 $D4  STA $D406        // voice 1 sustain auf 0x0f stellen
+$C00A $A9 $15      LDA #$15
+$C00C $8D $04 $D4  STA $D404        // voice 1 key bit, ring bit und Wellenform auf Dreieck setzen
+$C00F $A9 $F0      LDA #$F0
+$C011 $8D $18 $D4  STA $D418        // lautstärke auf maximal stellen
+$C014 $A9 $0B      LDA #$0B
+$C016 $8D $0B $D4  STA $D40B        // voice 3 frequenz auf 0x0b00 stellen
+$C019 $60          RTS 
+
