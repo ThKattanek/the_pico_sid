@@ -2144,7 +2144,7 @@
   (symbol (lib_id "power:+3.3V") (at 241.3 93.98 270) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 0d4bf249-808f-48dc-94e5-ef9edca5058c)
-    (property "Reference" "#PWR?" (id 0) (at 237.49 93.98 0)
+    (property "Reference" "#PWR017" (id 0) (at 237.49 93.98 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3V" (id 1) (at 245.11 93.9799 90)
@@ -2400,8 +2400,8 @@
   (symbol (lib_id "Device:R") (at 220.98 83.82 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 3923cd97-749d-4518-818c-7cf624d0e03f)
-    (property "Reference" "R?" (id 0) (at 220.98 78.74 90))
-    (property "Value" "200" (id 1) (at 220.98 81.28 90))
+    (property "Reference" "R4" (id 0) (at 220.98 78.74 90))
+    (property "Value" "1k" (id 1) (at 220.98 81.28 90))
     (property "Footprint" "" (id 2) (at 220.98 85.598 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -2433,7 +2433,7 @@
   (symbol (lib_id "Device:LED") (at 232.41 93.98 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 5e1f39e0-289e-4d8f-8733-aeb457bfcfdb)
-    (property "Reference" "D?" (id 0) (at 231.14 91.44 0))
+    (property "Reference" "D2" (id 0) (at 231.14 91.44 0))
     (property "Value" "LED RED" (id 1) (at 232.41 97.79 0))
     (property "Footprint" "" (id 2) (at 232.41 93.98 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -2690,7 +2690,7 @@
   (symbol (lib_id "Device:LED") (at 232.41 83.82 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 87a8def9-5869-4c5f-9ee6-703114a2517a)
-    (property "Reference" "D?" (id 0) (at 231.14 81.28 0))
+    (property "Reference" "D1" (id 0) (at 231.14 81.28 0))
     (property "Value" "LED GREEN" (id 1) (at 232.41 86.36 0))
     (property "Footprint" "" (id 2) (at 232.41 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -2892,8 +2892,8 @@
   (symbol (lib_id "Device:R") (at 220.98 93.98 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid c0bee8e1-2c4b-4de5-9f03-97b8cfd8792f)
-    (property "Reference" "R?" (id 0) (at 220.98 88.9 90))
-    (property "Value" "200" (id 1) (at 220.98 91.44 90))
+    (property "Reference" "R5" (id 0) (at 220.98 88.9 90))
+    (property "Value" "1k" (id 1) (at 220.98 91.44 90))
     (property "Footprint" "" (id 2) (at 220.98 95.758 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -3176,7 +3176,7 @@
   (symbol (lib_id "power:GND") (at 241.3 83.82 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid e352f26a-cb5b-4fac-9ef1-af3a963faf9e)
-    (property "Reference" "#PWR?" (id 0) (at 247.65 83.82 0)
+    (property "Reference" "#PWR016" (id 0) (at 247.65 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 245.11 83.8199 90)
@@ -3305,11 +3305,11 @@
     (path "/071d1889-55e5-4cfe-86b7-2322b4da3364"
       (reference "#PWR015") (unit 1) (value "GND") (footprint "")
     )
-    (path "/0d4bf249-808f-48dc-94e5-ef9edca5058c"
-      (reference "#PWR?") (unit 1) (value "+3.3V") (footprint "")
-    )
     (path "/e352f26a-cb5b-4fac-9ef1-af3a963faf9e"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR016") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/0d4bf249-808f-48dc-94e5-ef9edca5058c"
+      (reference "#PWR017") (unit 1) (value "+3.3V") (footprint "")
     )
     (path "/249fc3f4-6214-43d5-bed7-4570a982ba76"
       (reference "C1") (unit 1) (value "100n") (footprint "")
@@ -3326,11 +3326,11 @@
     (path "/324c1a2c-059f-4981-b7e5-d168b59464ae"
       (reference "C5") (unit 1) (value "100n") (footprint "")
     )
-    (path "/5e1f39e0-289e-4d8f-8733-aeb457bfcfdb"
-      (reference "D?") (unit 1) (value "LED RED") (footprint "")
-    )
     (path "/87a8def9-5869-4c5f-9ee6-703114a2517a"
-      (reference "D?") (unit 1) (value "LED GREEN") (footprint "")
+      (reference "D1") (unit 1) (value "LED GREEN") (footprint "")
+    )
+    (path "/5e1f39e0-289e-4d8f-8733-aeb457bfcfdb"
+      (reference "D2") (unit 1) (value "LED RED") (footprint "")
     )
     (path "/6d20c440-e8ae-442d-9b38-e1d32399f02f"
       (reference "J1") (unit 1) (value "SWD") (footprint "")
@@ -3345,10 +3345,10 @@
       (reference "R3") (unit 1) (value "1,8k") (footprint "")
     )
     (path "/3923cd97-749d-4518-818c-7cf624d0e03f"
-      (reference "R?") (unit 1) (value "200") (footprint "")
+      (reference "R4") (unit 1) (value "1k") (footprint "")
     )
     (path "/c0bee8e1-2c4b-4de5-9f03-97b8cfd8792f"
-      (reference "R?") (unit 1) (value "200") (footprint "")
+      (reference "R5") (unit 1) (value "1k") (footprint "")
     )
     (path "/9dc66f85-19b8-4dfd-859b-d40546c9d1c1"
       (reference "U1") (unit 1) (value "4050") (footprint "")
