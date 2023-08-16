@@ -30,6 +30,8 @@
 
 #define AUDIO_PIN 28
 
+#define DEBUG_LED_PIN 19
+
 volatile static bool reset_state = true;
 
 bool AudioCallback();
@@ -51,6 +53,12 @@ int main() {
 
 	stdio_init_all();	
 
+	// Init Debug LED (green/red)
+	gpio_set_drive_strength(DEBUG_LED_PIN, GPIO_DRIVE_STRENGTH_12MA);
+	gpio_set_function(DEBUG_LED_PIN, GPIO_FUNC_SIO);
+	gpio_set_dir(DEBUG_LED_PIN, true);
+	gpio_put(DEBUG_LED_PIN, true);
+
 	// PIO Program initialize
 	PIO pio = pio0;
 
@@ -59,10 +67,13 @@ int main() {
 
 	write_sid_reg_program_init(pio, sm, offset, CLK_PIN, CS_PIN);	//CLK_PIN + RW_PIN + A0-A4 + D0-D7 all PIN Count is 15
 
+	// Init SID
 	SidInit(&sid1);
 
+	// Init Audio PWM
 	InitPWMAudio(AUDIO_PIN);
 	
+	// UART Start Message PicoSID
 	printf("The Pico SID by Thorsten Kattanek 1\n");
 
     while (1)
