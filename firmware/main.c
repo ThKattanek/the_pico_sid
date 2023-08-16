@@ -81,8 +81,8 @@ int main() {
 		while (!(pio->irq & (1<<0))); 		// wait for irq 1 fro either of the pio programs
     		pio_interrupt_clear(pio, 0); 	// clear the irq so we can wait for it again
 		
-		uint16_t value = pio->rxf[sm];
-		SidWriteReg(&sid1, value >> 2, (value >> 7) & 0xff);
+		uint16_t incomming = pio->rxf[sm];
+		SidWriteReg(&sid1, incomming >> 2, (incomming >> 7) & 0xff);
     }
 }
 
