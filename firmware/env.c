@@ -66,6 +66,92 @@ inline uint8_t EnvGetOutput(ENV* env)
 	return env->EnvCounter;
 }
 
+void EnvMoreCycles(ENV* env, uint cycles)
+{
+	for(uint j=0; j<cycles; j++)
+	{
+		for(uint i=0; i<3; i++)
+		{
+			env[i].RateCounter++;
+			if(env[i].RateCounter & 0x8000) 
+			{
+				env[i].RateCounter++;
+				env[i].RateCounter &= 0x7fff;
+			}
+
+			if(env[i].RateCounter == env[i].RatePeriod)
+			{
+				env[i].RateCounter=0;
+
+				if(env[i].State == ATTACK || ++env[i].ExponentialCounter == env[i].ExponentialCounterPeriod)
+				{
+					env[i].ExponentialCounter = 0;
+
+					if(!env[i].HoldZero)
+					{
+						switch(env[i].State)
+						{
+						case ATTACK:
+							env[i].EnvCounter++;
+							env[i].EnvCounter &= 0xff;
+							if(env[i].EnvCounter == 0xff)
+							{
+								env[i].State = DECAY_SUSTAIN;
+								env[i].RatePeriod = RateCounterPeriod[env[i].Decay];
+							}
+							break;
+
+						case DECAY_SUSTAIN:
+							if(env[i].EnvCounter != SustainLevel[env[i].Sustain])
+							{
+								env[i].EnvCounter--;
+							}
+							break;
+
+						case RELEASE:
+							env[i].EnvCounter--;
+							env[i].EnvCounter &= 0xff;
+							break;
+						}
+
+						switch(env[i].EnvCounter)
+						{
+						case 0xFF:
+							env[i].ExponentialCounterPeriod = 1;
+							break;
+
+						case 0x5D:
+							env[i].ExponentialCounterPeriod = 2;
+							break;
+
+						case 0x36:
+							env[i].ExponentialCounterPeriod = 4;
+							break;
+
+						case 0x1A:
+							env[i].ExponentialCounterPeriod = 8;
+							break;
+
+						case 0x0E:
+							env[i].ExponentialCounterPeriod = 16;
+							break;
+
+						case 0x06:
+							env[i].ExponentialCounterPeriod = 30;
+							break;
+
+						case 0x00:
+							env[i].ExponentialCounterPeriod = 1;
+							env[i].HoldZero = true;
+							break;
+						}
+					}
+				}
+			}	
+		}
+	}
+}
+
 inline void EnvOneCycle(ENV* env)
 {
 	env->RateCounter++;
@@ -149,7 +235,6 @@ inline void EnvOneCycle(ENV* env)
 inline void EnvExecuteCycles(ENV* env, uint8_t cycles)
 {
 	///////////////////// VOICE 1 //////////////////// 
-
 	env->RateCounter += cycles;
 	if(env->RateCounter & 0x8000) 
 	{
@@ -229,7 +314,6 @@ inline void EnvExecuteCycles(ENV* env, uint8_t cycles)
     }
 
 	///////////////////// VOICE 2 //////////////////// 
-
 	env++;
 	env->RateCounter += cycles;
 	if(env->RateCounter & 0x8000) 
@@ -310,7 +394,6 @@ inline void EnvExecuteCycles(ENV* env, uint8_t cycles)
     }
 
 	///////////////////// VOICE 3 //////////////////// 
-
 	env++;
 	env->RateCounter += cycles;
 	if(env->RateCounter & 0x8000) 

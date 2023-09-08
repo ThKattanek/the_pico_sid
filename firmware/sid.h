@@ -44,6 +44,9 @@ struct SID
 	OSC		  	Osc[3];
 	ENV			Env[3];
 	float		VolumeOut;
+
+	uint16_t 	AudioOut;
+	
 }typedef SID;
 
 void SidInit(SID *sid);

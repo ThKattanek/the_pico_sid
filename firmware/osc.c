@@ -123,6 +123,91 @@ inline void OscOneCycle(OSC* osc)
 #endif
 }
 
+inline void OscMoreCycles(OSC* osc, uint cycles)
+{
+	OSC* osc0 = osc;
+	OSC* osc1 = osc+1;
+	OSC* osc2 = osc+2;
+
+	for(int i=0; i<cycles; i++)
+	{
+		// Voice 1
+		if(!osc0->TestBit)
+		{
+			osc0->FrequenzCounterOld = osc0->FrequenzCounter;
+			osc0->FrequenzCounter += osc0->FrequenzAdd;
+			osc0->FrequenzCounter &= 0xffffff;
+		}
+
+		osc0->FrequenzCounterMsbRising = !(osc0->FrequenzCounterOld & 0x800000) && (osc0->FrequenzCounter & 0x800000);
+
+		if(!(osc0->FrequenzCounterOld & 0x080000) && (osc0->FrequenzCounter & 0x080000))
+		{
+			osc0->Bit0 = ((osc0->ShiftRegister >> 22) ^ (osc0->ShiftRegister >> 17)) & 0x01;
+			osc0->ShiftRegister = ((osc0->ShiftRegister << 1) & 0x7fffff) | osc0->Bit0;
+		}
+
+		OSC* osc_source = osc0->OscSource;
+		OSC* osc_destination = osc0->OscDestination;
+
+		/// Oscilltor mit Source Sycronisieren ?? ///
+	#ifndef DISABLE_SYNC
+		if (osc0->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc0->SyncBit && osc_source->FrequenzCounterMsbRising))
+			osc_destination->FrequenzCounter = 0;
+	#endif
+
+		// Voice 2
+		if(!osc1->TestBit)
+		{
+			osc1->FrequenzCounterOld = osc1->FrequenzCounter;
+			osc1->FrequenzCounter += osc1->FrequenzAdd;
+			osc1->FrequenzCounter &= 0xffffff;
+		}
+
+		osc1->FrequenzCounterMsbRising = !(osc1->FrequenzCounterOld & 0x800000) && (osc1->FrequenzCounter & 0x800000);
+
+		if(!(osc1->FrequenzCounterOld & 0x080000) && (osc1->FrequenzCounter & 0x080000))
+		{
+			osc1->Bit0 = ((osc1->ShiftRegister >> 22) ^ (osc1->ShiftRegister >> 17)) & 0x01;
+			osc1->ShiftRegister = ((osc1->ShiftRegister << 1) & 0x7fffff) | osc1->Bit0;
+		}
+
+		osc_source = osc1->OscSource;
+		osc_destination = osc1->OscDestination;
+
+		/// Oscilltor mit Source Sycronisieren ?? ///
+	#ifndef DISABLE_SYNC
+		if (osc1->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc1->SyncBit && osc_source->FrequenzCounterMsbRising))
+			osc_destination->FrequenzCounter = 0;
+	#endif
+
+		// Voice 3
+		if(!osc0->TestBit)
+		{
+			osc2->FrequenzCounterOld = osc2->FrequenzCounter;
+			osc2->FrequenzCounter += osc2->FrequenzAdd;
+			osc2->FrequenzCounter &= 0xffffff;
+		}
+
+		osc2->FrequenzCounterMsbRising = !(osc2->FrequenzCounterOld & 0x800000) && (osc2->FrequenzCounter & 0x800000);
+
+		if(!(osc2->FrequenzCounterOld & 0x080000) && (osc2->FrequenzCounter & 0x080000))
+		{
+			osc2->Bit0 = ((osc2->ShiftRegister >> 22) ^ (osc2->ShiftRegister >> 17)) & 0x01;
+			osc2->ShiftRegister = ((osc2->ShiftRegister << 1) & 0x7fffff) | osc2->Bit0;
+		}
+
+		osc_source = osc2->OscSource;
+		osc_destination = osc2->OscDestination;
+
+		/// Oscilltor mit Source Sycronisieren ?? ///
+	#ifndef DISABLE_SYNC
+		if (osc2->FrequenzCounterMsbRising && osc_destination->SyncBit && !(osc2->SyncBit && osc_source->FrequenzCounterMsbRising))
+			osc_destination->FrequenzCounter = 0;
+	#endif
+	}
+}
+
 inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
 {
 	///////////////////// VOICE 1 ////////////////////
@@ -179,7 +264,6 @@ inline void OscExecuteCycles(OSC* osc, uint8_t cycles)
 #endif
 
 	///////////////////// VOICE 3 ////////////////////
-	
 	osc++;
     if(!osc->TestBit)
     {

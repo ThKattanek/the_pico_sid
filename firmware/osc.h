@@ -40,6 +40,7 @@ void OscSetControlBits(OSC* osc, uint8_t ctrlbits);
 void OscSetPulesCompare(OSC* osc, uint16_t pulsecompare);
 uint16_t OscGetDreieck(OSC* osc);
 uint16_t OscGetOutput(OSC* osc);
+void OscMoreCycles(OSC* osc, uint cycles);
 void OscOneCycle(OSC* osc);
 void OscExecuteCycles(OSC* osc, uint8_t cycles);
 

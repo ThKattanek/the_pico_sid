@@ -42,6 +42,7 @@ void EnvSetKeyBit(ENV* env, bool value);
 void EnvSetAttackDecay(ENV* env, uint8_t value);
 void EnvSetSustainRelease(ENV* env, uint8_t value);
 uint8_t EnvGetOutput(ENV* env);
+void EnvMoreCycles(ENV* env, uint cycles);
 void EnvOneCycle(ENV* env);
 void EnvExecuteCycles(ENV* env, uint8_t cycles);
 
