@@ -61,7 +61,7 @@ inline void EnvSetSustainRelease(ENV* env, uint8_t value)
 		env->RatePeriod = RateCounterPeriod[env->Release];
 }
 
-inline uint8_t EnvGetOutput(ENV* env)
+inline int EnvGetOutput(ENV* env)
 {
 	return env->EnvCounter;
 }

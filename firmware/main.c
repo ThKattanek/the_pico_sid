@@ -65,20 +65,49 @@ void Core1Entry()
 		led_state = !led_state;
 		gpio_put(DEBUG_LED_PIN, led_state);
 
-		OscExecuteCycles(&sid1.Osc, 4);
-		EnvExecuteCycles(&sid1.Env, 4);
+		OscExecuteCycles(&sid1.Osc[0], 4);
+		EnvExecuteCycles(&sid1.Env[0], 4);
 		
+		//int voice1 = ((OscGetOutput(&sid1.Osc[0]) * 0xfff - sid1.Filter.WaveZero) * EnvGetOutput(&sid1.Env[0]) + sid1.Filter.VoiceDC);
+		//int voice2 = ((OscGetOutput(&sid1.Osc[1]) * 0xfff - sid1.Filter.WaveZero) * EnvGetOutput(&sid1.Env[1]) + sid1.Filter.VoiceDC);
+		//int voice3 = ((OscGetOutput(&sid1.Osc[2]) * 0xfff - sid1.Filter.WaveZero) * EnvGetOutput(&sid1.Env[2]) + sid1.Filter.VoiceDC);
+
+
+
+		//int voice1 = ((OscGetOutput(&sid1.Osc[0]) / (float)0xfff) * (EnvGetOutput(&sid1.Env[0]) / (float)0xff)) * 0xfff;
+		//int voice2 = (OscGetOutput(&sid1.Osc[1]) / (float)0xfff) * (EnvGetOutput(&sid1.Env[1]) / (float)0xff) * 0x3ff;
+
+		
+		
+		//int voice1 = ((int)OscGetOutput(&sid1.Osc[0] - sid1.Filter.WaveZero) * (int)EnvGetOutput(&sid1.Env[0]) + sid1.Filter.VoiceDC);
+		//int voice2 = ((int)OscGetOutput(&sid1.Osc[1] - sid1.Filter.WaveZero) * (int)EnvGetOutput(&sid1.Env[1]) + sid1.Filter.VoiceDC);
+		//int voice3 = ((int)OscGetOutput(&sid1.Osc[2] - sid1.Filter.WaveZero) * (int)EnvGetOutput(&sid1.Env[2]) + sid1.Filter.VoiceDC);
+
+		int voice1 = OscGetOutput(&sid1.Osc[0]) >> 2;
+		int voice2 = OscGetOutput(&sid1.Osc[1]) >> 2;
+		int voice3 = OscGetOutput(&sid1.Osc[2]) >> 2;
+
+/*
+		voice1 >>= 7;
+		voice2 >>= 7;
+		voice3 >>= 7;
+	
+
+		int voice1 = OscGetOutput(&sid1.Osc[0]);
+		int voice2 = OscGetOutput(&sid1.Osc[1]);
+		int voice3 = OscGetOutput(&sid1.Osc[2]);
+			*/
+
+		FilterExcecuteCycles(&sid1.Filter, 4, voice1, voice2, voice3, 0);
 
 		while(gpio_get(CLK_2_PIN)){}
-
-		
 	}
 }
 
 int main() {
 
 	//default clock is 125000kHz
-	set_sys_clock_khz(170000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	set_sys_clock_khz(250000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
 
 	stdio_init_all();	
 
@@ -94,6 +123,7 @@ int main() {
 
 	// Init SID
 	SidInit(&sid1);
+	SidSetModel(&sid1, MOS_8580);
 
 	// PIO Program initialize
 	pio = pio0;
@@ -122,60 +152,10 @@ int main() {
     }
 }
 
-/*
-void FillAudioBuffer(void)
-{	
-	uint16_t *sound_buffer;
-
-	bool fill_audio = false;
-
-	if (dma_hw->ints1 & (1 << dma_chan_1)) // are we called for our DMA channel 1? 
-	{
-		dma_hw->ints1 = (1 << dma_chan_1); // clear IRQ DMA Channel 1
-		sound_buffer = sound_buffer1;
-		fill_audio = true;
-	}
-	else if(dma_hw->ints1 & (1 << dma_chan_2))
-	{
-		dma_hw->ints1 = (1 << dma_chan_2); // clear IRQ DMA Channel 2
-		sound_buffer = sound_buffer2;
-		fill_audio = true;
-	}
-
-	// filling sound_buffer
-	if(fill_audio)
-	{
-		for(int i=0; i<SOUND_BUFFER_SIZE; i++)
-		{
-			#ifdef SID_CYCLE_EXACT
-				OscMoreCycles(sid1.Osc, 22);
-				// EnvMoreCycles(sid1.Env, 22);			
-			#else
-				OscExecuteCycles(&sid1.Osc[0], 22);
-				EnvExecuteCycles(&sid1.Env[0], 22);
-			#endif
-
-			// 11 Bit Sample schreiben	
-			float out_sample1 = OscGetOutput(&sid1.Osc[0]) / (float)0xfff;
-			float out_sample2 = OscGetOutput(&sid1.Osc[1]) / (float)0xfff;
-			float out_sample3 = OscGetOutput(&sid1.Osc[2]) / (float)0xfff;
-
-			//out_sample1 *= EnvGetOutput(&sid1.Env[0]) / (float)0xff;
-			//out_sample2 *= EnvGetOutput(&sid1.Env[1]) / (float)0xff;
-			//out_sample3 *= EnvGetOutput(&sid1.Env[2]) / (float)0xff;
-
-			sound_buffer[i] = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x7ff * sid1.VolumeOut;
-			
-			// sound_buffer[i] = out_sample1 * 0x7ff * sid1.VolumeOut;
-		}
-	}
-}
-*/
-
 void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
-
+/*
 	float out_sample1 = OscGetOutput(&sid1.Osc[0]) / (float)0xfff;
 	float out_sample2 = OscGetOutput(&sid1.Osc[1]) / (float)0xfff;
 	float out_sample3 = OscGetOutput(&sid1.Osc[2]) / (float)0xfff;
@@ -185,8 +165,10 @@ void pwm_irq_handle()
 	out_sample3 *= EnvGetOutput(&sid1.Env[2]) / (float)0xff;
 		
 	uint16_t sample_out = ((out_sample1 + out_sample2 + out_sample3) / 3.0f) * 0x7ff * sid1.VolumeOut;
-
+	
 	pwm_set_gpio_level(AUDIO_PIN, sample_out);
+*/
+	 pwm_set_gpio_level(AUDIO_PIN, FilterGetOutput(&sid1.Filter));
 }
 
 void InitPWMAudio(uint audio_out_gpio)
@@ -198,7 +180,7 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	pwm_set_clkdiv_int_frac(slice_num, 1,14);	// PWM Frequency of 43294Hz when Systemclock is 133MHz.
+	pwm_set_clkdiv_int_frac(slice_num, 2,12);	// PWM Frequency of 44389Hz when Systemclock is 250MHz.
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit

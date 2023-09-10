@@ -1,15 +1,12 @@
 //////////////////////////////////////////////////
-//						//
-// realSID                                      //
-// von Thorsten Kattanek			//
+//                                              //
+// ThePicoSID                                   //
+// von Thorsten Kattanek                        //
 //                                              //
 // #file: waves.h                               //
-//						//
-// Geistiges Eigentum von Thorsten Kattanek	//
-//						//
-// Letzte Änderung am 31.12.2012		//
-//      					//
-//						//
+//                                              //
+// https://github.com/ThKattanek/the_pico_sid   //
+//                                              //
 //////////////////////////////////////////////////
 
 #ifndef WAVES_H

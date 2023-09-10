@@ -16,6 +16,7 @@
 
 #include "osc.h"
 #include "env.h"
+#include "filter.h"
 
 //#define SID_CYCLE_EXACT
 
@@ -43,12 +44,12 @@ struct SID
 
 	OSC		  	Osc[3];
 	ENV			Env[3];
-	float		VolumeOut;
+	FILTER		Filter;
 
-	uint16_t 	AudioOut;
-	
+	float		VolumeOut;	
 }typedef SID;
 
+void SidSetModel(SID* sid, int sid_model);
 void SidInit(SID *sid);
 void SidReset(SID *sid);
 void SidWriteReg(SID *sid, uint8_t address, uint8_t value);

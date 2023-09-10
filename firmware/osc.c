@@ -52,7 +52,7 @@ inline void OscSetPulesCompare(OSC* osc, uint16_t pulsecompare)
     osc->PulseCompare = pulsecompare & 0xfff;
 }
 
-inline uint16_t OscGetDreieck(OSC* osc)
+inline int OscGetDreieck(OSC* osc)
 {
     unsigned int MSB;
 	OSC* osc_source = osc->OscSource;
@@ -66,7 +66,7 @@ inline uint16_t OscGetDreieck(OSC* osc)
     return ((MSB)?(~osc->FrequenzCounter >> 11) : (osc->FrequenzCounter >> 11)) & 0xfff;
 }
 
-inline uint16_t OscGetOutput(OSC* osc)
+inline int OscGetOutput(OSC* osc)
 {
     if(osc->WaveForm == 0) return 0;
 

@@ -14,8 +14,8 @@
 
 #include <pico/stdlib.h>
 
-#define DISABLE_RINGMOD
-#define DISABLE_SYNC
+//#define DISABLE_RINGMOD
+//#define DISABLE_SYNC
 
 struct OSC
 {
@@ -38,8 +38,8 @@ void OscReset(OSC *osc);
 void OscSetFrequenz(OSC* osc, uint16_t frequency);
 void OscSetControlBits(OSC* osc, uint8_t ctrlbits);
 void OscSetPulesCompare(OSC* osc, uint16_t pulsecompare);
-uint16_t OscGetDreieck(OSC* osc);
-uint16_t OscGetOutput(OSC* osc);
+int  OscGetDreieck(OSC* osc);
+int  OscGetOutput(OSC* osc);
 void OscMoreCycles(OSC* osc, uint cycles);
 void OscOneCycle(OSC* osc);
 void OscExecuteCycles(OSC* osc, uint8_t cycles);

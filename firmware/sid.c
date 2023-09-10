@@ -11,6 +11,11 @@
 
 #include "sid.h"
 
+inline void SidSetModel(SID* sid, int sid_model)
+{
+	FilterSetSidModel(&sid->Filter, sid_model);
+}
+
 inline void SidInit(SID *sid)
 {
 	sid->Osc[0].OscSource = &(sid->Osc[2]);
@@ -20,6 +25,10 @@ inline void SidInit(SID *sid)
 	sid->Osc[0].OscDestination = &(sid->Osc[1]);
 	sid->Osc[1].OscDestination = &(sid->Osc[2]);
 	sid->Osc[2].OscDestination = &(sid->Osc[0]);
+
+	FilterInit(&sid->Filter);
+
+	SidSetModel(sid, MOS_8580);
 
 	SidReset(sid);
 }
@@ -55,7 +64,7 @@ inline void SidReset(SID *sid)
 	EnvReset(&sid->Env[1]);
 	EnvReset(&sid->Env[2]);
 
-    //Filter->Reset();	
+	FilterReset(&sid->Filter);
 }
 
 inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
@@ -147,17 +156,17 @@ inline void SidWriteReg(SID *sid, uint8_t address, uint8_t value)
         break;
     case 21: // Filterfrequenz LoByte
         sid->FilterFreqLo = value;
-        //Filter->SetFrequenz((FilterFreqHi<<3) | (FilterFreqLo & 0x07));
+		FilterSetFrequenz(&sid->Filter, (sid->FilterFreqHi<<3) | (sid->FilterFreqLo & 0x07));
         break;
     case 22: // Filterfrequenz HByte
         sid->FilterFreqHi = value;
-        //Filter->SetFrequenz((FilterFreqHi<<3) | (FilterFreqLo & 0x07));
+        FilterSetFrequenz(&sid->Filter, (sid->FilterFreqHi<<3) | (sid->FilterFreqLo & 0x07));
         break;
     case 23: // FilterControl1
-        //Filter->SetControl1(value);
+		FilterSetControl1(&sid->Filter, value);
         break;
     case 24: // FilterControl2
-        //Filter->SetControl2(value);
+		FilterSetControl2(&sid->Filter, value);
 		sid->VolumeOut = (value & 0x0f) / (float)0x0f;
         break;
     default:
