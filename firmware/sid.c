@@ -67,7 +67,7 @@ void SidInit()
 	voices[1].osc_destination = 2;
 	voices[2].osc_destination = 0;
 
-    filter_on = false;
+    filter_on = true;
 
 	SidSetChipTyp(MOS_8580);
 	SidReset();
@@ -130,8 +130,8 @@ inline void SidSetChipTyp(int chip_type)
         wave2 = Wave6581_2;
         wave3 = Wave6581_3;
 
-        wave_zero = 0x000;			// 0x380
-        voice_dc = 0x000;			// 0x800 * 0xFF
+        wave_zero = 0x380;			// 0x380
+        voice_dc = 0x800 * 0xFF;	// 0x800 * 0xFF
 
         mixer_dc = -0xfff * 0xff / 18 >> 7;
         f0 = f0_6581;
@@ -143,7 +143,7 @@ inline void SidSetChipTyp(int chip_type)
         wave2 = Wave8580_2;
         wave3 = Wave8580_3;
 
-        wave_zero = 0x000;	// 0x800
+        wave_zero = 0x800;	// 0x800
         voice_dc = 0x000;	// 0x000
 
         mixer_dc = 0;

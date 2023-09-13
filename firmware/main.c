@@ -74,8 +74,8 @@ void Core1Entry()
 		led_state = !led_state;
 		gpio_put(DEBUG_LED_PIN, led_state);
 
-		// every 4 cycles
-		SidCycle(4);
+		// every 8 cycles
+		SidCycle(8);
 
 		while(gpio_get(CLK_2_PIN)){}
 	}
@@ -146,7 +146,7 @@ void pwm_irq_handle()
 	pwm_clear_irq(slice_num);
 
 	// Sample Output
-	pwm_set_gpio_level(AUDIO_PIN, SidTestOut() / (float)0xffff * 0x7ff);
+	pwm_set_gpio_level(AUDIO_PIN, SidFilterOut() / (float)0xffff * 0x7ff);
 }
 
 void InitPWMAudio(uint audio_out_gpio)
@@ -158,7 +158,7 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	pwm_set_clkdiv_int_frac(slice_num, 2,12);	// PWM Frequency of 44389Hz when Systemclock is 250MHz.
+	pwm_set_clkdiv_int_frac(slice_num, 2,12);	// PWM Frequency of 44389,2046Hz when Systemclock is 250MHz.
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit
