@@ -20,13 +20,9 @@ add_executable(${PROJECT_NAME}
   main.c /
   sid.c /
   sid.h /
-  osc.c /
-  osc.h /
-  waves.h /
-  env.c /
-  env.h /
-  filter.c /
-  filter.h
+  mos6581_8085_waves.h /
+  f0_points_6581.h /
+  f0_points_8580.h
 )
 
 pico_generate_pio_header(${PROJECT_NAME}
