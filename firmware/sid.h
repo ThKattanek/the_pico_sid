@@ -9,45 +9,80 @@
 //                                              //
 //////////////////////////////////////////////////
 
-#ifndef SID_H
-#define SID_H
+#ifndef	SID_H
+#define	SID_H
+
+#if defined(__linux__) || defined(_WIN32)
+
+#include <stdint.h>
+#include <stdbool.h>
+typedef unsigned int uint;
+
+#else
 
 #include <pico/stdlib.h>
 
-#include "osc.h"
-#include "env.h"
+#endif
 
-//#define SID_CYCLE_EXACT
+#include "f0_points_6581.h"
+#include "f0_points_8580.h"
 
-struct SID
+//// Sid Typen ////
+#define MOS_6581 		0
+#define MOS_8580 		1
+
+#define	ATTACK			0
+#define	DECAY_SUSTAIN   1
+#define RELEASE			2
+
+#define	PUFFER_TIME		1
+struct VOICE
 {
-	// Alle IO Register ///
-	uint8_t   	IO[32];
-	uint8_t   	Freq0Lo;
-	uint8_t   	Freq0Hi;
-	uint8_t   	Freq1Lo;
-	uint8_t   	Freq1Hi;
-	uint8_t   	Freq2Lo;
-	uint8_t   	Freq2Hi;
-	uint8_t   	Puls0Lo;
-	uint8_t   	Puls0Hi;
-	uint8_t   	Puls1Lo;
-	uint8_t   	Puls1Hi;
-	uint8_t   	Puls2Lo;
-	uint8_t   	Puls2Hi;
-	uint8_t   	Ctrl0;
-	uint8_t   	Ctrl1;
-	uint8_t   	Ctrl2;
-	uint8_t  	FilterFreqLo;
-	uint8_t   	FilterFreqHi;
+	/// Oscillator Register ///
+    bool			osc_enable;
+    bool			test_bit;
+    bool			ring_bit;
+    bool			sync_bit;
+    uint8_t			waveform;
+    uint			frequency;
+    uint			dutycycle;
+    uint			accu;
+    uint			shiftreg;
+    uint			msb_rising;
+    int				osc_source;
+    int				osc_destination;
 
-	OSC		  	Osc[3];
-	ENV			Env[3];
-	float		VolumeOut;
-}typedef SID;
+    /// Envelope Register ///
+    bool			key_bit;
+    int				state;
+    uint			rate_period;
+    uint			rate_counter;
+    uint			exponential_counter_period;
+    uint			exponential_counter;
+    uint			env_counter;
+    bool			hold_zero;
+    uint			attack;
+    uint			decay;
+    uint			sustain;
+    uint			release;
+}typedef VOICE;
 
-void SidInit(SID *sid);
-void SidReset(SID *sid);
-void SidWriteReg(SID *sid, uint8_t address, uint8_t value);
+void SidInit();
+void SidReset();
+void SidSetSamplerate(uint samplerate);
+void SidSetChipTyp(int chip_type);
+void SidWriteReg(uint16_t address, uint8_t value);
+int  SidVoiceOutput(int voice_nr);
+int  SidTestOut();
+int  SidFilterOut();
+uint SidWaveDreieck(VOICE* v, VOICE* vs);
+uint SidWaveSaegezahn(VOICE *v);
+uint SidWaveRechteck(VOICE *v);
+uint SidWaveRauschen(VOICE *v);
+uint SidOscOut(int voice_nr);
+uint SidEnvOut(int voice_nr);
+void SidCycle(int cycles_count);
+void SidSetW0();
+void SidSetQ();
 
 #endif // SID_H

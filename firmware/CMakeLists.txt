@@ -20,10 +20,9 @@ add_executable(${PROJECT_NAME}
   main.c /
   sid.c /
   sid.h /
-  osc.c /
-  osc.h /
-  env.c /
-  env.h
+  mos6581_8085_waves.h /
+  f0_points_6581.h /
+  f0_points_8580.h
 )
 
 pico_generate_pio_header(${PROJECT_NAME}
@@ -35,7 +34,8 @@ pico_enable_stdio_usb(${PROJECT_NAME} 0)
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
 
 # Pull in our pico_stdlib which pulls in commonly used features
-target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_pio hardware_pwm hardware_dma hardware_timer hardware_clocks)
+# target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_pio hardware_pwm hardware_dma hardware_timer hardware_clocks)
+target_link_libraries(${PROJECT_NAME} pico_stdlib pico_multicore hardware_pio hardware_dma hardware_pwm)
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(${PROJECT_NAME})
