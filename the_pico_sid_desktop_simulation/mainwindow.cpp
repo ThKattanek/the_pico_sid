@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     bufferSize = SOUND_BUFFER_SIZE * 2;
 
     // Default Audioformat (44100 / Stereo / Float)
-    m_format.setSampleRate(44100);
+    m_format.setSampleRate(41223);
     m_format.setChannelCount(2);
     m_format.setSampleSize(32);
     m_format.setCodec("audio/pcm");
@@ -60,7 +60,6 @@ MainWindow::MainWindow(QWidget *parent)
 
         SidInit();
         SidSetChipTyp(MOS_8580);
-        SidSetSamplerate(44100);
         sid_dump = new SIDDumpClass(&sid_io);
 
         m_audiogen->start();
@@ -94,35 +93,10 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
             if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
             SidCycle(4);
         }
-        buffer[buffer_pos] = buffer[buffer_pos+1] = SidFilterOut() / float(0xfffff);
+        //buffer[buffer_pos] = buffer[buffer_pos+1] = SidFilterOut() / float(0xfffff);
+        buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(SidFilterOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
         buffer_pos += 2;
     }
-
-/*
-	for(int i=0; i<(len / (m_format.sampleSize()/8)); i+=2)
-	{
-
-#define CYCLE_EXACT
-
-#ifndef CYCLE_EXACT
-        for(int i=0; i<6; i++)
-        {
-            for(int i=0; i<4; i++)
-                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-
-            SidCycle(4);
-        }
-#else
-        for(int i=0; i<22; i++)
-        {
-            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-            SidCycle(1);
-        }
-#endif
-        sample = SidFilterOut();
-        buffer[i] = buffer[i+1] = sample / float(0xffff);
-	}
-*/
 }
 
 
