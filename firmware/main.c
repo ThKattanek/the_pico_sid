@@ -37,6 +37,8 @@ volatile uint slice_num;
 
 //#define RINGBUFFER_ENABLE
 
+int sample;
+
 #ifdef RINGBUFFER_ENABLE
 volatile uint16_t register_ring_buffer[0x1000];
 volatile uint16_t register_ring_buffer_rpos = 0;
@@ -75,7 +77,8 @@ void Core1Entry()
 		gpio_put(DEBUG_LED_PIN, led_state);
 
 		// every 8 cycles
-		SidCycle(8);
+		SidCycle(4);
+		sample = SidFilterOut();
 
 		while(gpio_get(CLK_2_PIN)){}
 	}
@@ -146,7 +149,7 @@ void pwm_irq_handle()
 	pwm_clear_irq(slice_num);
 
 	// Sample Output
-	pwm_set_gpio_level(AUDIO_PIN, SidFilterOut() / (float)0xffff * 0x7ff);
+	pwm_set_gpio_level(AUDIO_PIN, (sample / (float)0xfffff) * 0x7ff);
 }
 
 void InitPWMAudio(uint audio_out_gpio)

@@ -81,7 +81,7 @@ uint SidWaveRechteck(VOICE *v);
 uint SidWaveRauschen(VOICE *v);
 uint SidOscOut(int voice_nr);
 uint SidEnvOut(int voice_nr);
-void SidCycle(int cycles_count);
+bool SidCycle(int cycles_count);
 void SidSetW0();
 void SidSetQ();
 
