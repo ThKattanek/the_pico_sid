@@ -42,16 +42,20 @@ uint		hp_bp_lp;
 uint		volume;
 
 /// FILTER internal Regs ///
-volatile int			mixer_dc;
-volatile int			vhp;
-volatile int			vbp;
-volatile int			vlp;
-volatile int			vnf;
-volatile int			w0,w0_ceil_1,w0_ceil_dt;
-volatile int			_1024_div_Q;
-volatile int*           f0;
+volatile int	mixer_dc;
+volatile int	vhp;
+volatile int	vbp;
+volatile int	vlp;
+volatile int	vnf;
+volatile int	w0,w0_ceil_1,w0_ceil_dt;
+volatile int	_1024_div_Q;
+volatile int*   f0;
 
-volatile int			ext_in;
+volatile int	ext_in;
+
+float   freq_conv_counter;
+float   freq_conv_add;
+uint    cycle_counter;
 
 void SidInit()
 {
@@ -67,9 +71,9 @@ void SidInit()
 	voices[1].osc_destination = 2;
 	voices[2].osc_destination = 0;
 
-    filter_on = false;
+    filter_on = true;
 
-	SidSetChipTyp(MOS_8580);
+    SidSetChipTyp(MOS_8580);
 	SidReset();
 }
 
@@ -119,6 +123,13 @@ inline void SidReset()
     SidSetQ();
 }
 
+void SidSetSamplerate(uint samplerate)
+{
+    freq_conv_add = 1.0f / (985248.f / samplerate);
+    freq_conv_counter = 0.0f;
+    cycle_counter = 0;
+}
+
 inline void SidSetChipTyp(int chip_type)
 {
 	sid_type = chip_type;
@@ -130,8 +141,8 @@ inline void SidSetChipTyp(int chip_type)
         wave2 = Wave6581_2;
         wave3 = Wave6581_3;
 
-        wave_zero = 0x000;			// 0x380
-        voice_dc = 0x000;			// 0x800 * 0xFF
+        wave_zero = 0x380;			// 0x380
+        voice_dc = 0x800 * 0xFF;	// 0x800 * 0xFF
 
         mixer_dc = -0xfff * 0xff / 18 >> 7;
         f0 = f0_6581;
@@ -143,7 +154,7 @@ inline void SidSetChipTyp(int chip_type)
         wave2 = Wave8580_2;
         wave3 = Wave8580_3;
 
-        wave_zero = 0x000;	// 0x800
+        wave_zero = 0x800;	// 0x800
         voice_dc = 0x000;	// 0x000
 
         mixer_dc = 0;
@@ -420,7 +431,7 @@ int  SidFilterOut()
         break;
     }
 
-    return ((vnf + vf + mixer_dc) * (int)(volume)) >> 4;
+    return ((vnf + vf + mixer_dc) * (int)(volume));
 }
 
 inline uint SidWaveDreieck(VOICE* v, VOICE* vs)
@@ -490,270 +501,284 @@ inline uint SidEnvOut(int voice_nr)
     return voices[voice_nr].env_counter;
 }
 
-inline void SidCycle(int cycles_count)
+inline bool SidCycle(int cycles_count)
 {
-	// OSC
-	static unsigned int AccuPrev;
-    static unsigned int AccuDelta;
-    static unsigned int ShiftPeriod;
-    static unsigned int Bit0;
+    //cycle_counter++;
+    //freq_conv_counter += freq_conv_add;
+    //if(freq_conv_counter >= 1.0f)
+    //{
+    //    freq_conv_counter -= 1.0f;
+    //    cycles_count = (int)cycle_counter;
+    //    cycle_counter = 0;
 
-	for(int i=0; i<3; i++)
-    {
-		// OSC Cycles
-        if(!voices[i].test_bit)
+
+        // OSC
+        static unsigned int AccuPrev;
+        static unsigned int AccuDelta;
+        static unsigned int ShiftPeriod;
+        static unsigned int Bit0;
+
+        for(int i=0; i<3; i++)
         {
-            AccuPrev = voices[i].accu;
-            AccuDelta = cycles_count * voices[i].frequency;
-            voices[i].accu += AccuDelta;
-            voices[i].accu &= 0xffffff;
-            voices[i].msb_rising =! (AccuPrev&0x800000) && (voices[i].accu & 0x800000);
-            ShiftPeriod = 0x100000;
-            while (AccuDelta)
+            // OSC Cycles
+            if(!voices[i].test_bit)
             {
-                if (AccuDelta < ShiftPeriod)
+                AccuPrev = voices[i].accu;
+                AccuDelta = cycles_count * voices[i].frequency;
+                voices[i].accu += AccuDelta;
+                voices[i].accu &= 0xffffff;
+                voices[i].msb_rising =! (AccuPrev&0x800000) && (voices[i].accu & 0x800000);
+                ShiftPeriod = 0x100000;
+                while (AccuDelta)
                 {
-                    ShiftPeriod=AccuDelta;
-                    if(ShiftPeriod<=0x80000)
+                    if (AccuDelta < ShiftPeriod)
                     {
-                        if (((voices[i].accu-ShiftPeriod) & 0x080000) || !(voices[i].accu & 0x080000))
+                        ShiftPeriod=AccuDelta;
+                        if(ShiftPeriod<=0x80000)
                         {
-                            break;
+                            if (((voices[i].accu-ShiftPeriod) & 0x080000) || !(voices[i].accu & 0x080000))
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (((voices[i].accu - ShiftPeriod) & 0x080000) && !(voices[i].accu & 0x080000))
+                            {
+                                break;
+                            }
                         }
                     }
-                    else
-                    {
-                        if (((voices[i].accu - ShiftPeriod) & 0x080000) && !(voices[i].accu & 0x080000))
-                        {
-                            break;
-                        }
-                    }
-                }
 
-                Bit0 = ((voices[i].shiftreg>>22) ^ (voices[i].shiftreg>>17)) & 0x01;
-                voices[i].shiftreg <<= 1;
-                voices[i].shiftreg &= 0x7fffff;
-                voices[i].shiftreg |= Bit0;
-                AccuDelta -= ShiftPeriod;
+                    Bit0 = ((voices[i].shiftreg>>22) ^ (voices[i].shiftreg>>17)) & 0x01;
+                    voices[i].shiftreg <<= 1;
+                    voices[i].shiftreg &= 0x7fffff;
+                    voices[i].shiftreg |= Bit0;
+                    AccuDelta -= ShiftPeriod;
+                }
             }
         }
-	}
 
-	for(int i=0; i<3; i++)
-	{
-		// ENV Cycles
-		int rate_step = voices[i].rate_period - voices[i].rate_counter;
-		if (rate_step <= 0)
-		{
-			rate_step += 0x7fff;
-		}
-
-		while (cycles_count)
-		{
-			if (cycles_count < rate_step)
-			{
-				voices[i].rate_counter += cycles_count;
-				if (voices[i].rate_counter & 0x8000)
-				{
-					voices[i].rate_counter++;
-					voices[i].rate_counter &= 0x7fff;
-				}
-				goto L10;
-			}
-			voices[i].rate_counter = 0;
-			cycles_count -= rate_step;
-
-			if(voices[i].state == ATTACK || ++voices[i].exponential_counter == voices[i].exponential_counter_period)
-			{
-				voices[i].exponential_counter = 0;
-				if (voices[i].hold_zero)
-				{
-					rate_step = voices[i].rate_period;
-					continue;
-				}
-
-				switch(voices[i].state)
-				{
-				case ATTACK:
-					voices[i].env_counter++;
-					voices[i].env_counter &= 0xff;
-					if(voices[i].env_counter == 0xff)
-					{
-						voices[i].state = DECAY_SUSTAIN;
-						voices[i].rate_period = RateCounterPeriod[voices[i].decay];
-					}
-					break;
-
-				case DECAY_SUSTAIN:
-					if(voices[i].env_counter != SustainLevel[voices[i].sustain]) --voices[i].env_counter;
-					break;
-
-				case RELEASE:
-					voices[i].env_counter--;
-					voices[i].env_counter &= 0xFF;
-					break;
-				}
-				switch(voices[i].env_counter)
-				{
-				case 0xFF:
-					voices[i].exponential_counter_period = 1;
-					break;
-
-				case 0x5D:
-					voices[i].exponential_counter_period = 2;
-					break;
-
-				case 0x36:
-					voices[i].exponential_counter_period = 4;
-					break;
-
-				case 0x1A:
-					voices[i].exponential_counter_period = 8;
-					break;
-
-				case 0x0E:
-					voices[i].exponential_counter_period = 16;
-					break;
-
-				case 0x06:
-					voices[i].exponential_counter_period = 30;
-					break;
-
-				case 0x00:
-					voices[i].exponential_counter_period = 1;
-					voices[i].hold_zero = true;
-					break;
-				}
-			}
-			rate_step = voices[i].rate_period;
-		}
-		L10:;
-	}
-
-	// FILTER Cycles
-
-	int voice1 = SidVoiceOutput(0);
-	int voice2 = SidVoiceOutput(1);
-	int voice3 = SidVoiceOutput(2);
-
-    voice1 >>= 7;
-    voice2 >>= 7;
-
-    if(voice3_off && !(filter_key & 0x04)) voice3 = 0;
-    else voice3 >>= 7;
-
-    ext_in >>= 7;
-
-    if(!filter_on)
-    {
-        vnf = voice1 + voice2 + voice3 + ext_in;
-        vhp = vbp = vlp = 0;
-        return;
-    }
-
-    int Vi;
-
-    switch (filter_key)
-    {
-
-    default:
-
-    case 0x00:
-        Vi = 0;
-        vnf = voice1 + voice2 + voice3 + ext_in;
-        break;
-
-    case 0x01:
-        Vi = voice1;
-        vnf = voice2 + voice3 + ext_in;
-        break;
-
-    case 0x02:
-        Vi = voice2;
-        vnf = voice1 + voice3 + ext_in;
-        break;
-
-    case 0x03:
-        Vi = voice1 + voice2;
-        vnf = voice3 + ext_in;
-        break;
-
-    case 0x04:
-        Vi = voice3;
-        vnf = voice1 + voice2 + ext_in;
-        break;
-
-    case 0x05:
-        Vi = voice1 + voice3;
-        vnf = voice2 + ext_in;
-        break;
-
-    case 0x06:
-        Vi = voice2 + voice3;
-        vnf = voice1 + ext_in;
-        break;
-
-    case 0x07:
-        Vi = voice1 + voice2 + voice3;
-        vnf = ext_in;
-        break;
-
-    case 0x08:
-        Vi = ext_in;
-        vnf = voice1 + voice2 + voice3;
-        break;
-
-    case 0x09:
-        Vi = voice1 + ext_in;
-        vnf = voice2 + voice3;
-        break;
-
-    case 0x0A:
-        Vi = voice2 + ext_in;
-        vnf = voice1 + voice3;
-        break;
-
-    case 0x0B:
-        Vi = voice1 + voice2 + ext_in;
-        vnf = voice3;
-        break;
-
-    case 0x0C:
-        Vi = voice3 + ext_in;
-        vnf = voice1 + voice2;
-        break;
-
-    case 0x0D:
-        Vi = voice1 + voice3 + ext_in;
-        vnf = voice2;
-        break;
-
-    case 0x0E:
-        Vi = voice2 + voice3 + ext_in;
-        vnf = voice1;
-        break;
-
-    case 0x0F:
-        Vi = voice1 + voice2 + voice3 + ext_in;
-        vnf = 0;
-        break;
-    }
-
-    int delta_t_flt = 8;
-    while (cycles_count)
-    {
-        if (cycles_count < delta_t_flt)
+        for(int i=0; i<3; i++)
         {
-            delta_t_flt = cycles_count;
+            // ENV Cycles
+            int rate_step = voices[i].rate_period - voices[i].rate_counter;
+            if (rate_step <= 0)
+            {
+                rate_step += 0x7fff;
+            }
+
+            while (cycles_count)
+            {
+                if (cycles_count < rate_step)
+                {
+                    voices[i].rate_counter += cycles_count;
+                    if (voices[i].rate_counter & 0x8000)
+                    {
+                        voices[i].rate_counter++;
+                        voices[i].rate_counter &= 0x7fff;
+                    }
+                    goto L10;
+                }
+                voices[i].rate_counter = 0;
+                cycles_count -= rate_step;
+
+                if(voices[i].state == ATTACK || ++voices[i].exponential_counter == voices[i].exponential_counter_period)
+                {
+                    voices[i].exponential_counter = 0;
+                    if (voices[i].hold_zero)
+                    {
+                        rate_step = voices[i].rate_period;
+                        continue;
+                    }
+
+                    switch(voices[i].state)
+                    {
+                    case ATTACK:
+                        voices[i].env_counter++;
+                        voices[i].env_counter &= 0xff;
+                        if(voices[i].env_counter == 0xff)
+                        {
+                            voices[i].state = DECAY_SUSTAIN;
+                            voices[i].rate_period = RateCounterPeriod[voices[i].decay];
+                        }
+                        break;
+
+                    case DECAY_SUSTAIN:
+                        if(voices[i].env_counter != SustainLevel[voices[i].sustain]) --voices[i].env_counter;
+                        break;
+
+                    case RELEASE:
+                        voices[i].env_counter--;
+                        voices[i].env_counter &= 0xFF;
+                        break;
+                    }
+                    switch(voices[i].env_counter)
+                    {
+                    case 0xFF:
+                        voices[i].exponential_counter_period = 1;
+                        break;
+
+                    case 0x5D:
+                        voices[i].exponential_counter_period = 2;
+                        break;
+
+                    case 0x36:
+                        voices[i].exponential_counter_period = 4;
+                        break;
+
+                    case 0x1A:
+                        voices[i].exponential_counter_period = 8;
+                        break;
+
+                    case 0x0E:
+                        voices[i].exponential_counter_period = 16;
+                        break;
+
+                    case 0x06:
+                        voices[i].exponential_counter_period = 30;
+                        break;
+
+                    case 0x00:
+                        voices[i].exponential_counter_period = 1;
+                        voices[i].hold_zero = true;
+                        break;
+                    }
+                }
+                rate_step = voices[i].rate_period;
+            }
+            L10:;
         }
-        int w0_delta_t = w0_ceil_dt*delta_t_flt>>6;
-        int dVbp = (w0_delta_t*vhp >> 14);
-        int dVlp = (w0_delta_t*vbp >> 14);
-        vbp-=dVbp;
-        vlp-=dVlp;
-        vhp=(vbp*_1024_div_Q>>10)-vlp-Vi;
-        cycles_count -= delta_t_flt;
-    }
+
+        // FILTER Cycles
+
+        int voice1 = SidVoiceOutput(0);
+        int voice2 = SidVoiceOutput(1);
+        int voice3 = SidVoiceOutput(2);
+
+        voice1 >>= 7;
+        voice2 >>= 7;
+
+        if(voice3_off && !(filter_key & 0x04)) voice3 = 0;
+        else voice3 >>= 7;
+
+        ext_in >>= 7;
+
+        if(!filter_on)
+        {
+            vnf = voice1 + voice2 + voice3 + ext_in;
+            vhp = vbp = vlp = 0;
+
+        }
+        else
+        {
+            int Vi;
+
+            switch (filter_key)
+            {
+
+            default:
+
+            case 0x00:
+                Vi = 0;
+                vnf = voice1 + voice2 + voice3 + ext_in;
+                break;
+
+            case 0x01:
+                Vi = voice1;
+                vnf = voice2 + voice3 + ext_in;
+                break;
+
+            case 0x02:
+                Vi = voice2;
+                vnf = voice1 + voice3 + ext_in;
+                break;
+
+            case 0x03:
+                Vi = voice1 + voice2;
+                vnf = voice3 + ext_in;
+                break;
+
+            case 0x04:
+                Vi = voice3;
+                vnf = voice1 + voice2 + ext_in;
+                break;
+
+            case 0x05:
+                Vi = voice1 + voice3;
+                vnf = voice2 + ext_in;
+                break;
+
+            case 0x06:
+                Vi = voice2 + voice3;
+                vnf = voice1 + ext_in;
+                break;
+
+            case 0x07:
+                Vi = voice1 + voice2 + voice3;
+                vnf = ext_in;
+                break;
+
+            case 0x08:
+                Vi = ext_in;
+                vnf = voice1 + voice2 + voice3;
+                break;
+
+            case 0x09:
+                Vi = voice1 + ext_in;
+                vnf = voice2 + voice3;
+                break;
+
+            case 0x0A:
+                Vi = voice2 + ext_in;
+                vnf = voice1 + voice3;
+                break;
+
+            case 0x0B:
+                Vi = voice1 + voice2 + ext_in;
+                vnf = voice3;
+                break;
+
+            case 0x0C:
+                Vi = voice3 + ext_in;
+                vnf = voice1 + voice2;
+                break;
+
+            case 0x0D:
+                Vi = voice1 + voice3 + ext_in;
+                vnf = voice2;
+                break;
+
+            case 0x0E:
+                Vi = voice2 + voice3 + ext_in;
+                vnf = voice1;
+                break;
+
+            case 0x0F:
+                Vi = voice1 + voice2 + voice3 + ext_in;
+                vnf = 0;
+                break;
+            }
+
+            int delta_t_flt = 8;
+            while (cycles_count)
+            {
+                if (cycles_count < delta_t_flt)
+                {
+                    delta_t_flt = cycles_count;
+                }
+                int w0_delta_t = w0_ceil_dt*delta_t_flt>>6;
+                int dVbp = (w0_delta_t*vhp >> 14);
+                int dVlp = (w0_delta_t*vbp >> 14);
+                vbp-=dVbp;
+                vlp-=dVlp;
+                vhp=(vbp*_1024_div_Q>>10)-vlp-Vi;
+                cycles_count -= delta_t_flt;
+            }
+        }
+        return true;
+    //}
+    return false;
 }
 
 ////////// FILTER //////////

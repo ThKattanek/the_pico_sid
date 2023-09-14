@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         SidInit();
         SidSetChipTyp(MOS_8580);
+        SidSetSamplerate(44100);
         sid_dump = new SIDDumpClass(&sid_io);
 
         m_audiogen->start();
@@ -79,9 +80,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::OnFillAudioData(char *data, qint64 len)
 {
-	float *buffer = reinterpret_cast<float*>(data);
+    float* buffer = reinterpret_cast<float*>(data);
+    int buffer_pos = 0;
+    int sample;
 
-    uint16_t sample_in;
+    while(buffer_pos < (len / (m_format.sampleSize()/8)))
+    {
+        for(int i=0; i<6; i++)
+        {
+            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+            SidCycle(4);
+        }
+        buffer[buffer_pos] = buffer[buffer_pos+1] = SidFilterOut() / float(0xfffff);
+        buffer_pos += 2;
+    }
+
+/*
 	for(int i=0; i<(len / (m_format.sampleSize()/8)); i+=2)
 	{
 
@@ -96,18 +113,16 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
             SidCycle(4);
         }
 #else
-        for(int i=0; i<24; i++)
+        for(int i=0; i<22; i++)
         {
             if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
             SidCycle(1);
         }
 #endif
-        sample_in = SidFilterOut();
-
-        //// 16Bit Sample to float
-        sample_in &= 0xffff;
-        buffer[i] = buffer[i+1] = sample_in / float(0xffff);
+        sample = SidFilterOut();
+        buffer[i] = buffer[i+1] = sample / float(0xffff);
 	}
+*/
 }
 
 
