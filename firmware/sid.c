@@ -53,10 +53,6 @@ volatile int*   f0;
 
 volatile int	ext_in;
 
-float   freq_conv_counter;
-float   freq_conv_add;
-uint    cycle_counter;
-
 void SidInit()
 {
 	voices[0].osc_enable = true;
@@ -75,6 +71,46 @@ void SidInit()
 
     SidSetChipTyp(MOS_8580);
 	SidReset();
+}
+
+void SidSetChipTyp(int chip_type)
+{
+	sid_type = chip_type;
+
+    if(sid_type == MOS_6581)
+    {
+        wave0 = Wave6581_0;
+        wave1 = Wave6581_1;
+        wave2 = Wave6581_2;
+        wave3 = Wave6581_3;
+
+        wave_zero = 0x380;			// 0x380
+        voice_dc = 0x800 * 0xFF;	// 0x800 * 0xFF
+
+        mixer_dc = -0xfff * 0xff / 18 >> 7;
+        f0 = f0_6581;
+    }
+    else
+    {
+        wave0 = Wave8580_0;
+        wave1 = Wave8580_1;
+        wave2 = Wave8580_2;
+        wave3 = Wave8580_3;
+
+        wave_zero = 0x800;	// 0x800
+        voice_dc = 0x000;	// 0x000
+
+        mixer_dc = 0;
+        f0 = f0_8580;
+    }
+
+    SidSetW0();
+    SidSetQ();
+}
+
+void SidEnableFilter(bool enable)
+{
+	filter_on = enable;
 }
 
 inline void SidReset()
@@ -118,48 +154,6 @@ inline void SidReset()
     vbp=0;
     vlp=0;
     vnf=0;
-
-    SidSetW0();
-    SidSetQ();
-}
-
-void SidSetSamplerate(uint samplerate)
-{
-    freq_conv_add = 1.0f / (985248.f / samplerate);
-    freq_conv_counter = 0.0f;
-    cycle_counter = 0;
-}
-
-inline void SidSetChipTyp(int chip_type)
-{
-	sid_type = chip_type;
-
-    if(sid_type == MOS_6581)
-    {
-        wave0 = Wave6581_0;
-        wave1 = Wave6581_1;
-        wave2 = Wave6581_2;
-        wave3 = Wave6581_3;
-
-        wave_zero = 0x380;			// 0x380
-        voice_dc = 0x800 * 0xFF;	// 0x800 * 0xFF
-
-        mixer_dc = -0xfff * 0xff / 18 >> 7;
-        f0 = f0_6581;
-    }
-    else
-    {
-        wave0 = Wave8580_0;
-        wave1 = Wave8580_1;
-        wave2 = Wave8580_2;
-        wave3 = Wave8580_3;
-
-        wave_zero = 0x800;	// 0x800
-        voice_dc = 0x000;	// 0x000
-
-        mixer_dc = 0;
-        f0 = f0_8580;
-    }
 
     SidSetW0();
     SidSetQ();
@@ -371,21 +365,7 @@ inline void SidWriteReg(uint16_t address, uint8_t value)
     }
 }
 
-inline int SidVoiceOutput(int voice_nr)
-{
-    return (SidOscOut(voice_nr) - wave_zero) * SidEnvOut(voice_nr) + voice_dc;
-}
-
-int SidTestOut()
-{
-	int32_t voice1 = (int32_t)(SidOscOut(0) - wave_zero) * SidEnvOut(0) + voice_dc; 
-	int32_t voice2 = (int32_t)(SidOscOut(1) - wave_zero) * SidEnvOut(1) + voice_dc; 
-    int32_t voice3 = (int32_t)(SidOscOut(2) - wave_zero) * SidEnvOut(2) + voice_dc;
-
-    return ((voice1 >> 7) + (voice2 >> 7) + (voice3 >> 7)) * (int)(volume);
-}
-
-int  SidFilterOut()
+inline int  SidFilterOut()
 {
 	if (!filter_on)
     {
@@ -432,6 +412,11 @@ int  SidFilterOut()
     }
 
     return ((vnf + vf + mixer_dc) * (int)(volume));
+}
+
+inline int SidVoiceOutput(int voice_nr)
+{
+    return (SidOscOut(voice_nr) - wave_zero) * SidEnvOut(voice_nr) + voice_dc;
 }
 
 inline uint SidWaveDreieck(VOICE* v, VOICE* vs)

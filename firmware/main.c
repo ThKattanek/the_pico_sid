@@ -101,6 +101,7 @@ int main() {
 	// Init SID
 	SidInit();
 	SidSetChipTyp(MOS_8580);
+	SidEnableFilter(true);
 
 	// Init Audio PWM
 	//InitPWMAudio(AUDIO_PIN);

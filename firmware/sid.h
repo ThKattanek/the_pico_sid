@@ -35,7 +35,6 @@ typedef unsigned int uint;
 #define	DECAY_SUSTAIN   1
 #define RELEASE			2
 
-#define	PUFFER_TIME		1
 struct VOICE
 {
 	/// Oscillator Register ///
@@ -67,14 +66,20 @@ struct VOICE
     uint			release;
 }typedef VOICE;
 
+// Initialized
 void SidInit();
-void SidReset();
-void SidSetSamplerate(uint samplerate);
+
+// Config
 void SidSetChipTyp(int chip_type);
+void SidEnableFilter(bool enable);
+
+// Signals from extern
+void SidReset();
 void SidWriteReg(uint16_t address, uint8_t value);
-int  SidVoiceOutput(int voice_nr);
-int  SidTestOut();
 int  SidFilterOut();
+
+// Intern
+int  SidVoiceOutput(int voice_nr);
 uint SidWaveDreieck(VOICE* v, VOICE* vs);
 uint SidWaveSaegezahn(VOICE *v);
 uint SidWaveRechteck(VOICE *v);
