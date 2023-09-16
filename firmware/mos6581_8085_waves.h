@@ -1,15 +1,11 @@
 //////////////////////////////////////////////////
 //                                              //
-// Emu64                                        //
+// ThePicoSID                                   //
 // von Thorsten Kattanek                        //
 //                                              //
-// #file: mos6581_8085_wellenformen.h           //
+// #file: mos6581_8085_waves.h                  //
 //                                              //
-// Dieser Sourcecode ist Copyright geschützt!   //
-// Geistiges Eigentum von Th.Kattanek           //
-//                                              //
-// Letzte Änderung am 18.05.2014                //
-// www.emu64.de                                 //
+// https://github.com/ThKattanek/the_pico_sid   //
 //                                              //
 //////////////////////////////////////////////////
 
