@@ -34,15 +34,7 @@ volatile uint sm;
 
 volatile uint slice_num;
 
-uint16_t samples1[32] __attribute__((aligned(64)));
-uint16_t samples2[32] __attribute__((aligned(64)));
-
-int dma_chan_1;
-int dma_chan_2;
-
 //#define RINGBUFFER_ENABLE
-
-int sample;
 
 #ifdef RINGBUFFER_ENABLE
 volatile uint16_t register_ring_buffer[0x1000];
@@ -97,9 +89,6 @@ int main() {
 	SidInit();
 	SidSetChipTyp(MOS_8580);
 	SidEnableFilter(true);
-
-	// Init Audio PWM
-	//InitPWMAudio(AUDIO_PIN);
 	
 	// UART Start Message PicoSID
 	printf("The Pico SID by Thorsten Kattanek\n");
