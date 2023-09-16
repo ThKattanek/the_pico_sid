@@ -9,18 +9,20 @@
 //                                              //
 //////////////////////////////////////////////////;
 
+.define CLK_PIN 3
+
 .program write_sid_reg
 
-	set y, 0x01		;CLK = 1 and RW = 0
+	set y, 0x00		;CS = 0 and RW = 0 -> then read from address- an data-bus
 	
 .wrap_target
-wait_to_cs_low:
-	jmp pin wait_to_cs_low
+wait_to_clk_low:
+	wait 1 gpio CLK_PIN [31]
  
 	out isr, 2
 	in pins, 2
 	mov x, isr
-	jmp x!=y, wait_to_cs_high
+	jmp x!=y, wait_to_clk_high
 
 	in pins, 15
 	push block
@@ -28,9 +30,9 @@ wait_to_cs_low:
 
     irq 0
 
-wait_to_cs_high:
-	jmp pin wait_to_cs_low
-	jmp wait_to_cs_high
+wait_to_clk_high:
+	wait 0 gpio CLK_PIN
+
 .wrap             
 
 % c-sdk {
@@ -40,18 +42,18 @@ void write_sid_reg_program_init(PIO pio, uint sm, uint offset, uint clk_pin, uin
    
    pio_sm_config c = write_sid_reg_program_get_default_config(offset);
 
-   // config CLK and RW Signal
-   sm_config_set_in_pins(&c, clk_pin);
+   // config CS and RW Signal
+   sm_config_set_in_pins(&c, cs_pin);
    
    for(int i=0; i<15; i++)
-	   pio_gpio_init(pio, clk_pin + i);
+	   pio_gpio_init(pio, cs_pin + i);
 
-   pio_sm_set_consecutive_pindirs(pio, sm, clk_pin, 15, GPIO_IN);
+   pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 15, GPIO_IN);
 
-   // config CS Signal
-   pio_gpio_init(pio, cs_pin);
-   pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 1, GPIO_IN);   
-   sm_config_set_jmp_pin(&c, cs_pin);
+   // config CLK Signal
+   pio_gpio_init(pio, clk_pin);
+   pio_sm_set_consecutive_pindirs(pio, sm, clk_pin, 1, GPIO_IN);   
+   sm_config_set_jmp_pin(&c, clk_pin);
 
 	sm_config_set_in_shift(&c,
                            false, // don't shift right
