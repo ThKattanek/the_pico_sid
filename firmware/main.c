@@ -21,9 +21,8 @@
 
 // PIN MAPPING
 #define RES_PIN 2
-#define CS_PIN 3
-#define CLK_PIN 4	
-#define CLK_2_PIN 20	// 1/2 CLK from CLK_PIN
+#define CLK_PIN 3		// Atention: When change this gpio, then also change this in write_sid_reg.pio
+#define CS_PIN 4
 #define RW_PIN 5
 #define AUDIO_PIN 28
 #define DEBUG_LED_PIN 19
@@ -93,10 +92,6 @@ int main() {
 	gpio_set_function(DEBUG_LED_PIN, GPIO_FUNC_SIO);
 	gpio_set_dir(DEBUG_LED_PIN, true);
 	gpio_put(DEBUG_LED_PIN, led_state);
-
-	// CLK 1/4
-	gpio_set_function(CLK_2_PIN, GPIO_FUNC_SIO);
-	gpio_set_dir(CLK_2_PIN, false);
 
 	// Init SID
 	SidInit();
