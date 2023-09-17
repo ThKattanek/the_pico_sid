@@ -25,7 +25,9 @@
 #define CS_PIN 4
 #define RW_PIN 5
 #define AUDIO_PIN 28
-#define DEBUG_LED_PIN 19
+#define DEBUG_PIN 19
+#define POTX_ADC0_PIN 26
+#define POTY_ADC1_PIN 27
 
 volatile bool reset_state = true;
 
@@ -80,10 +82,10 @@ int main() {
 	stdio_init_all();	
 
 	// Init Debug LED (green/red)
-	gpio_set_drive_strength(DEBUG_LED_PIN, GPIO_DRIVE_STRENGTH_2MA);
-	gpio_set_function(DEBUG_LED_PIN, GPIO_FUNC_SIO);
-	gpio_set_dir(DEBUG_LED_PIN, true);
-	gpio_put(DEBUG_LED_PIN, led_state);
+	gpio_set_drive_strength(DEBUG_PIN, GPIO_DRIVE_STRENGTH_2MA);
+	gpio_set_function(DEBUG_PIN, GPIO_FUNC_SIO);
+	gpio_set_dir(DEBUG_PIN, true);
+	gpio_put(DEBUG_PIN, led_state);
 
 	// Init SID
 	SidInit();
@@ -132,7 +134,7 @@ void pwm_irq_handle()
 	pwm_clear_irq(slice_num);
 
 	led_state = !led_state;
-	gpio_put(DEBUG_LED_PIN, led_state);
+	gpio_put(DEBUG_PIN, led_state);
 
 	for(int i=0; i<6; i++)
 	{

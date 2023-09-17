@@ -2,9 +2,11 @@
  SID        |  GPIO     | DIR
  -----------+-----------+----
  RES        |  2        | IN
- CS         |  3        | IN
- CLK        |  4        | IN
+ CLK        |  3        | IN
+ CS         |  4        | IN
  RW         |  5        | IN
  A0-A4      |  6 - 10   | IN
  D0-D7      |  11 - 18  | IN
  AUDIO OUT  |  28       | OUT
+ POTX		|  26		| IN
+ POTY		|  27		| IN
