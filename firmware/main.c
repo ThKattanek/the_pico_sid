@@ -48,8 +48,8 @@ bool led_state = true;
 
 void InitPWMAudio(uint audio_out_gpio);
 
-void C64Reset(uint gpio, uint32_t events) {
-
+void C64Reset(uint gpio, uint32_t events) 
+{
     if (events & GPIO_IRQ_EDGE_FALL) 
 	{
 		// C64 Reset
