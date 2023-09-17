@@ -94,9 +94,6 @@ int main() {
 	
 	// UART Start Message PicoSID
 	printf("The Pico SID by Thorsten Kattanek\n");
-
-	// Start Core#1 for SID Emualtion
-	multicore_launch_core1(Core1Entry);
 	
 	// PIO Program initialize
 	pio = pio0;
@@ -110,6 +107,9 @@ int main() {
 	irq_set_enabled(PIO0_IRQ_0, true);
 
 	pio0_hw->inte0 = PIO_IRQ0_INTE_SM0_BITS | PIO_IRQ0_INTE_SM1_BITS;
+
+	// Start Core#1 for SID Emualtion
+	multicore_launch_core1(Core1Entry);
 
     while (1)
     {

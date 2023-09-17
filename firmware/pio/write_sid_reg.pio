@@ -17,7 +17,7 @@
 	
 .wrap_target
 wait_to_clk_low:
-	wait 1 gpio CLK_PIN [31]
+	wait 1 gpio CLK_PIN [25]
  
 	out isr, 2
 	in pins, 2
