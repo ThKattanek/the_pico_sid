@@ -19,9 +19,9 @@ unsigned int SustainLevel[]={0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0
 ////////// SID //////////
 
 uint		sid_type;
-
 uint		voice_dc;
 uint		wave_zero;
+bool		enable_audio_out;
 
 ////////// VOICES //////////
 
@@ -69,6 +69,8 @@ void SidInit()
 
     filter_on = true;
 
+	enable_audio_out = true;
+
     SidSetChipTyp(MOS_8580);
 	SidReset();
 }
@@ -111,6 +113,11 @@ void SidSetChipTyp(int chip_type)
 void SidEnableFilter(bool enable)
 {
 	filter_on = enable;
+}
+
+inline void SidSetAudioOut(bool enable)
+{
+	enable_audio_out = enable;
 }
 
 inline void SidReset()
@@ -369,7 +376,9 @@ inline int  SidFilterOut()
 {
 	if (!filter_on)
     {
-        return ((vnf + mixer_dc) * (int)(volume));
+		if(enable_audio_out)
+        	return ((vnf + mixer_dc) * (int)(volume));
+		else return 0;
     }
 
     int vf;
@@ -411,7 +420,9 @@ inline int  SidFilterOut()
         break;
     }
 
-    return ((vnf + vf + mixer_dc) * (int)(volume));
+	if(enable_audio_out)
+    	return ((vnf + vf + mixer_dc) * (int)(volume));
+	else return 0;
 }
 
 inline int SidVoiceOutput(int voice_nr)

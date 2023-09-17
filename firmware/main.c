@@ -48,6 +48,22 @@ bool led_state = true;
 
 void InitPWMAudio(uint audio_out_gpio);
 
+void C64Reset(uint gpio, uint32_t events) {
+
+    if (events & GPIO_IRQ_EDGE_FALL) 
+	{
+		// C64 Reset
+		// Normalerweise erst wenn RESET 10 Zyklen auf Lo war
+        SidSetAudioOut(false);
+		SidReset();
+    }
+	else if (events & GPIO_IRQ_EDGE_RISE) 
+	{
+		// C64 Reset Ende
+        SidSetAudioOut(true);
+    }
+}
+
 void WriteSidReg()
 {
 	if (pio0_hw->irq & 1) 
@@ -107,6 +123,11 @@ int main() {
 	irq_set_enabled(PIO0_IRQ_0, true);
 
 	pio0_hw->inte0 = PIO_IRQ0_INTE_SM0_BITS | PIO_IRQ0_INTE_SM1_BITS;
+
+	// IRQ für die RESET Leitung
+	gpio_init(RES_PIN);
+    gpio_set_dir(RES_PIN, GPIO_IN);
+    gpio_set_irq_enabled_with_callback(RES_PIN, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &C64Reset);
 
 	// Start Core#1 for SID Emualtion
 	multicore_launch_core1(Core1Entry);
