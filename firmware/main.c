@@ -16,6 +16,7 @@
 #include <hardware/pwm.h>
 
 #include "write_sid_reg.pio.h"
+#include "read_sid_reg.pio.h"
 
 #include "sid.h"
 
@@ -32,7 +33,8 @@
 volatile bool reset_state = true;
 
 volatile PIO pio;
-volatile uint sm;
+volatile uint sm0;	// write sid
+volatile uint sm1;	// read sid
 
 volatile uint slice_num;
 
@@ -75,9 +77,18 @@ void WriteSidReg()
 		register_ring_buffer[register_ring_buffer_wpos & 0xfff] = pio->rxf[sm];	
 		register_ring_buffer_wpos++;
 #else
-		uint16_t incomming = pio->rxf[sm];
+		uint16_t incomming = pio->rxf[sm0];
 		SidWriteReg(incomming >> 2, (incomming >> 7) & 0xff);
 #endif
+	}
+}
+
+void ReadSidReg()
+{
+	if (pio0_hw->irq & 2) 
+	{
+		pio0_hw->irq = 2;	
+		uint16_t read_address = (pio->rxf[sm1] >> 2) & 0x1f;
 	}
 }
 
@@ -114,15 +125,21 @@ int main() {
 	// PIO Program initialize
 	pio = pio0;
 
+	// PIO Write SID
 	uint offset = pio_add_program(pio, &write_sid_reg_program);
-	sm = pio_claim_unused_sm(pio, true);
-
-	write_sid_reg_program_init(pio, sm, offset, CLK_PIN, CS_PIN);	//CLK_PIN + RW_PIN + A0-A4 + D0-D7 all PIN Count is 15
-
+	sm0 = pio_claim_unused_sm(pio, true);
+	write_sid_reg_program_init(pio, sm0, offset, CLK_PIN, CS_PIN);	//CLK_PIN + RW_PIN + A0-A4 + D0-D7 all PIN Count is 15
 	irq_set_exclusive_handler(PIO0_IRQ_0, WriteSidReg);
 	irq_set_enabled(PIO0_IRQ_0, true);
+	pio0_hw->inte0 = PIO_IRQ0_INTE_SM0_BITS;
 
-	pio0_hw->inte0 = PIO_IRQ0_INTE_SM0_BITS | PIO_IRQ0_INTE_SM1_BITS;
+	// PIO Read SID
+	offset = pio_add_program(pio, &read_sid_reg_program);
+	sm1 = pio_claim_unused_sm(pio, true);
+	read_sid_reg_program_init(pio, sm1, offset, CLK_PIN, CS_PIN);
+	irq_set_exclusive_handler(PIO0_IRQ_1, ReadSidReg);
+	irq_set_enabled(PIO0_IRQ_1, true);
+	pio0_hw->inte1 = PIO_IRQ1_INTE_SM1_BITS;
 
 	// IRQ für die RESET Leitung
 	gpio_init(RES_PIN);

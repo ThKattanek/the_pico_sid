@@ -1,0 +1,66 @@
+/////////////////////////////////////////////////
+//                                              //
+// ThePicoSID                                   //
+// von Thorsten Kattanek                        //
+//                                              //
+// #file: /pio/read_sid_reg.pio                 //
+//                                              //
+// https://github.com/ThKattanek/the_pico_sid   //
+//                                              //
+//////////////////////////////////////////////////;
+
+.define CLK_PIN 3
+
+.program read_sid_reg
+
+	set y, 0x02		;CS = 0 and RW = 1 -> then read from address-bus and read write to data-bus
+	
+.wrap_target
+wait_to_clk_low:
+	wait 1 gpio CLK_PIN [25]
+ 
+	out isr, 2
+	in pins, 2
+	mov x, isr
+	jmp x!=y, wait_to_clk_high
+
+	in pins, 7
+	push block
+	out isr, 7
+
+    irq 1
+
+wait_to_clk_high:
+	wait 0 gpio CLK_PIN
+
+.wrap             
+
+% c-sdk {
+// this is a raw helper function for use by the user which sets up the GPIO output, and configures the SM to output on a particular pin
+
+void read_sid_reg_program_init(PIO pio, uint sm, uint offset, uint clk_pin, uint cs_pin) {
+   
+   pio_sm_config c = read_sid_reg_program_get_default_config(offset);
+
+   // config CS and RW Signal
+   sm_config_set_in_pins(&c, cs_pin);
+   
+   for(int i=0; i<7; i++)
+	   pio_gpio_init(pio, cs_pin + i);
+
+   pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 7, GPIO_IN);
+
+   // config CLK Signal
+   pio_gpio_init(pio, clk_pin);
+   pio_sm_set_consecutive_pindirs(pio, sm, clk_pin, 1, GPIO_IN);   
+   sm_config_set_jmp_pin(&c, clk_pin);
+
+	sm_config_set_in_shift(&c,
+                           false, // don't shift right
+                           false, // don't autopush
+                        7);   // push threshold (doesn't matter)
+
+   pio_sm_init(pio, sm, offset, &c);
+   pio_sm_set_enabled(pio, sm, true);
+}
+%}
