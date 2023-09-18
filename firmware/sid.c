@@ -22,6 +22,7 @@ uint		sid_type;
 uint		voice_dc;
 uint		wave_zero;
 bool		enable_audio_out;
+uint8_t		last_reg_write_value;
 
 ////////// VOICES //////////
 
@@ -166,13 +167,13 @@ inline void SidReset()
     SidSetQ();
 }
 
-inline void SidWriteReg(uint16_t address, uint8_t value)
+inline void SidWriteReg(uint8_t address, uint8_t value)
 {
     static bool key_next;
 
-	address &= 0x1f;
+	last_reg_write_value = value;
 
-    switch(address)
+    switch(address & 0x1f)
     {
     case 0: // FrequenzLO für Stimme 0
         voices[0].frequency = (voices[0].frequency & 0xff00) | (value & 0x00ff);
@@ -370,6 +371,30 @@ inline void SidWriteReg(uint16_t address, uint8_t value)
         volume = value & 0x0f;
         break;
     }
+}
+
+inline uint8_t SidReadReg(uint8_t address)
+{
+    switch(address & 0x1f)
+    {
+	case 25: // AD Wandler 1 (POTX)
+		return 0x88;
+		break;
+
+    case 26: // AD Wandler 2 (POTY)
+		return 0x99;
+        break;
+
+    case 27:
+        return SidOscOut(2) >> 4;
+
+    case 28:
+        return SidEnvOut(2);
+
+    default:
+        return last_reg_write_value;
+    }
+    return 0;
 }
 
 inline int  SidFilterOut()

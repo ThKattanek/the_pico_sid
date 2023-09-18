@@ -76,7 +76,8 @@ void SidEnableFilter(bool enable);
 // Signals from extern
 void SidSetAudioOut(bool enable);
 void SidReset();
-void SidWriteReg(uint16_t address, uint8_t value);
+void SidWriteReg(uint8_t address, uint8_t value);
+uint8_t SidReadReg(uint8_t address);
 int  SidFilterOut();
 
 // Intern

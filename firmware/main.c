@@ -88,7 +88,8 @@ void ReadSidReg()
 	if (pio0_hw->irq & 2) 
 	{
 		pio0_hw->irq = 2;	
-		uint16_t read_address = (pio->rxf[sm1] >> 2) & 0x1f;
+		uint16_t read_address = (pio->rxf[sm1] >> 2);
+		uint8_t value = SidReadReg(read_address); 
 	}
 }
 
