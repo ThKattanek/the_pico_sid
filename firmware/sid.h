@@ -67,7 +67,7 @@ struct VOICE
 }typedef VOICE;
 
 // Initialized
-void SidInit();
+void SidInit(uint8_t* _sid_io);
 
 // Config
 void SidSetChipTyp(int chip_type);

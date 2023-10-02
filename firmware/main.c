@@ -45,6 +45,7 @@ volatile uint slice_num;
 bool led_state = true;
 
 void InitPWMAudio(uint audio_out_gpio);
+void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
 
 void C64Reset(uint gpio, uint32_t events) 
 {
@@ -96,7 +97,13 @@ int main() {
 	gpio_put(DEBUG_PIN, led_state);
 
 	// Init SID
-	SidInit();
+
+	// memory for the sid io
+    uint8_t* sid_io = memalign(32, 32);
+	for(int i=0; i<32; i++)
+		sid_io[i] = i;
+
+	SidInit(sid_io);
 	SidSetChipTyp(MOS_8580);
 	SidEnableFilter(true);
 	
@@ -122,7 +129,8 @@ int main() {
 	// PIO DMA READ
 	offset = pio_add_program(pio, &dma_read_program);
 	sm2 = pio_claim_unused_sm(pio, true);
-	dma_read_program_init(pio, sm2, offset, DATA_PIN);
+	dma_read_program_init(pio, sm2, offset, ADRR_PIN, DATA_PIN, sid_io);
+	DmaReadInit(pio, sm2, sid_io);
 
 	// IRQ für die RESET Leitung
 	gpio_init(RES_PIN);
@@ -179,4 +187,42 @@ void InitPWMAudio(uint audio_out_gpio)
 	pwm_set_irq_enabled(slice_num, true);
 	irq_set_exclusive_handler(PWM_IRQ_WRAP, pwm_irq_handle);
 	irq_set_enabled(PWM_IRQ_WRAP, true);
+}
+
+// Set up DMA channels for handling reads
+void DmaReadInit(PIO pio, uint sm, uint8_t* base_address) 
+{
+    // Read channel: copy requested byte to TX fifo (source address set by write channel below)
+    uint read_channel = 0;
+    dma_channel_claim(read_channel);
+
+    dma_channel_config read_config = dma_channel_get_default_config(read_channel);
+    channel_config_set_read_increment(&read_config, false);
+    channel_config_set_write_increment(&read_config, false);
+    channel_config_set_dreq(&read_config, pio_get_dreq(pio, sm, true));
+    channel_config_set_transfer_data_size(&read_config, DMA_SIZE_8);
+
+    dma_channel_configure(read_channel,
+                          &read_config,
+                          &pio->txf[sm], // write to TX fifo
+                          base_address,  // read from base address (overwritten by write channel)
+                          1,             // transfer count
+                          false);        // start later
+
+    // Write channel: copy address from RX fifo to the read channel's READ_ADDR_TRIGGER
+    uint write_channel = 1;
+    dma_channel_claim(write_channel);
+    dma_channel_config write_config = dma_channel_get_default_config(write_channel);
+    channel_config_set_read_increment(&write_config, false);
+    channel_config_set_write_increment(&write_config, false);
+    channel_config_set_dreq(&write_config, pio_get_dreq(pio, sm, false));
+    channel_config_set_transfer_data_size(&write_config, DMA_SIZE_32);
+
+    volatile void *read_channel_addr = &dma_channel_hw_addr(read_channel)->al3_read_addr_trig;
+    dma_channel_configure(write_channel,
+                          &write_config,
+                          read_channel_addr, // write to read_channel READ_ADDR_TRIGGER
+                          &pio->rxf[sm],     // read from RX fifo
+                          0xffffffff,        // do many transfers
+                          true);             // start now
 }

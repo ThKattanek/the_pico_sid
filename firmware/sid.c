@@ -23,6 +23,7 @@ uint		voice_dc;
 uint		wave_zero;
 bool		enable_audio_out;
 uint8_t		last_reg_write_value;
+uint8_t*	sid_io;
 
 ////////// VOICES //////////
 
@@ -54,8 +55,10 @@ volatile int*   f0;
 
 volatile int	ext_in;
 
-void SidInit()
+void SidInit(uint8_t* _sid_io)
 {
+	sid_io = _sid_io;
+
 	voices[0].osc_enable = true;
 	voices[1].osc_enable = true;
 	voices[2].osc_enable = true;
@@ -371,6 +374,13 @@ inline void SidWriteReg(uint8_t address, uint8_t value)
         volume = value & 0x0f;
         break;
     }
+
+	// Set all none-read registers with the last write value
+	for(int i=0; i<25; i++)
+		sid_io[i] = last_reg_write_value;
+	sid_io[29] = last_reg_write_value;
+	sid_io[30] = last_reg_write_value;
+	sid_io[31] = last_reg_write_value;
 }
 
 inline uint8_t SidReadReg(uint8_t address)
@@ -788,6 +798,10 @@ inline void SidCycle(int cycles_count)
 			cycles_count -= delta_t_flt;
 		}
 	}
+
+	// Save values for read registers
+	sid_io[27] = SidOscOut(2) >> 4;
+	sid_io[28] = SidEnvOut(2);
 }
 
 ////////// FILTER //////////
