@@ -1,0 +1,39 @@
+/////////////////////////////////////////////////
+//                                              //
+// ThePicoSID                                   //
+// von Thorsten Kattanek                        //
+//                                              //
+// #file: /pio/dma_read.pio                     //
+//                                              //
+// https://github.com/ThKattanek/the_pico_sid   //
+//                                              //
+//////////////////////////////////////////////////;
+
+.program dma_read
+	
+.wrap_target
+	wait 1 irq 4                    ; wait for read_sid_reg to detect a read
+
+	set x, 11
+	mov osr, x
+	out pins, 8
+.wrap             
+
+% c-sdk {
+// this is a raw helper function for use by the user which sets up the GPIO output, and configures the SM to output on a particular pin
+
+void dma_read_program_init(PIO pio, uint sm, uint offset, uint data_pin) {
+   
+	pio_sm_config c = dma_read_program_get_default_config(offset);
+
+	// config DATA BUS   
+	for(int i=0; i<8; i++)
+		pio_gpio_init(pio, data_pin + i);
+
+	// config data
+	sm_config_set_out_pins(&c, data_pin, 8);
+
+	pio_sm_init(pio, sm, offset, &c);
+	pio_sm_set_enabled(pio, sm, true);
+}
+%} 

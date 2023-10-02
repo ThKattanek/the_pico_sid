@@ -33,6 +33,10 @@ pico_generate_pio_header(${PROJECT_NAME}
 	${CMAKE_CURRENT_LIST_DIR}/pio/read_sid_reg.pio
 )
 
+pico_generate_pio_header(${PROJECT_NAME}
+	${CMAKE_CURRENT_LIST_DIR}/pio/dma_read.pio
+)
+
 # Make the stdio functions use USB rather than the serial pins
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
