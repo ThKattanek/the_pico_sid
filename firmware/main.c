@@ -17,6 +17,7 @@
 
 #include "write_sid_reg.pio.h"
 #include "read_sid_reg.pio.h"
+#include "dma_read.pio.h"
 
 #include "sid.h"
 
@@ -25,6 +26,8 @@
 #define CLK_PIN 3		// Atention: When change this gpio, then also change this in write_sid_reg.pio
 #define CS_PIN 4
 #define RW_PIN 5
+#define ADRR_PIN 6
+#define DATA_PIN 11
 #define AUDIO_PIN 28
 #define DEBUG_PIN 19
 #define POTX_ADC0_PIN 26
@@ -35,16 +38,9 @@ volatile bool reset_state = true;
 volatile PIO pio;
 volatile uint sm0;	// write sid
 volatile uint sm1;	// read sid
+volatile uint sm2;	// dma read
 
 volatile uint slice_num;
-
-//#define RINGBUFFER_ENABLE
-
-#ifdef RINGBUFFER_ENABLE
-volatile uint16_t register_ring_buffer[0x1000];
-volatile uint16_t register_ring_buffer_rpos = 0;
-volatile uint16_t register_ring_buffer_wpos = 0;
-#endif
 
 bool led_state = true;
 
@@ -72,24 +68,8 @@ void WriteSidReg()
 	{
 		pio0_hw->irq = 1;
 
-#ifdef RINGBUFFER_ENABLE
-		uint16_t incomming = pio->rxf[sm];
-		register_ring_buffer[register_ring_buffer_wpos & 0xfff] = pio->rxf[sm];	
-		register_ring_buffer_wpos++;
-#else
 		uint16_t incomming = pio->rxf[sm0];
 		SidWriteReg(incomming >> 2, (incomming >> 7) & 0xff);
-#endif
-	}
-}
-
-void ReadSidReg()
-{
-	if (pio0_hw->irq & 2) 
-	{
-		pio0_hw->irq = 2;	
-		uint16_t read_address = (pio->rxf[sm1] >> 2);
-		uint8_t value = SidReadReg(read_address); 
 	}
 }
 
@@ -137,10 +117,12 @@ int main() {
 	// PIO Read SID
 	offset = pio_add_program(pio, &read_sid_reg_program);
 	sm1 = pio_claim_unused_sm(pio, true);
-	read_sid_reg_program_init(pio, sm1, offset, CLK_PIN, CS_PIN);
-	irq_set_exclusive_handler(PIO0_IRQ_1, ReadSidReg);
-	irq_set_enabled(PIO0_IRQ_1, true);
-	pio0_hw->inte1 = PIO_IRQ1_INTE_SM1_BITS;
+	read_sid_reg_program_init(pio, sm1, offset, CLK_PIN, CS_PIN, DATA_PIN);
+
+	// PIO DMA READ
+	offset = pio_add_program(pio, &dma_read_program);
+	sm2 = pio_claim_unused_sm(pio, true);
+	dma_read_program_init(pio, sm2, offset, DATA_PIN);
 
 	// IRQ für die RESET Leitung
 	gpio_init(RES_PIN);
@@ -152,19 +134,6 @@ int main() {
 
     while (1)
     {
-#ifdef RINGBUFFER_ENABLE	
-		if(register_ring_buffer_rpos < register_ring_buffer_wpos)
-		{
-			uint16_t incomming = register_ring_buffer[register_ring_buffer_rpos & 0xfff];
-			SidWriteReg(incomming >> 2, (incomming >> 7) & 0xff);
-			register_ring_buffer_rpos++;
-		}else if(register_ring_buffer_rpos > register_ring_buffer_wpos)
-		{
-			/// buffer overflow
-			register_ring_buffer_rpos = register_ring_buffer_wpos;
-			printf("Buffer Overflow\n");
-		}
-#endif
     }
 }
 
