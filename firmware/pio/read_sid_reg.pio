@@ -1,0 +1,71 @@
+/////////////////////////////////////////////////
+//                                              //
+// ThePicoSID                                   //
+// von Thorsten Kattanek                        //
+//                                              //
+// #file: /pio/read_sid_reg.pio                 //
+//                                              //
+// https://github.com/ThKattanek/the_pico_sid   //
+//                                              //
+//////////////////////////////////////////////////;
+
+.define CLK_PIN 3
+
+.program read_sid_reg
+
+	set y, 0x02		;CS = 0 and RW = 1 -> then read from address-bus and read write to data-bus
+	
+.wrap_target
+wait_to_clk_low:
+	wait 1 gpio CLK_PIN [25]
+ 
+	out isr, 2
+	in pins, 2
+	mov x, isr
+	jmp x!=y, wait_to_clk_high
+
+	mov osr, ~null	;set data pins to output 
+    out pindirs, 8
+
+	irq set 4	; read state is ready ... start dma_read
+
+wait_to_clk_high:
+	wait 0 gpio CLK_PIN
+
+	mov osr, null 	;set data pins to input
+    out pindirs, 8
+
+.wrap             
+
+% c-sdk {
+// this is a raw helper function for use by the user which sets up the GPIO output, and configures the SM to output on a particular pin
+
+void read_sid_reg_program_init(PIO pio, uint sm, uint offset, uint clk_pin, uint cs_pin, uint data_pin) {
+   
+	pio_sm_config c = read_sid_reg_program_get_default_config(offset);
+
+	// config CS and RW Signal
+	sm_config_set_in_pins(&c, cs_pin);
+   
+	for(int i=0; i<2; i++)
+		pio_gpio_init(pio, cs_pin + i);
+
+	pio_sm_set_consecutive_pindirs(pio, sm, cs_pin, 2, GPIO_IN);
+
+	// config CLK Signal
+	pio_gpio_init(pio, clk_pin);
+	pio_sm_set_consecutive_pindirs(pio, sm, clk_pin, 1, GPIO_IN);   
+	sm_config_set_jmp_pin(&c, clk_pin);
+
+	sm_config_set_in_shift(&c,
+                           false, // don't shift right
+                           false, // don't autopush
+                        2);   // push threshold (doesn't matter)
+
+	// config data
+	sm_config_set_out_pins(&c, data_pin, 8);
+
+	pio_sm_init(pio, sm, offset, &c);
+	pio_sm_set_enabled(pio, sm, true);
+}
+%}

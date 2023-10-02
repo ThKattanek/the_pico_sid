@@ -1,0 +1,55 @@
+/////////////////////////////////////////////////
+//                                              //
+// ThePicoSID                                   //
+// von Thorsten Kattanek                        //
+//                                              //
+// #file: /pio/dma_read.pio                     //
+//                                              //
+// https://github.com/ThKattanek/the_pico_sid   //
+//                                              //
+//////////////////////////////////////////////////;
+
+.program dma_read
+.side_set 1 opt
+	
+    pull block                      ; save the base address of the pico's RAM to Y
+    mov y, osr                      ; (should be sent by read_program_init)
+
+.wrap_target
+	wait 1 irq 4                    ; wait for read_sid_reg to detect a read
+
+	in pins, 5                      ; read low address bits into ISR
+    in y, 27                        ; shift high address bits into ISR to form a complete address
+
+    push noblock                    ; push the address onto the RX fifo
+    pull block                      ; stall until we load data from the TX fifo into OSR
+    out pins, 8                     ; write 8 bit value from OSR to the data bus and enable output
+.wrap             
+
+% c-sdk {
+// this is a raw helper function for use by the user which sets up the GPIO output, and configures the SM to output on a particular pin
+
+void dma_read_program_init(PIO pio, uint sm, uint offset, uint address_pin, uint data_pin, uint8_t* base_address) {
+   
+	pio_sm_config c = dma_read_program_get_default_config(offset);
+
+	// config ADDRESS BUS
+    sm_config_set_in_pins(&c, address_pin);
+    for(int i = 0; i < 5; i++)
+        pio_gpio_init(pio, address_pin + i);
+    
+    pio_sm_set_consecutive_pindirs(pio, sm, address_pin, 5, GPIO_IN);
+
+	// config DATA BUS   
+	for(int i=0; i<8; i++)
+		pio_gpio_init(pio, data_pin + i);
+
+	sm_config_set_out_pins(&c, data_pin, 8);
+
+	pio_sm_init(pio, sm, offset, &c);
+	pio_sm_set_enabled(pio, sm, true);
+
+	// Initialization is waiting to pull the high 27 bits of the base address
+    pio_sm_put(pio, sm, ((uint32_t)base_address) >> 5);
+}
+%} 
