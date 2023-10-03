@@ -14,6 +14,7 @@
 #include <hardware/pio.h>
 #include <hardware/dma.h>
 #include <hardware/pwm.h>
+#include <hardware/adc.h>
 
 #include "write_sid_reg.pio.h"
 #include "read_sid_reg.pio.h"
@@ -96,8 +97,12 @@ int main() {
 	gpio_set_dir(DEBUG_PIN, true);
 	gpio_put(DEBUG_PIN, led_state);
 
-	// Init SID
+	// ADC Init
+	adc_init();
+	adc_gpio_init(POTX_ADC0_PIN);
+	adc_gpio_init(POTY_ADC1_PIN);
 
+	// Init SID
 	// memory for the sid io
     uint8_t* sid_io = memalign(32, 32);
 	for(int i=0; i<32; i++)
@@ -140,8 +145,21 @@ int main() {
 	// Start Core#1 for SID Emualtion
 	multicore_launch_core1(Core1Entry);
 
+	uint16_t value;
+
     while (1)
     {
+		// ADC0 read and write to SID IO(25) -> POTX
+		adc_select_input(0);
+        value = adc_read();
+		sid_io[25] = value >> 4;
+        sleep_us(256);
+
+		// ADC1 read and write to SID IO(25) -> POTY
+		adc_select_input(1);
+        value = adc_read();
+		sid_io[26] = value >> 4;
+        sleep_us(256);
     }
 }
 
