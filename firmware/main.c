@@ -145,23 +145,21 @@ int main() {
 	// Start Core#1 for SID Emualtion
 	multicore_launch_core1(Core1Entry);
 
+	uint16_t value;
+
     while (1)
     {
-		uint16_t value;
-
-		const float conversion_factor = 3.3f / (1 << 12);
-		// 12-bit conversion, assume max value == ADC_VREF == 3.3 V
+		// ADC0 read and write to SID IO(25) -> POTX
 		adc_select_input(0);
         value = adc_read();
 		sid_io[25] = value >> 4;
-        //printf("Raw value: 0x%03x, voltage: %f V\n", result >> 4, result * conversion_factor);
-        sleep_ms(10);
+        sleep_us(256);
 
+		// ADC1 read and write to SID IO(25) -> POTY
 		adc_select_input(1);
         value = adc_read();
 		sid_io[26] = value >> 4;
-        //printf("Raw value: 0x%03x, voltage: %f V\n", result >> 4, result * conversion_factor);
-        sleep_ms(10);
+        sleep_us(256);
     }
 }
 
