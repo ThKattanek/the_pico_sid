@@ -43,7 +43,7 @@ pico_enable_stdio_uart(${PROJECT_NAME} 1)
 
 # Pull in our pico_stdlib which pulls in commonly used features
 # target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_pio hardware_pwm hardware_dma hardware_timer hardware_clocks)
-target_link_libraries(${PROJECT_NAME} pico_stdlib pico_multicore hardware_pio hardware_dma hardware_pwm)
+target_link_libraries(${PROJECT_NAME} pico_stdlib pico_multicore hardware_pio hardware_dma hardware_pwm hardware_adc)
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(${PROJECT_NAME})
