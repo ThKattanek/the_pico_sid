@@ -30,9 +30,9 @@
 #define ADRR_PIN 6
 #define DATA_PIN 11
 #define AUDIO_PIN 28
-#define DEBUG_PIN 19
-#define POTX_ADC0_PIN 26
-#define POTY_ADC1_PIN 27
+#define ADC0_COMPARE_PIN 19
+#define ADC1_COMPARE_PIN 20
+#define ADC_2KHz_PIN 21
 
 volatile bool reset_state = true;
 
@@ -42,8 +42,6 @@ volatile uint sm1;	// read sid
 volatile uint sm2;	// dma read
 
 volatile uint slice_num;
-
-bool led_state = true;
 
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
@@ -91,16 +89,15 @@ int main() {
 
 	stdio_init_all();	
 
-	// Init Debug LED (green/red)
-	gpio_set_drive_strength(DEBUG_PIN, GPIO_DRIVE_STRENGTH_2MA);
-	gpio_set_function(DEBUG_PIN, GPIO_FUNC_SIO);
-	gpio_set_dir(DEBUG_PIN, true);
-	gpio_put(DEBUG_PIN, led_state);
+	// ADC
+	gpio_init(ADC_2KHz_PIN);
+	gpio_set_dir(ADC_2KHz_PIN, true);	// Output
 
-	// ADC Init
-	adc_init();
-	adc_gpio_init(POTX_ADC0_PIN);
-	adc_gpio_init(POTY_ADC1_PIN);
+	gpio_init(ADC0_COMPARE_PIN);
+	gpio_init(ADC1_COMPARE_PIN);
+
+	gpio_set_dir(ADC0_COMPARE_PIN, false);	// Input
+	gpio_set_dir(ADC1_COMPARE_PIN, false);	// Input
 
 	// Init SID
 	// memory for the sid io
@@ -145,30 +142,37 @@ int main() {
 	// Start Core#1 for SID Emualtion
 	multicore_launch_core1(Core1Entry);
 
-	uint16_t value;
+	volatile uint16_t counter;
+	volatile bool	adc0_compare_state;
+	volatile bool	adc0_compare_state_old;
+	volatile bool	adc1_compare_state;
+	volatile bool	adc1_compare_state_old;
 
     while (1)
     {
-		// ADC0 read and write to SID IO(25) -> POTX
-		adc_select_input(0);
-        value = adc_read();
-		sid_io[25] = value >> 4;
-        sleep_us(256);
+		// ADC
+		sleep_us(1);
 
-		// ADC1 read and write to SID IO(25) -> POTY
-		adc_select_input(1);
-        value = adc_read();
-		sid_io[26] = value >> 4;
-        sleep_us(256);
+		counter++;
+		gpio_put(ADC_2KHz_PIN, counter & 0x100);	// Create 2KHz Signal for the mosfet
+
+		// AX
+		adc0_compare_state = gpio_get(ADC0_COMPARE_PIN);
+		if(adc0_compare_state && !adc0_compare_state_old)
+			sid_io[25] = counter & 0xff;
+		adc0_compare_state_old = adc0_compare_state;
+
+		// AY
+		adc1_compare_state = gpio_get(ADC1_COMPARE_PIN);
+		if(adc1_compare_state && !adc1_compare_state_old)
+			sid_io[26] = counter & 0xff;
+		adc1_compare_state_old = adc1_compare_state;
     }
 }
 
 void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
-
-	led_state = !led_state;
-	gpio_put(DEBUG_PIN, led_state);
 
 	for(int i=0; i<6; i++)
 	{

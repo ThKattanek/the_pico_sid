@@ -8,5 +8,6 @@
  A0-A4      |  6 - 10   | IN
  D0-D7      |  11 - 18  | IN/OUT
  AUDIO OUT  |  28       | OUT
- POTX		|  26		| IN
- POTY		|  27		| IN
+ ADC0_CMP	|  19		| IN
+ ADC1_CMP	|  20		| IN
+ ADC_2KHz   |  21       | OUT
