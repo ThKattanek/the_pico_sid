@@ -34,6 +34,8 @@
 #define ADC1_COMPARE_PIN 20
 #define ADC_2KHz_PIN 21
 
+#define ADC_OFFSET -5
+
 volatile bool reset_state = true;
 
 volatile PIO pio;
@@ -159,13 +161,13 @@ int main() {
 		// AX
 		adc0_compare_state = gpio_get(ADC0_COMPARE_PIN);
 		if(adc0_compare_state && !adc0_compare_state_old)
-			sid_io[25] = counter & 0xff;
+			sid_io[25] = (counter + ADC_OFFSET) & 0xff;
 		adc0_compare_state_old = adc0_compare_state;
 
 		// AY
 		adc1_compare_state = gpio_get(ADC1_COMPARE_PIN);
 		if(adc1_compare_state && !adc1_compare_state_old)
-			sid_io[26] = counter & 0xff;
+			sid_io[26] = (counter + ADC_OFFSET) & 0xff;
 		adc1_compare_state_old = adc1_compare_state;
     }
 }
