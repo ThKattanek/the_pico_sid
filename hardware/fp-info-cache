@@ -1,4 +1,4 @@
-20843950611829039
+20847388535445567
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -87157,6 +87157,13 @@ c64_expansionsport
 44
 44
 c64_tk
+c64_sid_pins
+
+
+0
+28
+28
+c64_tk
 c64_userport
 
 
@@ -87177,6 +87184,13 @@ Through hole socket strip THT 2x22 2.54mm double row
 0
 44
 44
+connector_tk
+RPi_Pico_SMD_TH
+Through hole straight pin header, 2x20, 2.54mm pitch, double rows
+Through hole pin header THT 2x20 2.54mm double row
+0
+43
+43
 connector_tk
 ftdi_232_red
 
