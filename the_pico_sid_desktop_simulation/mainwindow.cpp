@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     cycle_excact_sid = false;
 
+
+
     // Default Audioformat (44100 / Stereo / Float)
     m_format.setSampleRate(41223);
     m_format.setChannelCount(2);
