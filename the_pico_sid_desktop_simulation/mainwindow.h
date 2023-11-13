@@ -30,9 +30,14 @@ public:
 
 private slots:
 	void OnFillAudioData(char *data, qint64 len);
-    void on_pushButton_clicked();
+    void on_Quit_clicked();
+    void on_LoadSidDump_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_CycleExcact_toggled(bool checked);
+
+    void on_mos6581_clicked();
+
+    void on_mos8580_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -42,9 +47,12 @@ private:
     QAudioFormat     m_format;
     QByteArray       m_buffer;
     QAudioOutput*    m_audioOutput;
-    AudioGenerator* m_audiogen;
+    AudioGenerator*  m_audiogen;
 
+    uint8_t         sid_io[32];
     SIDDumpClass*   sid_dump;
-    uint8_t         sid_io;
+    uint8_t         sid_dump_io;
+
+    bool            cycle_excact_sid;
 };
 #endif // MAINWINDOW_H

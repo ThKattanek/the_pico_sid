@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     bufferSize = SOUND_BUFFER_SIZE * 2;
 
+    cycle_excact_sid = false;
+
     // Default Audioformat (44100 / Stereo / Float)
     m_format.setSampleRate(41223);
     m_format.setChannelCount(2);
@@ -43,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
     else{
-        qInfo() << "Current Audioformat: 44100/Stereo/Float";
+        qInfo() << "Current Audioformat: 41223/Stereo/Float";
         is_supported_format = true;
     }
 
@@ -58,9 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 		connect(m_audiogen, SIGNAL(FillAudioData(char*, qint64)), this, SLOT(OnFillAudioData(char*, qint64)));
 
-        SidInit();
+        SidInit(sid_io);
         SidSetChipTyp(MOS_8580);
-        sid_dump = new SIDDumpClass(&sid_io);
+        sid_dump = new SIDDumpClass(&sid_dump_io);
 
         m_audiogen->start();
 		m_audioOutput->start(m_audiogen);
@@ -85,27 +87,38 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
 
     while(buffer_pos < (len / (m_format.sampleSize()/8)))
     {
-        for(int i=0; i<6; i++)
+        if(!cycle_excact_sid)
         {
-            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-            if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-            SidCycle(4);
+            for(int i=0; i<6; i++)
+            {
+                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                SidCycle(4);
+            }
         }
-        //buffer[buffer_pos] = buffer[buffer_pos+1] = SidFilterOut() / float(0xfffff);
+        else
+        {
+            for(int i=0; i<24; i++)
+            {
+                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                SidCycle(1);
+            }
+        }
         buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(SidFilterOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
+
         buffer_pos += 2;
     }
 }
 
-
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_Quit_clicked()
 {
     this->close();
 }
 
-void MainWindow::on_pushButton_2_clicked()
+
+void MainWindow::on_LoadSidDump_clicked()
 {
     sid_dump->StopDump();
 
@@ -117,5 +130,23 @@ void MainWindow::on_pushButton_2_clicked()
         else
             sid_dump->PlayDump();
     }
+}
+
+
+void MainWindow::on_CycleExcact_toggled(bool checked)
+{
+    cycle_excact_sid = checked;
+}
+
+
+void MainWindow::on_mos6581_clicked()
+{
+    SidSetChipTyp(MOS_6581);
+}
+
+
+void MainWindow::on_mos8580_clicked()
+{
+    SidSetChipTyp(MOS_8580);
 }
 
