@@ -195,7 +195,7 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41057,2Hz when Systemclock is 247MHz.
+	pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit
