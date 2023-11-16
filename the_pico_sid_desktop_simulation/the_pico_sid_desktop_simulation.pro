@@ -34,18 +34,6 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-system(git clone https://github.com/libsidplayfp/resid)
-system(mv resid/sid.cc resid/resid.cc)
-
-exists(resid/sid.cc) {
-
-message(ReSID found)
-DEFINES += RESID_SUPPORT 1
-
-SOURCES += \
-    resid/resid.cc
-}
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

@@ -85,7 +85,6 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
 {
     float* buffer = reinterpret_cast<float*>(data);
     int buffer_pos = 0;
-    int sample;
 
     while(buffer_pos < (len / (m_format.sampleSize()/8)))
     {
@@ -124,11 +123,11 @@ void MainWindow::on_LoadSidDump_clicked()
 {
     sid_dump->StopDump();
 
-    QString filename = QFileDialog::getOpenFileName(this,tr("Emu64 SID Dump �ffnen "),"",tr("Emu64 SID Dump Datei") + "(*.sdp);;" + tr("Alle Dateien") + "(*.*)");
+    QString filename = QFileDialog::getOpenFileName(this,tr("Emu64 SID Dump öffnen "),"",tr("Emu64 SID Dump Datei") + "(*.sdp);;" + tr("Alle Dateien") + "(*.*)");
     if(filename != "")
     {
         if(!sid_dump->LoadDump(filename.toLocal8Bit().data()))
-            QMessageBox::warning(this,"realSID Error !","Fehler beim �ffnen des SID Dump Files.");
+            QMessageBox::warning(this,"realSID Error !","Fehler beim öffnen des SID Dump Files.");
         else
             sid_dump->PlayDump();
     }

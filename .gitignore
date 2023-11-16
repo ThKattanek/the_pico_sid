@@ -12,5 +12,5 @@ _deps
 build
 .vscode
 .cache
-.pro.user
+*.pro.user
 the_pico_sid_desktop_simulation/resid/

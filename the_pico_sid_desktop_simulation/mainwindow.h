@@ -14,12 +14,6 @@ extern "C" {
 #include "../firmware/sid.h"
 }
 
-// #define RESID_SUPPORT 1
-
-#ifdef RESID_SUPPORT
-#include "resid/sid.h"
-#endif
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -60,9 +54,5 @@ private:
     uint8_t         sid_dump_io;
 
     bool            cycle_excact_sid;
-
-#ifdef RESID_SUPPORT
-    reSID::SID resid;
-#endif
 };
 #endif // MAINWINDOW_H
