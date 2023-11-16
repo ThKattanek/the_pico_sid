@@ -105,6 +105,13 @@
      </spacer>
     </item>
     <item>
+     <widget class="QLabel" name="fw_version">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="Quit">
       <property name="text">
        <string>QUIT</string>

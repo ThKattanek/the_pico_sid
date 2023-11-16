@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <math.h>
 
+#include "../firmware/version.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -70,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent)
 		m_audioOutput->start(m_audiogen);
         m_audioOutput->setVolume(1);
     }
+
+    ui->fw_version->setText("Firmware Version: " + QString::number(VERSION_MAJOR) + "." + QString::number(VERSION_MINOR) + "." + QString::number(VERSION_PATCH));
 }
 
 MainWindow::~MainWindow()
