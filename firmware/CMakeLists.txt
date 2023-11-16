@@ -22,7 +22,8 @@ add_executable(${PROJECT_NAME}
   sid.h /
   mos6581_8085_waves.h /
   f0_points_6581.h /
-  f0_points_8580.h
+  f0_points_8580.h /
+  version.h
 )
 
 pico_generate_pio_header(${PROJECT_NAME}

@@ -22,6 +22,8 @@
 
 #include "sid.h"
 
+#include "version.h"
+
 // PIN MAPPING
 #define RES_PIN 2
 #define CLK_PIN 3		// Atention: When change this gpio, then also change this in write_sid_reg.pio
@@ -84,6 +86,13 @@ void Core1Entry()
 	}
 }
 
+void GetVersionNumber(uint8_t *major, uint8_t *minor, uint8_t *patch)
+{
+	*major = VERSION_MAJOR;
+	*minor = VERSION_MINOR;
+	*patch = VERSION_PATCH;
+}
+
 int main() {
 
 	//default clock is 125000kHz
@@ -112,7 +121,12 @@ int main() {
 	SidEnableFilter(true);
 	
 	// UART Start Message PicoSID
-	printf("The Pico SID by Thorsten Kattanek\n");
+	printf("ThePicoSID by Thorsten Kattanek\n");
+
+	uint8_t v_major, v_minor, v_patch;
+	GetVersionNumber(&v_major, &v_minor, &v_patch);
+
+	printf("Firmware Version: %d.%d.%d\n", v_major, v_minor, v_patch);
 	
 	// PIO Program initialize
 	pio = pio0;
