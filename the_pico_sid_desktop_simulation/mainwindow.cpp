@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     cycle_excact_sid = false;
 
-
+    this->setWindowTitle("ThePicoSID Desktop Simulation");
 
     // Default Audioformat (44100 / Stereo / Float)
     m_format.setSampleRate(41223);
