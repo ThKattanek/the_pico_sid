@@ -13,7 +13,7 @@
 #define	VERSION_H
 
 uint8_t VERSION_MAJOR = 0;
-uint8_t VERSION_MINOR = 2;
+uint8_t VERSION_MINOR = 1;
 uint8_t VERSION_PATCH = 0;
 
 #endif // VERSION_H

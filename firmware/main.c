@@ -36,7 +36,11 @@
 #define ADC1_COMPARE_PIN 20
 #define ADC_2KHz_PIN 21
 
+#define PICO_LED_PIN 25
+
 #define ADC_OFFSET -5
+
+
 
 volatile bool reset_state = true;
 
@@ -99,6 +103,11 @@ int main() {
 	set_sys_clock_khz(248000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
 
 	stdio_init_all();	
+
+	// Pico LED
+	gpio_init(PICO_LED_PIN);
+	gpio_set_dir(PICO_LED_PIN, true);
+	gpio_put(PICO_LED_PIN, true);
 
 	// ADC
 	gpio_init(ADC_2KHz_PIN);
