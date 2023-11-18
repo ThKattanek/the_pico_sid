@@ -7,7 +7,7 @@ set(PROJECT_NAME the_pico_sid)
 
 project(${PROJECT_NAME} C CXX ASM)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 # Initialize the SDK
 
@@ -17,12 +17,9 @@ set(PICO_CXX_ENABLE_RTTI 1)
 pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
-  main.c /
-  sid.c /
-  sid.h /
-  mos6581_8085_waves.h /
-  f0_points_6581.h /
-  f0_points_8580.h /
+  main.cpp /
+  pico_sid.cpp /
+  pico_sid.h /
   version.h
 )
 

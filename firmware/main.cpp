@@ -9,18 +9,23 @@
 //                                              //
 //////////////////////////////////////////////////
 
-#include <stdio.h>
+#include <cstdio>
+#include <malloc.h>
+#include <pico/stdio.h>
+#include <pico/stdlib.h>
 #include <pico/multicore.h>
 #include <hardware/pio.h>
 #include <hardware/dma.h>
 #include <hardware/pwm.h>
 #include <hardware/adc.h>
 
+#include "pico_sid.h"
+
 #include "write_sid_reg.pio.h"
 #include "read_sid_reg.pio.h"
 #include "dma_read.pio.h"
 
-#include "sid.h"
+// OLD_SID #include "sid.h"
 
 #include "version.h"
 
@@ -40,8 +45,6 @@
 
 #define ADC_OFFSET -5
 
-
-
 volatile bool reset_state = true;
 
 volatile PIO pio;
@@ -60,13 +63,13 @@ void C64Reset(uint gpio, uint32_t events)
 	{
 		// C64 Reset
 		// Normalerweise erst wenn RESET 10 Zyklen auf Lo war
-        SidSetAudioOut(false);
-		SidReset();
+        // OLD_SID SidSetAudioOut(false);
+		// OLD_SID SidReset();
     }
 	else if (events & GPIO_IRQ_EDGE_RISE) 
 	{
 		// C64 Reset Ende
-        SidSetAudioOut(true);
+        // OLD_SID SidSetAudioOut(true);
     }
 }
 
@@ -77,7 +80,7 @@ void WriteSidReg()
 		pio0_hw->irq = 1;
 
 		uint16_t incomming = pio->rxf[sm0];
-		SidWriteReg(incomming >> 2, (incomming >> 7) & 0xff);
+		// OLD_SID SidWriteReg(incomming >> 2, (incomming >> 7) & 0xff);
 	}
 }
 
@@ -121,13 +124,15 @@ int main() {
 
 	// Init SID
 	// memory for the sid io
-    uint8_t* sid_io = memalign(32, 32);
+    // OLD_SID uint8_t* sid_io = memalign(32, 32);
+	// uint8_t* sid_io = (uint8_t*)aligned_alloc(32,32);
+	uint8_t* sid_io = (uint8_t*)memalign(32,32);
 	for(int i=0; i<32; i++)
 		sid_io[i] = i;
 
-	SidInit(sid_io);
-	SidSetChipTyp(MOS_8580);
-	SidEnableFilter(true);
+	// OLD_SID SidInit(sid_io);
+	// OLD_SID SidSetChipTyp(MOS_8580);
+	// OLD_SID SidEnableFilter(true);
 	
 	// UART Start Message PicoSID
 	printf("ThePicoSID by Thorsten Kattanek\n");
@@ -201,10 +206,11 @@ void pwm_irq_handle()
 
 	for(int i=0; i<6; i++)
 	{
-		SidCycle(4);
+		// OLD_SID SidCycle(4);
 	}
 
-	uint16_t out = ((SidFilterOut() >> 4) + 32768) / (float)0xffff * 0x7ff;
+	// OLD_SID uint16_t out = ((SidFilterOut() >> 4) + 32768) / (float)0xffff * 0x7ff;
+	uint16_t out = 0;
 	
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }
