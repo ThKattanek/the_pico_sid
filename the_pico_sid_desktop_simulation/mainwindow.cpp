@@ -64,8 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 		connect(m_audiogen, SIGNAL(FillAudioData(char*, qint64)), this, SLOT(OnFillAudioData(char*, qint64)));
 
-        SidInit(sid_io);
-        SidSetChipTyp(MOS_8580);
+        sid.SetSidType(MOS_8580);
         sid_dump = new SIDDumpClass(&sid_dump_io);
 
         m_audiogen->start();
@@ -96,22 +95,22 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
         {
             for(int i=0; i<6; i++)
             {
-                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                SidCycle(4);
+                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                sid.NextCycles(4);
             }
         }
         else
         {
             for(int i=0; i<24; i++)
             {
-                if(sid_dump->CycleTickPlay()) SidWriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                SidCycle(1);
+                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                sid.NextCycles(1);
             }
         }
-        buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(SidFilterOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
+        buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
 
         buffer_pos += 2;
     }
@@ -146,12 +145,12 @@ void MainWindow::on_CycleExcact_toggled(bool checked)
 
 void MainWindow::on_mos6581_clicked()
 {
-    SidSetChipTyp(MOS_6581);
+    sid.SetSidType(MOS_6581);
 }
 
 
 void MainWindow::on_mos8580_clicked()
 {
-    SidSetChipTyp(MOS_8580);
+    sid.SetSidType(MOS_8580);
 }
 

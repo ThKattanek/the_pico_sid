@@ -20,16 +20,13 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     siddump.cpp \
-    ../firmware/sid.c
+    ../firmware/pico_sid.cpp
 
 HEADERS += \
     audiogenerator.h \
     mainwindow.h \
     siddump.h \
-    ../firmware/sid.h \
-    ../firmware/mos6581_8085_waves.h \
-    ../firmware/f0_points_8580.h \
-    ../firmware/f0_points_6581.h
+    ../firmware/pico_sid.h
 
 FORMS += \
     mainwindow.ui

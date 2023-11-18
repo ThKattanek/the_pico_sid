@@ -25,7 +25,7 @@
 #include "read_sid_reg.pio.h"
 #include "dma_read.pio.h"
 
-// OLD_SID #include "sid.h"
+#include "pico_sid.h"
 
 #include "version.h"
 
@@ -54,6 +54,8 @@ volatile uint sm2;	// dma read
 
 volatile uint slice_num;
 
+PICO_SID sid[2];
+
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
 
@@ -63,13 +65,11 @@ void C64Reset(uint gpio, uint32_t events)
 	{
 		// C64 Reset
 		// Normalerweise erst wenn RESET 10 Zyklen auf Lo war
-        // OLD_SID SidSetAudioOut(false);
-		// OLD_SID SidReset();
+        sid[0].Reset();
     }
 	else if (events & GPIO_IRQ_EDGE_RISE) 
 	{
 		// C64 Reset Ende
-        // OLD_SID SidSetAudioOut(true);
     }
 }
 
@@ -80,7 +80,7 @@ void WriteSidReg()
 		pio0_hw->irq = 1;
 
 		uint16_t incomming = pio->rxf[sm0];
-		// OLD_SID SidWriteReg(incomming >> 2, (incomming >> 7) & 0xff);
+		sid[0].WriteReg(incomming >> 2, (incomming >> 7) & 0xff);
 	}
 }
 
@@ -124,8 +124,7 @@ int main() {
 
 	// Init SID
 	// memory for the sid io
-    // OLD_SID uint8_t* sid_io = memalign(32, 32);
-	// uint8_t* sid_io = (uint8_t*)aligned_alloc(32,32);
+
 	uint8_t* sid_io = (uint8_t*)memalign(32,32);
 	for(int i=0; i<32; i++)
 		sid_io[i] = i;
@@ -206,11 +205,10 @@ void pwm_irq_handle()
 
 	for(int i=0; i<6; i++)
 	{
-		// OLD_SID SidCycle(4);
+		sid[0].NextCycles(4);
 	}
 
-	// OLD_SID uint16_t out = ((SidFilterOut() >> 4) + 32768) / (float)0xffff * 0x7ff;
-	uint16_t out = 0;
+	uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;
 	
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }

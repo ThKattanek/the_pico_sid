@@ -11,7 +11,7 @@
 #include "siddump.h"
 
 extern "C" {
-#include "../firmware/sid.h"
+#include "../firmware/pico_sid.h"
 }
 
 QT_BEGIN_NAMESPACE
@@ -32,11 +32,8 @@ private slots:
 	void OnFillAudioData(char *data, qint64 len);
     void on_Quit_clicked();
     void on_LoadSidDump_clicked();
-
     void on_CycleExcact_toggled(bool checked);
-
     void on_mos6581_clicked();
-
     void on_mos8580_clicked();
 
 private:
@@ -48,6 +45,8 @@ private:
     QByteArray       m_buffer;
     QAudioOutput*    m_audioOutput;
     AudioGenerator*  m_audiogen;
+
+    PICO_SID         sid;
 
     uint8_t         sid_io[32];
     SIDDumpClass*   sid_dump;
