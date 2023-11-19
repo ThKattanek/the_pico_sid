@@ -20,6 +20,14 @@ add_executable(${PROJECT_NAME}
   main.cpp /
   pico_sid.cpp /
   pico_sid.h /
+  sid_voice.cpp /
+  sid_voice.h /
+  sid_wave.cpp /
+  sid_wave.h /
+  sid_envelope.cpp /
+  sid_envelope.h /
+  sid_dac.cpp /
+  sid_dac.h
   version.h
 )
 

@@ -19,14 +19,30 @@ SOURCES += \
     audiogenerator.cpp \
     main.cpp \
     mainwindow.cpp \
-    siddump.cpp \
-    ../firmware/pico_sid.cpp
+    siddump.cpp
 
 HEADERS += \
     audiogenerator.h \
     mainwindow.h \
     siddump.h \
     ../firmware/pico_sid.h
+
+# PIOC SID Emulation (Firmware)
+SOURCES += \
+    ../firmware/pico_sid.cpp \
+    ../firmware/sid_voice.cpp \
+    ../firmware/sid_wave.cpp \
+    ../firmware/sid_envelope.cpp \
+    ../firmware/sid_dac.cpp
+
+HEADERS += \
+    ../firmware/pico_sid.h \
+    ../firmware/pico_sid_defs.h \
+    ../firmware/sid_voice.h \
+    ../firmware/sid_wave.h \
+    ../firmware/sid_envelope.h \
+    ../firmware/sid_dac.h \
+    ../firmware/version.h
 
 FORMS += \
     mainwindow.ui

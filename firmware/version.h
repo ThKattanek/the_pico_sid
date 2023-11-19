@@ -7,6 +7,9 @@
 //                                              //
 // https://github.com/ThKattanek/the_pico_sid   //
 //                                              //
+// The template used was resid:                 //
+// https://github.com/libsidplayfp/resid        //
+//                                              //
 //////////////////////////////////////////////////
 
 #ifndef	VERSION_H

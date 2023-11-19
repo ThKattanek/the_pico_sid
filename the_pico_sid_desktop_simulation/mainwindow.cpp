@@ -110,7 +110,10 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
                 sid.NextCycles(1);
             }
         }
-        buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
+
+        //buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
+
+        buffer[buffer_pos] = buffer[buffer_pos+1] = (sid.AudioOut() / (float)0xfff);
 
         buffer_pos += 2;
     }

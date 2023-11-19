@@ -3,38 +3,33 @@
 // ThePicoSID                                   //
 // von Thorsten Kattanek                        //
 //                                              //
-// #file: pico_sid.h                            //
+// #file: sid_envelope.cpp                      //
 //                                              //
 // https://github.com/ThKattanek/the_pico_sid   //
 //                                              //
 // The template used was resid:                 //
 // https://github.com/libsidplayfp/resid        //
 //                                              //
-////////////////////////////////////////////////// 
+//////////////////////////////////////////////////
 
-#ifndef PICO_SID_CLASS_H
-#define PICO_SID_CLASS_H
+#include "./sid_envelope.h"
 
-#include <stdint.h>
-
-#include "./pico_sid_defs.h"
-#include "./sid_voice.h"
-
-class PICO_SID
+SID_ENVELOPE::SID_ENVELOPE()
 {
-	public:
-	PICO_SID();
-	~PICO_SID();
 
-	void SetSidType(sid_type type);
-    void NextCycle();
-    void NextCycles(cycle_count cycle_count);
-	void Reset();
-	void WriteReg(uint8_t address, uint8_t value);
-	uint8_t ReadReg(uint8_t address);
-	uint16_t AudioOut();
+}
 
-    SID_VOICE voice[3];
-};
+SID_ENVELOPE::~SID_ENVELOPE()
+{
 
-#endif // PICO_SID_CLASS_H
+}
+
+void SID_ENVELOPE::SetSidType(sid_type type)
+{
+
+}
+
+void SID_ENVELOPE::Reset()
+{
+
+}

@@ -3,38 +3,18 @@
 // ThePicoSID                                   //
 // von Thorsten Kattanek                        //
 //                                              //
-// #file: pico_sid.h                            //
+// #file: sid_dac.h                             //
 //                                              //
 // https://github.com/ThKattanek/the_pico_sid   //
 //                                              //
 // The template used was resid:                 //
 // https://github.com/libsidplayfp/resid        //
 //                                              //
-////////////////////////////////////////////////// 
+//////////////////////////////////////////////////
 
-#ifndef PICO_SID_CLASS_H
-#define PICO_SID_CLASS_H
+#ifndef SID_DAC_H
+#define SID_DAC_H
 
-#include <stdint.h>
+void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term);
 
-#include "./pico_sid_defs.h"
-#include "./sid_voice.h"
-
-class PICO_SID
-{
-	public:
-	PICO_SID();
-	~PICO_SID();
-
-	void SetSidType(sid_type type);
-    void NextCycle();
-    void NextCycles(cycle_count cycle_count);
-	void Reset();
-	void WriteReg(uint8_t address, uint8_t value);
-	uint8_t ReadReg(uint8_t address);
-	uint16_t AudioOut();
-
-    SID_VOICE voice[3];
-};
-
-#endif // PICO_SID_CLASS_H
+#endif // SID_DAC_H
