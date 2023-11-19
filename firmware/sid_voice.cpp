@@ -53,8 +53,8 @@ void SID_VOICE::Reset()
 
 void SID_VOICE::WriteControlReg(reg8 value)
 {
-    //wave.WriteControlReg(value);
-    //envelope.WriteControlReg(value);
+    wave.WriteControlReg(value);
+  //envelope.WriteControlReg(value);
 }
 
 // ----------------------------------------------------------------------------

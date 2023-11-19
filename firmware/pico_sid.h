@@ -27,8 +27,9 @@ class PICO_SID
 	~PICO_SID();
 
 	void SetSidType(sid_type type);
-    void NextCycle();
-    void NextCycles(cycle_count cycle_count);
+    void Clock();
+    void Clock(cycle_count delta_t);
+
 	void Reset();
 	void WriteReg(uint8_t address, uint8_t value);
 	uint8_t ReadReg(uint8_t address);

@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     bufferSize = SOUND_BUFFER_SIZE * 2;
 
-    cycle_excact_sid = false;
+    cycle_excact_sid = true;
 
     this->setWindowTitle("ThePicoSID Desktop Simulation");
 
@@ -99,7 +99,7 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                sid.NextCycles(4);
+                sid.Clock(4);
             }
         }
         else
@@ -107,13 +107,13 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
             for(int i=0; i<24; i++)
             {
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                sid.NextCycles(1);
+                sid.Clock();
             }
         }
 
         //buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
 
-        buffer[buffer_pos] = buffer[buffer_pos+1] = (sid.AudioOut() / (float)0xfff);
+        buffer[buffer_pos] = buffer[buffer_pos+1] = (sid.AudioOut() / (float)0xffff);
 
         buffer_pos += 2;
     }

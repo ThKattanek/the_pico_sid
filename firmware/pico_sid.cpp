@@ -16,6 +16,11 @@
 
 PICO_SID::PICO_SID()
 {
+    voice[0].SetSyncSource(&voice[2]);
+    voice[1].SetSyncSource(&voice[0]);
+    voice[2].SetSyncSource(&voice[1]);
+
+    Reset();
 }
 
 PICO_SID::~PICO_SID()
@@ -29,32 +34,48 @@ uint8_t PICO_SID::ReadReg(uint8_t address)
 
 uint16_t PICO_SID::AudioOut()
 {
-    //return voice[0].wave.Output();
-    return voice[0].wave.ReadOSC();
+    return ((voice[0].wave.Output() ) + (voice[1].wave.Output() ) + (voice[2].wave.Output() ));
 }
 
 void PICO_SID::SetSidType(sid_type type)
 {
 }
 
-void PICO_SID::NextCycle()
+void PICO_SID::Clock()
 {
-    voice[1].wave.Clock();
+    int i;
+
+    // Clock oscillators.
+    for (i = 0; i < 3; i++) {
+        voice[i].wave.Clock();
+    }
+
+    // Synchronize oscillators.
+    for (i = 0; i < 3; i++) {
+        voice[i].wave.Synchronize();
+    }
+
+    // Calculate waveform output.
+    for (i = 0; i < 3; i++) {
+        voice[i].wave.SetWaveformOutput();
+    }
 }
 
-void PICO_SID::NextCycles(cycle_count count)
+void PICO_SID::Clock(cycle_count delta_t)
 {
-    voice[1].wave.Clock(count);
+
 }
 
 void PICO_SID::Reset()
 {
+     voice[0].Reset();
      voice[1].Reset();
+     voice[2].Reset();
 }
 
 void PICO_SID::WriteReg(uint8_t address, uint8_t value)
 {
-     switch (address & 0x1f) {
+     switch (address) {
      case 0x00:
          voice[0].wave.WriteFreqLo(value);
          break;

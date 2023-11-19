@@ -417,7 +417,7 @@ void SID_WAVE::Clock(cycle_count delta_t)
 // Note that the oscillators must be clocked exactly on the cycle when the
 // MSB is set high for hard sync to operate correctly. See SID::clock().
 // ----------------------------------------------------------------------------
-inline void SID_WAVE::Synchronize()
+void SID_WAVE::Synchronize()
 {
     // A special case occurs when a sync source is synced itself on the same
     // cycle as when its MSB is set high. In this case the destination will
