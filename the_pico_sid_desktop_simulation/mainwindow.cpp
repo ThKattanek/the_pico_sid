@@ -20,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("ThePicoSID Desktop Simulation");
 
+    ui->osc1->setMinimumSize(200,200);
+    ui->osc2->setMinimumSize(200,200);
+    ui->osc3->setMinimumSize(200,200);
+
     // Default Audioformat (44100 / Stereo / Float)
     m_format.setSampleRate(41223);
     m_format.setChannelCount(2);
@@ -64,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 		connect(m_audiogen, SIGNAL(FillAudioData(char*, qint64)), this, SLOT(OnFillAudioData(char*, qint64)));
 
-        sid.SetSidType(MOS_8580);
+        sid.SetSidType(MOS_6581);
         sid_dump = new SIDDumpClass(&sid_dump_io);
 
         m_audiogen->start();
@@ -88,6 +92,12 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
 {
     float* buffer = reinterpret_cast<float*>(data);
     int buffer_pos = 0;
+
+    static unsigned short wave0_buffer[SOUND_BUFFER_SIZE];
+    static float wave1_buffer[SOUND_BUFFER_SIZE];
+    static float wave2_buffer[SOUND_BUFFER_SIZE];
+
+    int wave_pos = 0;
 
     while(buffer_pos < (len / (m_format.sampleSize()/8)))
     {
@@ -113,10 +123,17 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
 
         //buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
 
-        buffer[buffer_pos] = buffer[buffer_pos+1] = (sid.AudioOut() / (float)0xffff);
+        buffer[buffer_pos] = buffer[buffer_pos+1] = ((sid.AudioOut()) / (float)0x2ffD) * 0.7f;
+
+        wave0_buffer[wave_pos] = sid.voice[0].wave.OutWaveform() * 10;
+        wave1_buffer[wave_pos] = sid.voice[1].wave.OutWaveform() / (float)0xfff;
+        wave2_buffer[wave_pos] = sid.voice[2].wave.OutWaveform() / (float)0xfff;
+        wave_pos++;
 
         buffer_pos += 2;
     }
+
+    ui->osc1->NextAudioData((uint8_t*)wave0_buffer, len / (m_format.sampleSize()/8));
 }
 
 void MainWindow::on_Quit_clicked()
@@ -129,7 +146,7 @@ void MainWindow::on_LoadSidDump_clicked()
 {
     sid_dump->StopDump();
 
-    QString filename = QFileDialog::getOpenFileName(this,tr("Emu64 SID Dump öffnen "),"",tr("Emu64 SID Dump Datei") + "(*.sdp);;" + tr("Alle Dateien") + "(*.*)");
+    QString filename = QFileDialog::getOpenFileName(this,tr("Emu64 SID Dump öffnen "),QDir::homePath()+"/Elektronik/Projekte/the_pico_sid/the_pico_sid_desktop_simulation/sid_dump_demos",tr("Emu64 SID Dump Datei") + "(*.sdp);;" + tr("Alle Dateien") + "(*.*)");
     if(filename != "")
     {
         if(!sid_dump->LoadDump(filename.toLocal8Bit().data()))

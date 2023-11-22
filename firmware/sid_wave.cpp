@@ -93,6 +93,25 @@ SID_WAVE::SID_WAVE()
         // MOS 8580: 2R/R ~ 2.00, correct termination.
         BuildDacTable(model_dac[1], 12, 2.00, true);
 
+        unsigned short max0 = model_dac[0][0];
+        unsigned short min0 = model_dac[0][0];
+
+        unsigned short max1 = model_dac[1][0];
+        unsigned short min1 = model_dac[1][0];
+
+        for(int i=1; i<(1<<12); i++)
+        {
+            if(max0 < model_dac[0][i])
+                max0 = model_dac[0][i];
+            if(min0 > model_dac[0][i])
+                min0 = model_dac[0][i];
+
+            if(max1 < model_dac[1][i])
+                max1 = model_dac[1][i];
+            if(min1 > model_dac[1][i])
+                min1 = model_dac[1][i];
+        }
+
         class_init = true;
     }
 
@@ -300,6 +319,11 @@ void SID_WAVE::ShiftregBitfade()
 reg8 SID_WAVE::ReadOSC()
 {
     return osc3 >> 4;
+}
+
+reg12 SID_WAVE::OutWaveform()
+{
+    return waveform_output;
 }
 
 // ----------------------------------------------------------------------------
@@ -618,7 +642,7 @@ static reg12 NoisePulse8580(reg12 noise)
     return (noise < 0xfc0) ? noise & (noise << 1) : 0xfc0;
 }
 
-inline void SID_WAVE::SetWaveformOutput()
+void SID_WAVE::SetWaveformOutput()
 {
     // Set output value.
     if (likely(waveform)) {
@@ -744,7 +768,6 @@ inline void SID_WAVE::SetWaveformOutput(cycle_count delta_t)
 // at bit 0 is missing. The MOS 8580 has correct termination, and has also
 // done away with the bias part on the left hand side of the figure above.
 //
-
 
 short SID_WAVE::Output()
 {

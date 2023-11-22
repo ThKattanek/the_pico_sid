@@ -34,7 +34,8 @@ uint8_t PICO_SID::ReadReg(uint8_t address)
 
 uint16_t PICO_SID::AudioOut()
 {
-    return ((voice[0].wave.Output() ) + (voice[1].wave.Output() ) + (voice[2].wave.Output() ));
+    // Ausgabe der reinen Wellenform
+    return voice[0].wave.Output() + voice[1].wave.Output() + voice[2].wave.Output();
 }
 
 void PICO_SID::SetSidType(sid_type type)
@@ -75,7 +76,7 @@ void PICO_SID::Reset()
 
 void PICO_SID::WriteReg(uint8_t address, uint8_t value)
 {
-     switch (address) {
+     switch (address & 0x1f) {
      case 0x00:
          voice[0].wave.WriteFreqLo(value);
          break;

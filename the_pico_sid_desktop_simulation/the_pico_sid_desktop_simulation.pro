@@ -19,13 +19,14 @@ SOURCES += \
     audiogenerator.cpp \
     main.cpp \
     mainwindow.cpp \
+    oscilloscope_widget.cpp \
     siddump.cpp
 
 HEADERS += \
     audiogenerator.h \
     mainwindow.h \
-    siddump.h \
-    ../firmware/pico_sid.h
+    oscilloscope_widget.h
+    siddump.h
 
 # PIOC SID Emulation (Firmware)
 SOURCES += \
@@ -45,7 +46,8 @@ HEADERS += \
     ../firmware/version.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    oscilloscope_widget.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

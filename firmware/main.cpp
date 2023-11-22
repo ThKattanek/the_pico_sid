@@ -203,12 +203,21 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
+	/*
 	for(int i=0; i<6; i++)
 	{
-		sid[0].NextCycles(4);
+		sid[0].Clock(4);
 	}
+	*/
 
-	uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;
+	for(int i=0; i<24; i++)
+		sid[0].Clock();
+
+	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;
+	uint16_t out = ((sid[0].AudioOut() ) + 32768) / (float)0xffff * 0x7ff;
+	
+	
+	//uint16_t out = (sid[0].AudioOut() / (float)0x2ffD) * 0x7ff;
 	
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }

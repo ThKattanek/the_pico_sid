@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_1">
       <item>
        <widget class="QSpinBox" name="spinBox">
         <property name="maximum">
@@ -53,6 +53,9 @@
         <property name="text">
          <string>Cycle Excact</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
      </layout>
@@ -88,6 +91,19 @@
          </size>
         </property>
        </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="OscilloscopeWidget" name="osc3" native="true"/>
+      </item>
+      <item>
+       <widget class="OscilloscopeWidget" name="osc2" native="true"/>
+      </item>
+      <item>
+       <widget class="OscilloscopeWidget" name="osc1" native="true"/>
       </item>
      </layout>
     </item>
@@ -132,6 +148,14 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>OscilloscopeWidget</class>
+   <extends>QWidget</extends>
+   <header>oscilloscope_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

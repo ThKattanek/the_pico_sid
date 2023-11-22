@@ -40,6 +40,8 @@ public:
     void WriteControlReg(reg8 value);
     reg8 ReadOSC();
 
+    reg12 OutWaveform();
+
     // 12-bit waveform output.
     short Output();
 
