@@ -67,6 +67,9 @@
         <property name="text">
          <string>MOS6581</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -75,7 +78,7 @@
          <string>MOS8580</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -97,13 +100,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="OscilloscopeWidget" name="osc3" native="true"/>
+       <widget class="OscilloscopeWidget" name="osc1" native="true"/>
       </item>
       <item>
        <widget class="OscilloscopeWidget" name="osc2" native="true"/>
       </item>
       <item>
-       <widget class="OscilloscopeWidget" name="osc1" native="true"/>
+       <widget class="OscilloscopeWidget" name="osc3" native="true"/>
       </item>
      </layout>
     </item>

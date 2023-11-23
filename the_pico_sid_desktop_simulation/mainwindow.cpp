@@ -24,6 +24,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->osc2->setMinimumSize(200,200);
     ui->osc3->setMinimumSize(200,200);
 
+    ui->osc1->SetAmplifire(3);
+    ui->osc1->SetSamplerate(44100);
+    ui->osc1->SetTriggerLevel(1.5f);
+    ui->osc1->SetTriggerTyp(RISING_EDGE);
+
+    ui->osc2->SetAmplifire(3);
+    ui->osc2->SetSamplerate(44100);
+    ui->osc2->SetTriggerLevel(1.5f);
+    ui->osc2->SetTriggerTyp(RISING_EDGE);
+
+    ui->osc3->SetAmplifire(3);
+    ui->osc3->SetSamplerate(44100);
+    ui->osc3->SetTriggerLevel(1.5f);
+    ui->osc3->SetTriggerTyp(RISING_EDGE);
+
     // Default Audioformat (44100 / Stereo / Float)
     m_format.setSampleRate(41223);
     m_format.setChannelCount(2);
@@ -94,8 +109,8 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
     int buffer_pos = 0;
 
     static unsigned short wave0_buffer[SOUND_BUFFER_SIZE];
-    static float wave1_buffer[SOUND_BUFFER_SIZE];
-    static float wave2_buffer[SOUND_BUFFER_SIZE];
+    static unsigned short wave1_buffer[SOUND_BUFFER_SIZE];
+    static unsigned short wave2_buffer[SOUND_BUFFER_SIZE];
 
     int wave_pos = 0;
 
@@ -122,18 +137,21 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
         }
 
         //buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
+        buffer[buffer_pos] = buffer[buffer_pos+1] = ((signed short)(~sid.AudioOut()+1) / (float)0xffff) * 2;
 
-        buffer[buffer_pos] = buffer[buffer_pos+1] = ((sid.AudioOut()) / (float)0x2ffD) * 0.7f;
 
-        wave0_buffer[wave_pos] = sid.voice[0].wave.OutWaveform() * 10;
-        wave1_buffer[wave_pos] = sid.voice[1].wave.OutWaveform() / (float)0xfff;
-        wave2_buffer[wave_pos] = sid.voice[2].wave.OutWaveform() / (float)0xfff;
+        // Osc Waves Visualisieren
+        wave0_buffer[wave_pos] = sid.voice[0].wave.Output();
+        wave1_buffer[wave_pos] = sid.voice[1].wave.Output();
+        wave2_buffer[wave_pos] = sid.voice[2].wave.Output();
         wave_pos++;
 
         buffer_pos += 2;
     }
 
-    ui->osc1->NextAudioData((uint8_t*)wave0_buffer, len / (m_format.sampleSize()/8));
+    ui->osc1->NextAudioData((unsigned char*)wave0_buffer, wave_pos, 12, false);
+    ui->osc2->NextAudioData((unsigned char*)wave1_buffer, wave_pos, 12, false);
+    ui->osc3->NextAudioData((unsigned char*)wave2_buffer, wave_pos, 12, false);
 }
 
 void MainWindow::on_Quit_clicked()

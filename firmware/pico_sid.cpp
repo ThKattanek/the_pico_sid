@@ -40,6 +40,9 @@ uint16_t PICO_SID::AudioOut()
 
 void PICO_SID::SetSidType(sid_type type)
 {
+    sid_model = type;
+    for (int i = 0; i < 3; i++)
+        voice[i].SetSidType(type);
 }
 
 void PICO_SID::Clock()

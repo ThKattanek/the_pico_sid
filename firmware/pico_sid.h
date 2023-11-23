@@ -35,6 +35,8 @@ class PICO_SID
 	uint8_t ReadReg(uint8_t address);
 	uint16_t AudioOut();
 
+    sid_type sid_model;
+
     SID_VOICE voice[3];
 };
 

@@ -32,7 +32,7 @@ public:
     void SetTriggerTyp(int value);
     void SetTriggerLevel(float value);
     void NextAudioData(float *data, int length);
-    void NextAudioData(uint8_t *data, int length);
+    void NextAudioData(uint8_t *data, int length, uint8_t bitcount, bool is_signed);
 
 public slots:
 

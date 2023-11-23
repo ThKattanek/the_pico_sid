@@ -138,10 +138,6 @@ void OscilloscopeWidget::DrawData(QPainter &painter, int width)
 
 void OscilloscopeWidget::NextAudioData(float *data, int length)
 {
-    // Es wird angenommen das ein Stereo Stream hier ankommt
-    // Das müsste noch angepasst weden um Flexibler zu sein
-    // Der linke Kanal wird hier rausgezogen
-
     float y_div_pix = height()/8.0f;
     float y_factor = amplifire;
     float y_add = height() * vertical_position;
@@ -196,8 +192,49 @@ void OscilloscopeWidget::NextAudioData(float *data, int length)
     }
 }
 
-void OscilloscopeWidget::NextAudioData(uint8_t *data, int length)
+void OscilloscopeWidget::NextAudioData(uint8_t *data, int length, uint8_t bitcount, bool is_signed)
 {
+    uint16_t* buffer_16u;
+    int16_t* buffer_16s;
+    uint32_t* buffer_32u;
+    int32_t* buffer_32s;
+
+    float *new_data = new float[length];
+
+    if(bitcount < 17)
+    {
+        // 16Bit
+        if(is_signed)
+        {
+            // signed
+            buffer_16s = reinterpret_cast<int16_t*>(data);
+        }
+        else
+        {
+            // unsigned
+            buffer_16u = reinterpret_cast<uint16_t*>(data);
+            for(int i=0; i<length; i++)
+                new_data[i] = static_cast<float>(buffer_16u[i]) / ((1<<bitcount)-1);
+            NextAudioData(new_data, length);
+        }
+    }
+    else if(bitcount < 33)
+    {
+        // 32Bit
+        if(is_signed)
+        {
+            // signed
+            buffer_32s = reinterpret_cast<int32_t*>(data);
+        }
+        else
+        {
+            // unsigned
+            buffer_32u = reinterpret_cast<uint32_t*>(data);
+        }
+    }
+
+    delete [] new_data;
+/*
     int16_t *buffer = reinterpret_cast<int16_t*>(data);
 
     float *new_data = new float[length];
@@ -205,6 +242,7 @@ void OscilloscopeWidget::NextAudioData(uint8_t *data, int length)
         new_data[i] = static_cast<float>(buffer[i]) / 0x7fff;
     NextAudioData(new_data, length/2);
     delete [] new_data;
+*/
 }
 
 void OscilloscopeWidget::OnRefresh()
