@@ -98,6 +98,13 @@
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Oscillators</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="OscilloscopeWidget" name="osc1" native="true"/>
@@ -107,6 +114,26 @@
       </item>
       <item>
        <widget class="OscilloscopeWidget" name="osc3" native="true"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Envelopes</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="OscilloscopeWidget" name="env1" native="true"/>
+      </item>
+      <item>
+       <widget class="OscilloscopeWidget" name="env2" native="true"/>
+      </item>
+      <item>
+       <widget class="OscilloscopeWidget" name="env3" native="true"/>
       </item>
      </layout>
     </item>

@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("ThePicoSID Desktop Simulation");
 
+    // Oscillator Views
     ui->osc1->setMinimumSize(200,200);
     ui->osc2->setMinimumSize(200,200);
     ui->osc3->setMinimumSize(200,200);
@@ -38,6 +39,26 @@ MainWindow::MainWindow(QWidget *parent)
     ui->osc3->SetSamplerate(44100);
     ui->osc3->SetTriggerLevel(1.5f);
     ui->osc3->SetTriggerTyp(RISING_EDGE);
+
+    // Envelope Views
+    ui->env1->setMinimumSize(200,200);
+    ui->env2->setMinimumSize(200,200);
+    ui->env3->setMinimumSize(200,200);
+
+    ui->env1->SetAmplifire(3);
+    ui->env1->SetSamplerate(44100);
+    ui->env1->SetTriggerLevel(1.5f);
+    ui->env1->SetTriggerTyp(RISING_EDGE);
+
+    ui->env2->SetAmplifire(3);
+    ui->env2->SetSamplerate(44100);
+    ui->env2->SetTriggerLevel(1.5f);
+    ui->env2->SetTriggerTyp(RISING_EDGE);
+
+    ui->env3->SetAmplifire(3);
+    ui->env3->SetSamplerate(44100);
+    ui->env3->SetTriggerLevel(1.5f);
+    ui->env3->SetTriggerTyp(RISING_EDGE);
 
     // Default Audioformat (44100 / Stereo / Float)
     m_format.setSampleRate(41223);
