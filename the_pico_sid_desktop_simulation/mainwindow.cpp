@@ -143,6 +143,7 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
     {
         if(!cycle_excact_sid)
         {
+             /*
             for(int i=0; i<6; i++)
             {
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
@@ -151,6 +152,11 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
                 sid.Clock(4);
             }
+            */
+             for(int i=0; i<24; i++)
+                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+             sid.Clock(24);
+
         }
         else
         {

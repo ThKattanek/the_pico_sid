@@ -16,12 +16,11 @@
 
 PICO_SID::PICO_SID()
 {
-    sid_model = MOS_6581;
+    SetSidType(MOS_6581);
+
     voice[0].SetSyncSource(&voice[2]);
     voice[1].SetSyncSource(&voice[0]);
     voice[2].SetSyncSource(&voice[1]);
-
-    Reset();
 }
 
 PICO_SID::~PICO_SID()
@@ -30,7 +29,7 @@ PICO_SID::~PICO_SID()
 
 uint8_t PICO_SID::ReadReg(uint8_t)
 {
-	return 0;
+    return 0;
 }
 
 int PICO_SID::AudioOut()
@@ -44,6 +43,7 @@ int PICO_SID::AudioOut()
 void PICO_SID::SetSidType(sid_type type)
 {
     sid_model = type;
+
     for (int i = 0; i < 3; i++)
         voice[i].SetSidType(type);
 }
@@ -52,27 +52,10 @@ void PICO_SID::Clock(cycle_count delta_t)
 {
     int i;
 
-    if (unlikely(write_pipeline) && likely(delta_t > 0))
-    {
-        write_pipeline = 0;
-        Clock(1);
-        WriteReg();
-        delta_t -= 1;
-    }
-
     if (unlikely(delta_t <= 0))
     {
         return;
     }
-
-    // Age bus value.
-    /*
-    bus_value_ttl -= delta_t;
-    if (unlikely(bus_value_ttl <= 0)) {
-        bus_value = 0;
-        bus_value_ttl = 0;
-    }
-    */
 
     for (i = 0; i < 3; i++)
     {
@@ -130,92 +113,76 @@ void PICO_SID::Clock(cycle_count delta_t)
 
 void PICO_SID::Reset()
 {
-     voice[0].Reset();
-     voice[1].Reset();
-     voice[2].Reset();
+    for(int i=0; i<3; i++)
+        voice[i].Reset();
+
 }
 
-void PICO_SID::WriteReg(uint8_t address, uint8_t value)
-{
-     write_address = address;
-     databus_value = value;
-     // bus_value_ttl = databus_ttl;
-
-     if (sid_model == MOS_8580)
-     {
-        write_pipeline = 1;
-     }
-     else
-     {
-        WriteReg();
-     }
-}
-
-void PICO_SID::WriteReg()
+void PICO_SID::WriteReg(uint8_t write_address, uint8_t bus_value)
 {
      switch (write_address & 0x1f) {
      case 0x00:
-         voice[0].wave.WriteFreqLo(databus_value);
+         voice[0].wave.WriteFreqLo(bus_value);
          break;
      case 0x01:
-         voice[0].wave.WriteFreqHi(databus_value);
+         voice[0].wave.WriteFreqHi(bus_value);
          break;
      case 0x02:
-         voice[0].wave.WritePwLo(databus_value);
+         voice[0].wave.WritePwLo(bus_value);
          break;
      case 0x03:
-         voice[0].wave.WritePwHi(databus_value);
+         voice[0].wave.WritePwHi(bus_value);
          break;
      case 0x04:
-         voice[0].WriteControlReg(databus_value);
+         voice[0].WriteControlReg(bus_value);
          break;
      case 0x05:
-         voice[0].envelope.WriteAttackDecay(databus_value);
+         voice[0].envelope.WriteAttackDecay(bus_value);
          break;
      case 0x06:
-         voice[0].envelope.WriteSustainRelease(databus_value);
+         voice[0].envelope.WriteSustainRelease(bus_value);
          break;
      case 0x07:
-         voice[1].wave.WriteFreqLo(databus_value);
+         voice[1].wave.WriteFreqLo(bus_value);
          break;
      case 0x08:
-         voice[1].wave.WriteFreqHi(databus_value);
+         voice[1].wave.WriteFreqHi(bus_value);
          break;
      case 0x09:
-         voice[1].wave.WritePwLo(databus_value);
+         voice[1].wave.WritePwLo(bus_value);
          break;
      case 0x0a:
-         voice[1].wave.WritePwHi(databus_value);
+         voice[1].wave.WritePwHi(bus_value);
          break;
      case 0x0b:
-         voice[1].WriteControlReg(databus_value);
+         voice[1].WriteControlReg(bus_value);
          break;
      case 0x0c:
-         voice[1].envelope.WriteAttackDecay(databus_value);
+         voice[1].envelope.WriteAttackDecay(bus_value);
          break;
      case 0x0d:
-         voice[1].envelope.WriteSustainRelease(databus_value);
+         voice[1].envelope.WriteSustainRelease(bus_value);
          break;
      case 0x0e:
-         voice[2].wave.WriteFreqLo(databus_value);
+         voice[2].wave.WriteFreqLo(bus_value);
          break;
      case 0x0f:
-         voice[2].wave.WriteFreqHi(databus_value);
+         voice[2].wave.WriteFreqHi(bus_value);
          break;
      case 0x10:
-         voice[2].wave.WritePwLo(databus_value);
+         voice[2].wave.WritePwLo(bus_value);
          break;
      case 0x11:
-         voice[2].wave.WritePwHi(databus_value);
+         voice[2].wave.WritePwHi(bus_value);
          break;
      case 0x12:
-         voice[2].WriteControlReg(databus_value);
+         voice[2].WriteControlReg(bus_value);
          break;
      case 0x13:
-         voice[2].envelope.WriteAttackDecay(databus_value);
+         voice[2].envelope.WriteAttackDecay(bus_value);
          break;
      case 0x14:
-         voice[2].envelope.WriteSustainRelease(databus_value);
+         voice[2].envelope.WriteSustainRelease(bus_value);
          break;
      case 0x15:
          //filter.writeFC_LO(databus_value);
@@ -232,6 +199,4 @@ void PICO_SID::WriteReg()
      default:
          break;
      }
-
-     write_pipeline = 0;
 }

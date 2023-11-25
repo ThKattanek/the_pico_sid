@@ -30,8 +30,7 @@ public:
     void Clock(cycle_count delta_t);
 
 	void Reset();
-    void WriteReg(uint8_t address, uint8_t value);
-    void WriteReg();
+    void WriteReg(uint8_t write_address, uint8_t bus_value);
 	uint8_t ReadReg(uint8_t address);
     int AudioOut();
 
@@ -41,8 +40,7 @@ public:
     reg8 sid_register[0x20];
 
     reg8 write_address;
-    reg8 databus_value;
-    cycle_count write_pipeline;
+    reg8 bus_value;
 };
 
 #endif // PICO_SID_CLASS_H
