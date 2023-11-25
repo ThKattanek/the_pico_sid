@@ -329,6 +329,8 @@ reg12 SID_WAVE::OutWaveform()
 // ----------------------------------------------------------------------------
 // SID clocking - 1 cycle.
 // ----------------------------------------------------------------------------
+
+RESID_INLINE
 void SID_WAVE::Clock()
 {
     if (unlikely(test)) {
@@ -364,6 +366,8 @@ void SID_WAVE::Clock()
 // ----------------------------------------------------------------------------
 // SID clocking - delta_t cycles.
 // ----------------------------------------------------------------------------
+
+RESID_INLINE
 void SID_WAVE::Clock(cycle_count delta_t)
 {
     if (unlikely(test)) {
@@ -441,6 +445,8 @@ void SID_WAVE::Clock(cycle_count delta_t)
 // Note that the oscillators must be clocked exactly on the cycle when the
 // MSB is set high for hard sync to operate correctly. See SID::clock().
 // ----------------------------------------------------------------------------
+
+RESID_INLINE
 void SID_WAVE::Synchronize()
 {
     // A special case occurs when a sync source is synced itself on the same
@@ -505,7 +511,8 @@ void SID_WAVE::Synchronize()
 // The low 4 waveform bits are zero (grounded).
 //
 
-inline void SID_WAVE::ClockShiftRegister()
+RESID_INLINE
+void SID_WAVE::ClockShiftRegister()
 {
     // bit0 = (bit22 | test) ^ bit17
     reg24 bit0 = ((shift_register >> 22) ^ (shift_register >> 17)) & 0x1;
@@ -515,7 +522,8 @@ inline void SID_WAVE::ClockShiftRegister()
     SetNoiseOutput();
 }
 
-inline void SID_WAVE::WriteShiftRegister()
+RESID_INLINE
+void SID_WAVE::WriteShiftRegister()
 {
     // Write changes to the shift register output caused by combined waveforms
     // back into the shift register.
@@ -538,7 +546,8 @@ inline void SID_WAVE::WriteShiftRegister()
     no_noise_or_noise_output = no_noise | noise_output;
 }
 
-inline void SID_WAVE::SetNoiseOutput()
+RESID_INLINE
+void SID_WAVE::SetNoiseOutput()
 {
     noise_output =
         ((shift_register & 0x100000) >> 9) |
@@ -642,6 +651,7 @@ static reg12 NoisePulse8580(reg12 noise)
     return (noise < 0xfc0) ? noise & (noise << 1) : 0xfc0;
 }
 
+RESID_INLINE
 void SID_WAVE::SetWaveformOutput()
 {
     // Set output value.
@@ -704,7 +714,8 @@ void SID_WAVE::SetWaveformOutput()
     pulse_output = -((accumulator >> 12) >= pw) & 0xfff;
 }
 
-inline void SID_WAVE::SetWaveformOutput(cycle_count delta_t)
+RESID_INLINE
+void SID_WAVE::SetWaveformOutput(cycle_count delta_t)
 {
     // Set output value.
     if (likely(waveform)) {
@@ -739,7 +750,6 @@ inline void SID_WAVE::SetWaveformOutput(cycle_count delta_t)
     }
 }
 
-
 // ----------------------------------------------------------------------------
 // Waveform output (12 bits).
 // ----------------------------------------------------------------------------
@@ -769,6 +779,7 @@ inline void SID_WAVE::SetWaveformOutput(cycle_count delta_t)
 // done away with the bias part on the left hand side of the figure above.
 //
 
+RESID_INLINE
 short SID_WAVE::Output()
 {
     // DAC imperfections are emulated by using waveform_output as an index

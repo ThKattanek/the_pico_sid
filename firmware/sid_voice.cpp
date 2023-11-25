@@ -54,7 +54,7 @@ void SID_VOICE::Reset()
 void SID_VOICE::WriteControlReg(reg8 value)
 {
     wave.WriteControlReg(value);
-  //envelope.WriteControlReg(value);
+    envelope.WriteControlReg(value);
 }
 
 // ----------------------------------------------------------------------------
@@ -90,8 +90,8 @@ void SID_VOICE::WriteControlReg(reg8 value)
 // As is the case with all MOS 6581 DACs, the termination to (virtual) ground
 // at bit 0 is missing. The MOS 8580 has correct termination.
 
-inline int SID_VOICE::Output()
+RESID_INLINE
+int SID_VOICE::Output()
 {
-    // return (wave.Output() - wave_zero) * envelope.Output();
-    return 0;
+    return (wave.Output() - wave_zero) * envelope.Output();
 }

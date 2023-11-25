@@ -133,6 +133,10 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
     static unsigned short wave1_buffer[SOUND_BUFFER_SIZE];
     static unsigned short wave2_buffer[SOUND_BUFFER_SIZE];
 
+    static unsigned short env0_buffer[SOUND_BUFFER_SIZE];
+    static unsigned short env1_buffer[SOUND_BUFFER_SIZE];
+    static unsigned short env2_buffer[SOUND_BUFFER_SIZE];
+
     int wave_pos = 0;
 
     while(buffer_pos < (len / (m_format.sampleSize()/8)))
@@ -153,18 +157,22 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
             for(int i=0; i<24; i++)
             {
                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                sid.Clock();
+                sid.Clock(1);
             }
         }
 
-        //buffer[buffer_pos] = buffer[buffer_pos+1] = ((~(sid.AudioOut() >> 4)+1) / (float)0xffff * 0x7ff) / float(0x7ff);
-        buffer[buffer_pos] = buffer[buffer_pos+1] = ((signed short)(~sid.AudioOut()+1) / (float)0xffff) * 2;
-
+        buffer[buffer_pos] = buffer[buffer_pos+1] = ((sid.AudioOut()) + 32768) / (float)0xffff;
 
         // Osc Waves Visualisieren
         wave0_buffer[wave_pos] = sid.voice[0].wave.Output();
         wave1_buffer[wave_pos] = sid.voice[1].wave.Output();
         wave2_buffer[wave_pos] = sid.voice[2].wave.Output();
+
+        // Env Waves Visualisieren
+        env0_buffer[wave_pos] = sid.voice[0].envelope.Output();
+        env1_buffer[wave_pos] = sid.voice[1].envelope.Output();
+        env2_buffer[wave_pos] = sid.voice[2].envelope.Output();
+
         wave_pos++;
 
         buffer_pos += 2;
@@ -173,6 +181,10 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
     ui->osc1->NextAudioData((unsigned char*)wave0_buffer, wave_pos, 12, false);
     ui->osc2->NextAudioData((unsigned char*)wave1_buffer, wave_pos, 12, false);
     ui->osc3->NextAudioData((unsigned char*)wave2_buffer, wave_pos, 12, false);
+
+    ui->env1->NextAudioData((unsigned char*)env0_buffer, wave_pos, 8, false);
+    ui->env2->NextAudioData((unsigned char*)env1_buffer, wave_pos, 8, false);
+    ui->env3->NextAudioData((unsigned char*)env2_buffer, wave_pos, 8, false);
 }
 
 void MainWindow::on_Quit_clicked()

@@ -22,22 +22,27 @@
 
 class PICO_SID
 {
-	public:
+public:
 	PICO_SID();
 	~PICO_SID();
 
 	void SetSidType(sid_type type);
-    void Clock();
     void Clock(cycle_count delta_t);
 
 	void Reset();
-	void WriteReg(uint8_t address, uint8_t value);
+    void WriteReg(uint8_t address, uint8_t value);
+    void WriteReg();
 	uint8_t ReadReg(uint8_t address);
-	uint16_t AudioOut();
+    int AudioOut();
 
     sid_type sid_model;
-
     SID_VOICE voice[3];
+
+    reg8 sid_register[0x20];
+
+    reg8 write_address;
+    reg8 databus_value;
+    cycle_count write_pipeline;
 };
 
 #endif // PICO_SID_CLASS_H

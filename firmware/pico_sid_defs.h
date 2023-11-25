@@ -15,6 +15,8 @@
 #ifndef PICO_SID_DEFS_CLASS_H
 #define PICO_SID_DEFS_CLASS_H
 
+#define RESID_INLINE
+
 enum sid_type {MOS_6581, MOS_8580};
 
 typedef unsigned int reg4;
