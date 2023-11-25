@@ -28,7 +28,7 @@ PICO_SID::~PICO_SID()
 {
 }
 
-uint8_t PICO_SID::ReadReg(uint8_t address)
+uint8_t PICO_SID::ReadReg(uint8_t)
 {
 	return 0;
 }
@@ -52,10 +52,8 @@ void PICO_SID::Clock(cycle_count delta_t)
 {
     int i;
 
-    // Pipelined writes on the MOS8580.
     if (unlikely(write_pipeline) && likely(delta_t > 0))
     {
-        // Step one cycle by a recursive call to ourselves.
         write_pipeline = 0;
         Clock(1);
         WriteReg();
@@ -76,34 +74,24 @@ void PICO_SID::Clock(cycle_count delta_t)
     }
     */
 
-    // Clock amplitude modulators.
     for (i = 0; i < 3; i++)
     {
         voice[i].envelope.Clock(delta_t);
     }
 
-    // Clock and synchronize oscillators.
-    // Loop until we reach the current cycle.
     cycle_count delta_t_osc = delta_t;
     while (delta_t_osc) {
         cycle_count delta_t_min = delta_t_osc;
 
-        // Find minimum number of cycles to an oscillator accumulator MSB toggle.
-        // We have to clock on each MSB on / MSB off for hard sync to operate
-        // correctly.
         for (i = 0; i < 3; i++) {
             SID_WAVE& wave = voice[i].wave;
 
-            // It is only necessary to clock on the MSB of an oscillator that is
-            // a sync source and has freq != 0.
             if (likely(!(wave.sync_dest->sync && wave.freq))) {
                 continue;
             }
 
             reg16 freq = wave.freq;
             reg24 accumulator = wave.accumulator;
-
-            // Clock on MSB off if MSB is on, clock on MSB on if MSB is off.
             reg24 delta_accumulator =
                 (accumulator & 0x800000 ? 0x1000000 : 0x800000) - accumulator;
 
@@ -117,12 +105,10 @@ void PICO_SID::Clock(cycle_count delta_t)
             }
         }
 
-        // Clock oscillators.
         for (i = 0; i < 3; i++) {
             voice[i].wave.Clock(delta_t_min);
         }
 
-        // Synchronize oscillators.
         for (i = 0; i < 3; i++) {
             voice[i].wave.Synchronize();
         }
@@ -130,8 +116,8 @@ void PICO_SID::Clock(cycle_count delta_t)
         delta_t_osc -= delta_t_min;
     }
 
-    // Calculate waveform output.
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++)
+    {
         voice[i].wave.SetWaveformOutput(delta_t);
     }
 
@@ -157,9 +143,6 @@ void PICO_SID::WriteReg(uint8_t address, uint8_t value)
 
      if (sid_model == MOS_8580)
      {
-        // Fake one cycle pipeline delay on the MOS8580
-        // when using non cycle accurate emulation.
-        // This will make the SID detection method work.
         write_pipeline = 1;
      }
      else
@@ -250,6 +233,5 @@ void PICO_SID::WriteReg()
          break;
      }
 
-     // Tell clock() that the pipeline is empty.
      write_pipeline = 0;
 }

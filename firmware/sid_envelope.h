@@ -28,7 +28,6 @@ public:
     enum State { ATTACK, DECAY_SUSTAIN, RELEASE, FREEZED };
 
     void SetSidType(sid_type type);
-    void Clock();
     void Clock(cycle_count delta_t);
     void Reset();
 
@@ -71,14 +70,9 @@ protected:
 
     sid_type sid_model;
 
-    // Lookup table to convert from attack, decay, or release value to rate
-    // counter period.
+    // Lookup tables
     static reg16 rate_counter_period[];
-
-    // The 16 selectable sustain levels.
     static reg8 sustain_level[];
-
-    // DAC lookup tables.
     static unsigned short model_dac[2][1 << 8];
 
     friend class PICO_SID;

@@ -17,11 +17,8 @@
 
 void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term)
 {
-    // FIXME: No variable length arrays in ISO C++, hardcoding to max 12 bits.
-    // double vbit[bits];
     double vbit[12];
 
-    // Calculate voltage contribution by each individual bit in the R-2R ladder.
     for (int set_bit = 0; set_bit < bits; set_bit++) {
         int bit;
 
@@ -31,7 +28,6 @@ void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term)
         double Rn = term ?        // Rn = 2R for correct termination,
                         _2R : INFINITY;         // INFINITY for missing termination.
 
-        // Calculate DAC "tail" resistance by repeated parallel substitution.
         for (bit = 0; bit < set_bit; bit++) {
             if (Rn == INFINITY) {
                 Rn = R + _2R;
@@ -41,7 +37,6 @@ void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term)
             }
         }
 
-        // Source transformation for bit voltage.
         if (Rn == INFINITY) {
             Rn = _2R;
         }
@@ -50,8 +45,6 @@ void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term)
             Vn = Vn*Rn/_2R;
         }
 
-        // Calculate DAC output voltage by repeated source transformation from
-        // the "tail".
         for (++bit; bit < bits; bit++) {
             Rn += R;
             double I = Vn/Rn;
@@ -62,7 +55,6 @@ void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term)
         vbit[set_bit] = Vn;
     }
 
-    // Calculate the voltage for any combination of bits by superpositioning.
     for (int i = 0; i < (1 << bits); i++) {
         int x = i;
         double Vo = 0;
@@ -71,7 +63,6 @@ void BuildDacTable(unsigned short* dac, int bits, double _2R_div_R, bool term)
             x >>= 1;
         }
 
-        // Scale maximum output to 2^bits - 1.
         dac[i] = (unsigned short)(((1 << bits) - 1)*Vo + 0.5);
     }
 }

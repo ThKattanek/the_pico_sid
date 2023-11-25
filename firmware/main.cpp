@@ -203,19 +203,21 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-	// sid[0].Clock(24);
+	sid[0].Clock(24);
 
 	/*
-	for(int i=0; i<6; i++)
+	for(int i=0; i<4; i++)
 	{
-		sid[0].Clock(4);
+		sid[0].Clock(6);
 	}
 	*/
 
+	/*
 	for(int i=0; i<2; i++)
 	{
 		sid[0].Clock(12);
 	}
+	*/
 
 	/*
 	for(int i=0; i<24; i++)

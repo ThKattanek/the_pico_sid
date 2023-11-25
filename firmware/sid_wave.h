@@ -29,7 +29,6 @@ public:
     void SetSyncSource(SID_WAVE* wave_source);
     void Reset();
 
-    void Clock();
     void Clock(int delta_t);
     void Synchronize();
 
@@ -42,10 +41,8 @@ public:
 
     reg12 OutWaveform();
 
-    // 12-bit waveform output.
     short Output();
 
-    // Calculate and set waveform output value.
     void SetWaveformOutput();
     void SetWaveformOutput(cycle_count delta_t);
 
@@ -61,23 +58,16 @@ protected:
 
     reg24 accumulator;
 
-    // Tell whether the accumulator MSB was set high on this cycle.
-    bool msb_rising;
 
-    // Fout  = (Fn*Fclk/16777216)Hz
-    // reg16 freq;
+    bool msb_rising;
     reg24 freq;
-    // PWout = (PWn/40.95)%
     reg12 pw;
 
     reg24 shift_register;
 
-    // Remaining time to fully reset shift register.
     cycle_count shift_register_reset;
-    // Emulation of pipeline causing bit 19 to clock the shift register.
     cycle_count shift_pipeline;
 
-    // Helper variables for waveform table lookup.
     reg24 ring_msb_mask;
     unsigned short no_noise;
     unsigned short noise_output;
@@ -85,30 +75,20 @@ protected:
     unsigned short no_pulse;
     unsigned short pulse_output;
 
-    // The control register right-shifted 4 bits; used for waveform table lookup.
     reg8 waveform;
-
-    // 8580 tri/saw pipeline
     reg12 tri_saw_pipeline;
     reg12 osc3;
-
-    // The remaining control register bits.
     reg8 test;
     reg8 ring_mod;
     reg8 sync;
-    // The gate bit is handled by the EnvelopeGenerator.
 
-    // DAC input.
     reg12 waveform_output;
-    // Fading time for floating DAC input (waveform 0).
     cycle_count floating_output_ttl;
 
     sid_type sid_model;
 
-    // Sample data for waveforms, not including noise.
     unsigned short* wave;
     static unsigned short model_wave[2][8][1 << 12];
-    // DAC lookup tables.
     static unsigned short model_dac[2][1 << 12];
 
     friend class SID_VOICE;

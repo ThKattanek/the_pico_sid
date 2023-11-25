@@ -327,43 +327,6 @@ reg12 SID_WAVE::OutWaveform()
 }
 
 // ----------------------------------------------------------------------------
-// SID clocking - 1 cycle.
-// ----------------------------------------------------------------------------
-
-RESID_INLINE
-void SID_WAVE::Clock()
-{
-    if (unlikely(test)) {
-        // Count down time to fully reset shift register.
-        if (unlikely(shift_register_reset) && unlikely(!--shift_register_reset)) {
-            ShiftregBitfade();
-        }
-
-        // The test bit sets pulse high.
-        pulse_output = 0xfff;
-    }
-    else {
-        // Calculate new accumulator value;
-        reg24 accumulator_next = (accumulator + freq) & 0xffffff;
-        reg24 accumulator_bits_set = ~accumulator & accumulator_next;
-        accumulator = accumulator_next;
-
-        // Check whether the MSB is set high. This is used for synchronization.
-        msb_rising = (accumulator_bits_set & 0x800000) ? true : false;
-
-        // Shift noise register once for each time accumulator bit 19 is set high.
-        // The shift is delayed 2 cycles.
-        if (unlikely(accumulator_bits_set & 0x080000)) {
-            // Pipeline: Detect rising bit, shift phase 1, shift phase 2.
-            shift_pipeline = 2;
-        }
-        else if (unlikely(shift_pipeline) && !--shift_pipeline) {
-            ClockShiftRegister();
-        }
-    }
-}
-
-// ----------------------------------------------------------------------------
 // SID clocking - delta_t cycles.
 // ----------------------------------------------------------------------------
 
