@@ -19,6 +19,7 @@
 
 #include "./pico_sid_defs.h"
 #include "./sid_voice.h"
+#include "./sid_filter.h"
 
 class PICO_SID
 {
@@ -36,6 +37,7 @@ public:
 
     sid_type sid_model;
     SID_VOICE voice[3];
+    SID_FILTER filter;
 
     reg8 sid_register[0x20];
 

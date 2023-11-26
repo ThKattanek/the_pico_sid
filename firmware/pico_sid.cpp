@@ -36,8 +36,12 @@ int PICO_SID::AudioOut()
 {
     // Ausgabe der reinen Wellenform
     // return voice[0].wave.Output() + voice[1].wave.Output() + voice[2].wave.Output();
+
     // Ausgabe Amplituden moduliert
-    return ((voice[0].Output() + voice[1].Output() + voice[2].Output()) / (float)0x2ffffd) * 0xffff;
+    // return ((voice[0].Output() + voice[1].Output() + voice[2].Output()) / (float)0x2ffffd) * 0xffff;
+
+    // Ausgabe SID Filter
+    return filter.Output();
 }
 
 void PICO_SID::SetSidType(sid_type type)
@@ -46,6 +50,8 @@ void PICO_SID::SetSidType(sid_type type)
 
     for (int i = 0; i < 3; i++)
         voice[i].SetSidType(type);
+
+    filter.SetSidType(type);
 }
 
 void PICO_SID::Clock(cycle_count delta_t)
@@ -105,7 +111,7 @@ void PICO_SID::Clock(cycle_count delta_t)
     }
 
     // Clock filter.
-    // filter.clock(delta_t, voice[0].output(), voice[1].output(), voice[2].output());
+    filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output());
 
     // Clock external filter.
     // extfilt.clock(delta_t, filter.output());
@@ -116,6 +122,7 @@ void PICO_SID::Reset()
     for(int i=0; i<3; i++)
         voice[i].Reset();
 
+    filter.Reset();
 }
 
 void PICO_SID::WriteReg(uint8_t write_address, uint8_t bus_value)
@@ -185,16 +192,16 @@ void PICO_SID::WriteReg(uint8_t write_address, uint8_t bus_value)
          voice[2].envelope.WriteSustainRelease(bus_value);
          break;
      case 0x15:
-         //filter.writeFC_LO(databus_value);
+         filter.WriteFcLo(bus_value);
          break;
      case 0x16:
-         //filter.writeFC_HI(databus_value);
+         filter.WriteFcHi(bus_value);
          break;
      case 0x17:
-         //filter.writeRES_FILT(databus_value);
+         filter.WriteResFilt(bus_value);
          break;
      case 0x18:
-         //filter.writeMODE_VOL(databus_value);
+         filter.WriteModeVol(bus_value);
          break;
      default:
          break;

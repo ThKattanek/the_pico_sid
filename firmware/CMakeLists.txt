@@ -27,7 +27,9 @@ add_executable(${PROJECT_NAME}
   sid_envelope.cpp /
   sid_envelope.h /
   sid_dac.cpp /
-  sid_dac.h
+  sid_dac.h /
+  sid_filter.cpp /
+  sid_filter.h /
   version.h
 )
 

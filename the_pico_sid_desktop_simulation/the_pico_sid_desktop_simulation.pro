@@ -2,7 +2,7 @@ QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -34,7 +34,8 @@ SOURCES += \
     ../firmware/sid_voice.cpp \
     ../firmware/sid_wave.cpp \
     ../firmware/sid_envelope.cpp \
-    ../firmware/sid_dac.cpp
+    ../firmware/sid_dac.cpp \
+    ../firmware/sid_filter.cpp
 
 HEADERS += \
     ../firmware/pico_sid.h \
@@ -43,6 +44,7 @@ HEADERS += \
     ../firmware/sid_wave.h \
     ../firmware/sid_envelope.h \
     ../firmware/sid_dac.h \
+    ../firmware/sid_filter.h \
     ../firmware/version.h
 
 FORMS += \
