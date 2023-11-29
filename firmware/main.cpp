@@ -107,8 +107,8 @@ int main()
 {	
 	// Set Systemclock to 300MHz
 	vreg_set_voltage( VREG_VOLTAGE_1_30 );
-	//set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
-	set_sys_clock_pll( 1500000000, 5, 1 );
+	set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	//set_sys_clock_pll( 1500000000, 5, 1 );
 
 	stdio_init_all();	
 
@@ -181,6 +181,8 @@ int main()
 	volatile bool	adc0_compare_state_old;
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
+
+	sid[0].SetSidType(MOS_8580);
 
     while (1)
     {
