@@ -10,9 +10,9 @@
 
 #include "siddump.h"
 
-extern "C" {
+
 #include "../firmware/pico_sid.h"
-}
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

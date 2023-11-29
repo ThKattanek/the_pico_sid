@@ -51,10 +51,11 @@ inline int PICO_SID::AudioOut()
     // return voice[0].wave.Output() + voice[1].wave.Output() + voice[2].wave.Output();
 
     // Ausgabe Amplituden moduliert
-    return ((voice[0].Output() + voice[1].Output() + voice[2].Output()) / (float)0x2ffffd) * 0xffff;
+    // return ((voice[0].Output() + voice[1].Output() + voice[2].Output()) / (float)0x2ffffd) * 0xffff;
 
     // Ausgabe SID Filter
-    // return filter.Output();
+	// return (filter.Output()  / (float)1048576) * 0xffff;	// Audiolevel is lower
+	return (filter.Output()  / (float)524287) * 0xffff;		// Audiolevel is higher
 }
 
 inline void PICO_SID::Clock(cycle_count delta_t)

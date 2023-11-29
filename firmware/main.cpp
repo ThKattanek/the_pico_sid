@@ -103,13 +103,12 @@ void GetVersionNumber(uint8_t *major, uint8_t *minor, uint8_t *patch)
 	*patch = VERSION_PATCH;
 }
 
-int main() {
-
-	//default clock is 125000kHz
-	//set_sys_clock_khz(248000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
-	
+int main() 
+{	
+	// Set Systemclock to 300MHz
 	vreg_set_voltage( VREG_VOLTAGE_1_30 );
-	set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	//set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	set_sys_clock_pll( 1500000000, 5, 1 );
 
 	stdio_init_all();	
 
@@ -226,12 +225,8 @@ void pwm_irq_handle()
 
 	//for(int i=0; i<24; i++) sid[0].Clock(1);
 
-	
-
 	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;	// Version 0.1.0
 	uint16_t out = (((sid[0].AudioOut()) + 32768) / (float)0xffff) * 0x7ff;		    // Version 0.2.0
-
-	//uint16_t out = (sid[0].AudioOut() / (float)0x2ffD) * 0x7ff;
 	
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }
