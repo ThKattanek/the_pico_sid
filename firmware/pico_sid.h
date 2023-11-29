@@ -45,4 +45,79 @@ public:
     reg8 bus_value;
 };
 
+inline int PICO_SID::AudioOut()
+{
+    // Ausgabe der reinen Wellenform
+    // return voice[0].wave.Output() + voice[1].wave.Output() + voice[2].wave.Output();
+
+    // Ausgabe Amplituden moduliert
+    return ((voice[0].Output() + voice[1].Output() + voice[2].Output()) / (float)0x2ffffd) * 0xffff;
+
+    // Ausgabe SID Filter
+    // return filter.Output();
+}
+
+inline void PICO_SID::Clock(cycle_count delta_t)
+{
+    int i;
+
+    if (unlikely(delta_t <= 0))
+    {
+        return;
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+        voice[i].envelope.Clock(delta_t);
+    }
+
+    cycle_count delta_t_osc = delta_t;
+    while (delta_t_osc) {
+        cycle_count delta_t_min = delta_t_osc;
+
+        for (i = 0; i < 3; i++) {
+            SID_WAVE& wave = voice[i].wave;
+
+            if (likely(!(wave.sync_dest->sync && wave.freq))) {
+                continue;
+            }
+
+            reg16 freq = wave.freq;
+            reg24 accumulator = wave.accumulator;
+            reg24 delta_accumulator =
+                (accumulator & 0x800000 ? 0x1000000 : 0x800000) - accumulator;
+
+            cycle_count delta_t_next = delta_accumulator/freq;
+            if (likely(delta_accumulator%freq)) {
+                ++delta_t_next;
+            }
+
+            if (unlikely(delta_t_next < delta_t_min)) {
+                delta_t_min = delta_t_next;
+            }
+        }
+
+        for (i = 0; i < 3; i++) {
+            voice[i].wave.Clock(delta_t_min);
+        }
+
+        for (i = 0; i < 3; i++) {
+            voice[i].wave.Synchronize();
+        }
+
+        delta_t_osc -= delta_t_min;
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+        voice[i].wave.SetWaveformOutput(delta_t);
+    }
+
+    // Clock filter.
+    filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output());
+
+    // Clock external filter.
+    // extfilt.clock(delta_t, filter.output());
+}
+
 #endif // PICO_SID_CLASS_H

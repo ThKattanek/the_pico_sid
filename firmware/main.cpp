@@ -9,10 +9,13 @@
 //                                              //
 //////////////////////////////////////////////////
 
+#pragma GCC optimize( "Ofast", "omit-frame-pointer", "modulo-sched", "modulo-sched-allow-regmoves", "gcse-sm", "gcse-las", "inline-small-functions", "delete-null-pointer-checks", "expensive-optimizations" ) 
+
 #include <cstdio>
 #include <malloc.h>
 #include <pico/stdio.h>
 #include <pico/stdlib.h>
+#include <hardware/vreg.h>
 #include <pico/multicore.h>
 #include <hardware/pio.h>
 #include <hardware/dma.h>
@@ -103,7 +106,10 @@ void GetVersionNumber(uint8_t *major, uint8_t *minor, uint8_t *patch)
 int main() {
 
 	//default clock is 125000kHz
-	set_sys_clock_khz(248000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	//set_sys_clock_khz(248000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	
+	vreg_set_voltage( VREG_VOLTAGE_1_30 );
+	set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
 
 	stdio_init_all();	
 
@@ -203,26 +209,24 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-	sid[0].Clock(24);
+	//sid[0].Clock(24);
 
-	/*
-	for(int i=0; i<4; i++)
-	{
-		sid[0].Clock(6);
-	}
-	*/
+	
+	//for(int i=0; i<2; i++) sid[0].Clock(12);
 
-	/*
-	for(int i=0; i<2; i++)
-	{
-		sid[0].Clock(12);
-	}
-	*/
+	//for(int i=0; i<3; i++) sid[0].Clock(8);
+	
+	//for(int i=0; i<4; i++) sid[0].Clock(6);
 
-	/*
-	for(int i=0; i<24; i++)
-		sid[0].Clock(1);
-	*/
+	//for(int i=0; i<6; i++) sid[0].Clock(4);
+
+	for(int i=0; i<8; i++) sid[0].Clock(3);
+
+	//for(int i=0; i<12; i++) sid[0].Clock(2);
+
+	//for(int i=0; i<24; i++) sid[0].Clock(1);
+
+	
 
 	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;	// Version 0.1.0
 	uint16_t out = (((sid[0].AudioOut()) + 32768) / (float)0xffff) * 0x7ff;		    // Version 0.2.0
@@ -241,7 +245,8 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
+	//pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
+	pwm_set_clkdiv_int_frac(slice_num, 3, 9);	// PWM Frequency of 41118Hz when Systemclock is 300MHz.
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit
