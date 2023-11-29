@@ -106,8 +106,9 @@ void GetVersionNumber(uint8_t *major, uint8_t *minor, uint8_t *patch)
 int main() 
 {	
 	// Set Systemclock to 300MHz
-	vreg_set_voltage( VREG_VOLTAGE_1_30 );
-	set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	//vreg_set_voltage( VREG_VOLTAGE_1_30 );
+	//set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
+	set_sys_clock_khz(248000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
 	//set_sys_clock_pll( 1500000000, 5, 1 );
 
 	stdio_init_all();	
@@ -217,9 +218,9 @@ void pwm_irq_handle()
 
 	//for(int i=0; i<3; i++) sid[0].Clock(8);
 	
-	//for(int i=0; i<4; i++) sid[0].Clock(6);
+	for(int i=0; i<4; i++) sid[0].Clock(6);
 
-	for(int i=0; i<6; i++) sid[0].Clock(4);
+	//for(int i=0; i<6; i++) sid[0].Clock(4);			// 300MHz
 
 	//for(int i=0; i<8; i++) sid[0].Clock(3);
 
@@ -242,8 +243,8 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	//pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
-	pwm_set_clkdiv_int_frac(slice_num, 3, 9);	// PWM Frequency of 41118Hz when Systemclock is 300MHz.
+	pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
+	//pwm_set_clkdiv_int_frac(slice_num, 3, 9);	// PWM Frequency of 41118Hz when Systemclock is 300MHz.
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit
