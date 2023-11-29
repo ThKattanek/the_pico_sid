@@ -218,9 +218,9 @@ void pwm_irq_handle()
 	
 	//for(int i=0; i<4; i++) sid[0].Clock(6);
 
-	//for(int i=0; i<6; i++) sid[0].Clock(4);
+	for(int i=0; i<6; i++) sid[0].Clock(4);
 
-	for(int i=0; i<8; i++) sid[0].Clock(3);
+	//for(int i=0; i<8; i++) sid[0].Clock(3);
 
 	//for(int i=0; i<12; i++) sid[0].Clock(2);
 
