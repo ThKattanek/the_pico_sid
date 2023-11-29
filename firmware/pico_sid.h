@@ -114,7 +114,7 @@ inline void PICO_SID::Clock(cycle_count delta_t)
     }
 
     // Clock filter.
-    filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output());
+    filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output(), 0);
 
     // Clock external filter.
     // extfilt.clock(delta_t, filter.output());

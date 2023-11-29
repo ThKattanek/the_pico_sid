@@ -28,6 +28,7 @@ typedef unsigned int reg24;
 typedef int cycle_count;
 typedef short short_point[2];
 typedef double double_point[2];
+typedef int fc_point[2];
 
 // Branch prediction macros, lifted off the Linux kernel.
 #if RESID_BRANCH_HINTS && HAVE_BUILTIN_EXPECT
