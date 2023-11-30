@@ -22,8 +22,6 @@
 #include <hardware/pwm.h>
 #include <hardware/adc.h>
 
-#include "pico_sid.h"
-
 #include "write_sid_reg.pio.h"
 #include "read_sid_reg.pio.h"
 #include "dma_read.pio.h"
