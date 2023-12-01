@@ -1,6 +1,7 @@
 - ThePicoSid muss konfigurierbar sein
 - Ringmudulation funktioniert nur bedingt, SID-Tester geht gar nicht aber mein Testprogramm geht
 - Sync geht noch nicht mit SID-Tester, ist jetzt erstmal abgeschaltet
+- Dropzone -> für Zufallszahlen ?
 
 Alles von Betatestern
 Stromi:
