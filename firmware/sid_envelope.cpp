@@ -168,11 +168,6 @@ void SID_ENVELOPE::WriteSustainRelease(reg8 value)
     }
 }
 
-reg8 SID_ENVELOPE::ReadEnv()
-{
-    return env3;
-}
-
 reg8 SID_ENVELOPE::OutWaveform()
 {
     return envelope_counter;

@@ -473,6 +473,11 @@ inline void SID_WAVE::SetWaveformOutput(cycle_count delta_t)
     }
 }
 
+inline reg8 SID_WAVE::ReadOSC()
+{
+    return osc3 >> 4;
+}
+
 // ----------------------------------------------------------------------------
 // Waveform output (12 bits).
 // ----------------------------------------------------------------------------

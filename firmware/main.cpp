@@ -55,7 +55,9 @@ volatile uint sm2;	// dma read
 
 volatile uint slice_num;
 
-PICO_SID sid[2];
+uint8_t* sid_io;
+
+PICO_SID sid;
 
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
@@ -66,7 +68,8 @@ void C64Reset(uint gpio, uint32_t events)
 	{
 		// C64 Reset
 		// Normalerweise erst wenn RESET 10 Zyklen auf Lo war
-        sid[0].Reset();
+        sid.Reset();
+		printf("Reset.");
     }
 	else if (events & GPIO_IRQ_EDGE_RISE) 
 	{
@@ -81,7 +84,7 @@ void WriteSidReg()
 		pio0_hw->irq = 1;
 
 		uint16_t incomming = pio->rxf[sm0];
-		sid[0].WriteReg(incomming >> 2, (incomming >> 7) & 0xff);
+		sid.WriteReg(incomming >> 2, (incomming >> 7) & 0xff);
 	}
 }
 
@@ -102,13 +105,10 @@ void GetVersionNumber(uint8_t *major, uint8_t *minor, uint8_t *patch)
 }
 
 int main() 
-{	
-	// Set Systemclock to 300MHz
-	//vreg_set_voltage( VREG_VOLTAGE_1_30 );
-	//set_sys_clock_khz(300000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
-	set_sys_clock_khz(248000, true); // Kann Normal bis 133MHz laufen, funktioniert bei mir auch bis 266MHz
-	//set_sys_clock_pll( 1500000000, 5, 1 );
-
+{		
+	vreg_set_voltage( VREG_VOLTAGE_1_30 );
+	sleep_ms(100);
+	set_sys_clock_khz(300000, true);
 	stdio_init_all();	
 
 	// Pico LED
@@ -129,13 +129,7 @@ int main()
 	// Init SID
 	// memory for the sid io
 
-	uint8_t* sid_io = (uint8_t*)memalign(32,32);
-	for(int i=0; i<32; i++)
-		sid_io[i] = i;
-
-	// OLD_SID SidInit(sid_io);
-	// OLD_SID SidSetChipTyp(MOS_8580);
-	// OLD_SID SidEnableFilter(true);
+	sid_io = (uint8_t*)memalign(32,32);
 	
 	// UART Start Message PicoSID
 	printf("ThePicoSID by Thorsten Kattanek\n");
@@ -181,7 +175,13 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	sid[0].SetSidType(MOS_8580);
+	sid.SetSidType(MOS_8580);
+
+	for(int i=0; i<32; i++)
+	{
+		sid.WriteReg(i, 0);
+		sid_io[i] = 0;
+	}
 
     while (1)
     {
@@ -209,25 +209,15 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-	//sid[0].Clock(24);
-
-	
-	//for(int i=0; i<2; i++) sid[0].Clock(12);
-
-	//for(int i=0; i<3; i++) sid[0].Clock(8);
-	
-	for(int i=0; i<4; i++) sid[0].Clock(6);
-
-	//for(int i=0; i<6; i++) sid[0].Clock(4);			// 300MHz
-
-	//for(int i=0; i<8; i++) sid[0].Clock(3);
-
-	//for(int i=0; i<12; i++) sid[0].Clock(2);
-
-	//for(int i=0; i<24; i++) sid[0].Clock(1);
+	for(int i=0; i<6; i++) 	// 300MHz
+	{
+		sid.Clock(4);			
+		sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
+		sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
+	}
 
 	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;	// Version 0.1.0
-	uint16_t out = (((sid[0].AudioOut()) + 32768) / (float)0xffff) * 0x7ff;		    // Version 0.2.0
+	uint16_t out = (((sid.AudioOut()) + 32768) / (float)0xffff) * 0x7ff;		    // Version 0.2.0
 	
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }
@@ -241,8 +231,8 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
-	//pwm_set_clkdiv_int_frac(slice_num, 3, 9);	// PWM Frequency of 41118Hz when Systemclock is 300MHz.
+	//pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
+	pwm_set_clkdiv_int_frac(slice_num, 3, 9);	// PWM Frequency of 41118Hz when Systemclock is 300MHz.
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit

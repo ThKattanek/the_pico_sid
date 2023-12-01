@@ -316,11 +316,6 @@ void SID_WAVE::ShiftregBitfade()
         shift_register_reset = (sid_model == MOS_6581) ? SHIFT_REGISTER_RESET_BIT_6581 : SHIFT_REGISTER_RESET_BIT_8580;
 }
 
-reg8 SID_WAVE::ReadOSC()
-{
-    return osc3 >> 4;
-}
-
 reg12 SID_WAVE::OutWaveform()
 {
     return waveform_output;

@@ -98,6 +98,8 @@ SID_FILTER::SID_FILTER()
   	interpolate(f0_points_8580, f0_points_8580 + sizeof(f0_points_8580)/sizeof(*f0_points_8580) - 1, PointPlotter<int>(f0_8580), 1.0);
 
 	SetSidType(MOS_6581);
+
+	Reset();
 }
 
 SID_FILTER::~SID_FILTER()

@@ -246,6 +246,11 @@ inline void SID_ENVELOPE::SetExponentialCounter()
     }
 }
 
+inline reg8 SID_ENVELOPE::ReadEnv()
+{
+    return env3;
+}
+
 inline short SID_ENVELOPE::Output()
 {
     // DAC imperfections are emulated by using envelope_counter as an index

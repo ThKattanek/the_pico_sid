@@ -21,6 +21,8 @@ PICO_SID::PICO_SID()
     voice[0].SetSyncSource(&voice[2]);
     voice[1].SetSyncSource(&voice[0]);
     voice[2].SetSyncSource(&voice[1]);
+
+	Reset();
 }
 
 PICO_SID::~PICO_SID()
