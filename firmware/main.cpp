@@ -175,7 +175,7 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	sid.SetSidType(MOS_8580);
+	//sid.SetSidType(MOS_8580);
 
 	for(int i=0; i<32; i++)
 	{
@@ -216,9 +216,9 @@ void pwm_irq_handle()
 		sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
 	}
 
-	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;	// Version 0.1.0
-	uint16_t out = (((sid.AudioOut()) + 32768) / (float)0xffff) * 0x7ff;		    // Version 0.2.0
-	
+	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;	// Version 0.1.0	    
+	uint16_t out = sid.AudioOut(11) + 1024; 										// Version 0.2.0
+
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }
 

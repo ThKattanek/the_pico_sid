@@ -34,6 +34,7 @@ public:
     void WriteReg(uint8_t write_address, uint8_t bus_value);
 	uint8_t ReadReg(uint8_t address);
     int AudioOut();
+	int AudioOut(int bits);
 
     sid_type sid_model;
     SID_VOICE voice[3];
@@ -56,6 +57,21 @@ inline int PICO_SID::AudioOut()
     // Ausgabe SID Filter
 	// return (filter.Output()  / (float)1048576) * 0xffff;	// Audiolevel is lower
 	return (filter.Output()  / (float)524287) * 0xffff;		// Audiolevel is higher
+}
+
+inline int PICO_SID::AudioOut(int bits)
+{
+	const int range = 1 << bits;
+	const int half = range >> 1;
+	int sample = filter.Output()/((4095*255 >> 7)*3*15*2/range);
+	
+	if (sample >= half)
+    	return half - 1;
+  
+  	if (sample < -half)
+    	return -half;
+  
+  	return sample;
 }
 
 inline void PICO_SID::Clock(cycle_count delta_t)
@@ -118,7 +134,7 @@ inline void PICO_SID::Clock(cycle_count delta_t)
     filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output(), 0);
 
     // Clock external filter.
-    // extfilt.clock(delta_t, filter.output());
+    // extfilt.clock(delta_t, filter.output())
 }
 
 #endif // PICO_SID_CLASS_H

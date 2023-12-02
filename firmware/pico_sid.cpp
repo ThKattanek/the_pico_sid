@@ -44,12 +44,12 @@ void PICO_SID::SetSidType(sid_type type)
     filter.SetSidType(type);
 }
 
-
-
 void PICO_SID::Reset()
 {
     for(int i=0; i<3; i++)
+	{
         voice[i].Reset();
+	}
 
     filter.Reset();
 }
