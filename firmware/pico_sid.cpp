@@ -13,6 +13,7 @@
 //////////////////////////////////////////////////
 
 #include "./pico_sid.h"
+#include "pico_sid.h"
 
 PICO_SID::PICO_SID()
 {
@@ -42,6 +43,12 @@ void PICO_SID::SetSidType(sid_type type)
         voice[i].SetSidType(type);
 
     filter.SetSidType(type);
+}
+
+void PICO_SID::EnableFilter(bool enable)
+{
+	filter_enable = enable;
+	filter.EnableFilter(filter_enable);
 }
 
 void PICO_SID::Reset()

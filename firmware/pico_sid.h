@@ -28,15 +28,15 @@ public:
 	~PICO_SID();
 
 	void SetSidType(sid_type type);
-    void Clock(cycle_count delta_t);
+	void EnableFilter(bool enable);
 
+    void Clock(cycle_count delta_t);
 	void Reset();
     void WriteReg(uint8_t write_address, uint8_t bus_value);
 	uint8_t ReadReg(uint8_t address);
     int AudioOut();
 	int AudioOut(int bits);
 
-    sid_type sid_model;
     SID_VOICE voice[3];
     SID_FILTER filter;
 
@@ -44,6 +44,9 @@ public:
 
     reg8 write_address;
     reg8 bus_value;
+
+	sid_type sid_model;
+	bool	filter_enable;
 };
 
 inline int PICO_SID::AudioOut()

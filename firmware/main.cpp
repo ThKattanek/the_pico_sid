@@ -175,13 +175,27 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	sid.SetSidType(MOS_8580);
+	sid.SetSidType(MOS_6581);
+	sid.EnableFilter(true);
 
 	for(int i=0; i<32; i++)
 	{
 		sid.WriteReg(i, 0);
 		sid_io[i] = 0;
 	}
+
+	// Output Coniguration to Serial
+	printf("\n-Configuration-\n");
+	if(sid.sid_model == MOS_6581)
+		printf("SID Model is: MOS-6581\n");
+	else
+		printf("SID Model is: MOS-8580\n");
+	
+	printf("Filter is: ");
+	if(sid.filter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
 
     while (1)
     {
@@ -203,6 +217,8 @@ int main()
 			sid_io[26] = (counter + ADC_OFFSET) & 0xff;
 		adc1_compare_state_old = adc1_compare_state;
     }
+
+
 }
 
 void pwm_irq_handle()
