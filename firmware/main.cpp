@@ -177,6 +177,7 @@ int main()
 
 	sid.SetSidType(MOS_6581);
 	sid.EnableFilter(true);
+	sid.EnableExtFilter(true);
 
 	for(int i=0; i<32; i++)
 	{
@@ -193,6 +194,12 @@ int main()
 	
 	printf("Filter is: ");
 	if(sid.filter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+
+	printf("ExtFilter is: ");
+	if(sid.extfilter_enable)
 		printf("on\n");
 	else
 		printf("off\n");
@@ -217,23 +224,32 @@ int main()
 			sid_io[26] = (counter + ADC_OFFSET) & 0xff;
 		adc1_compare_state_old = adc1_compare_state;
     }
-
-
 }
 
 void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-	for(int i=0; i<6; i++) 	// 300MHz
+	if(sid.extfilter_enable)
 	{
-		sid.Clock(4);			
-		sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
-		sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
+		for(int i=0; i<4; i++) 	// 300MHz // with extfilter enabled
+		{
+			sid.Clock(6);			
+			sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
+			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
+		}
 	}
-
-	//uint16_t out = ((sid[0].AudioOut() >> 4) + 32768) / (float)0xffff * 0x7ff;	// Version 0.1.0	    
-	uint16_t out = sid.AudioOut(11) + 1024; 										// Version 0.2.0
+	else
+	{
+		for(int i=0; i<6; i++) 	// 300MHz // with extfilter disabled
+		{
+			sid.Clock(4);			
+			sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
+			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
+		}
+	}
+	
+	uint16_t out = sid.AudioOut(11) + 1024;
 
 	pwm_set_gpio_level(AUDIO_PIN, out);
 }

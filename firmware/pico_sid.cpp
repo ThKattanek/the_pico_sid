@@ -24,6 +24,9 @@ PICO_SID::PICO_SID()
     voice[2].SetSyncSource(&voice[1]);
 
 	Reset();
+
+	filter_enable = true;
+	extfilter_enable = true;
 }
 
 PICO_SID::~PICO_SID()
@@ -43,12 +46,19 @@ void PICO_SID::SetSidType(sid_type type)
         voice[i].SetSidType(type);
 
     filter.SetSidType(type);
+	extfilter.SetSidType(type);
 }
 
 void PICO_SID::EnableFilter(bool enable)
 {
 	filter_enable = enable;
 	filter.EnableFilter(filter_enable);
+}
+
+void PICO_SID::EnableExtFilter(bool enable)
+{
+	extfilter_enable = enable;
+	extfilter.EnableFilter(extfilter_enable);
 }
 
 void PICO_SID::Reset()
@@ -59,6 +69,7 @@ void PICO_SID::Reset()
 	}
 
     filter.Reset();
+	extfilter.Reset();
 }
 
 void PICO_SID::WriteReg(uint8_t write_address, uint8_t bus_value)

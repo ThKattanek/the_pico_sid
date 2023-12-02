@@ -20,6 +20,7 @@
 #include "./pico_sid_defs.h"
 #include "./sid_voice.h"
 #include "./sid_filter.h"
+#include "./sid_extfilter.h"
 
 class PICO_SID
 {
@@ -29,6 +30,7 @@ public:
 
 	void SetSidType(sid_type type);
 	void EnableFilter(bool enable);
+	void EnableExtFilter(bool enable);
 
     void Clock(cycle_count delta_t);
 	void Reset();
@@ -39,6 +41,7 @@ public:
 
     SID_VOICE voice[3];
     SID_FILTER filter;
+	SID_EXTFILTER extfilter;
 
     reg8 sid_register[0x20];
 
@@ -47,6 +50,7 @@ public:
 
 	sid_type sid_model;
 	bool	filter_enable;
+	bool	extfilter_enable;
 };
 
 inline int PICO_SID::AudioOut()
@@ -59,14 +63,14 @@ inline int PICO_SID::AudioOut()
 
     // Ausgabe SID Filter
 	// return (filter.Output()  / (float)1048576) * 0xffff;	// Audiolevel is lower
-	return (filter.Output()  / (float)524287) * 0xffff;		// Audiolevel is higher
+	return (extfilter.Output()  / (float)524287) * 0xffff;		// Audiolevel is higher
 }
 
 inline int PICO_SID::AudioOut(int bits)
 {
 	const int range = 1 << bits;
 	const int half = range >> 1;
-	int sample = filter.Output()/((4095*255 >> 7)*3*15*2/range);
+	int sample = extfilter.Output()/((4095*255 >> 7)*3*15*2/range);
 	
 	if (sample >= half)
     	return half - 1;
@@ -137,7 +141,7 @@ inline void PICO_SID::Clock(cycle_count delta_t)
     filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output(), 0);
 
     // Clock external filter.
-    // extfilt.clock(delta_t, filter.output())
+    extfilter.Clock(delta_t, filter.Output());
 }
 
 #endif // PICO_SID_CLASS_H

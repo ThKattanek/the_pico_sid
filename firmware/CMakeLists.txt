@@ -30,6 +30,8 @@ add_executable(${PROJECT_NAME}
   sid_dac.h /
   sid_filter.cpp /
   sid_filter.h /
+  sid_extfilter.cpp /
+  sid_extfilter.h /
   version.h
 )
 
