@@ -175,7 +175,7 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	//sid.SetSidType(MOS_8580);
+	sid.SetSidType(MOS_8580);
 
 	for(int i=0; i<32; i++)
 	{
