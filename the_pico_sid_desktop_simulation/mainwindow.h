@@ -36,6 +36,10 @@ private slots:
     void on_mos6581_clicked();
     void on_mos8580_clicked();
 
+    void on_Filter_toggled(bool checked);
+
+    void on_ExtFilter_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
