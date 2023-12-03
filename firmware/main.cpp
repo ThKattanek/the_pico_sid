@@ -13,6 +13,7 @@
 
 #include <cstdio>
 #include <malloc.h>
+#include <cstring>
 #include <pico/stdio.h>
 #include <pico/stdlib.h>
 #include <hardware/vreg.h>
@@ -69,7 +70,6 @@ void C64Reset(uint gpio, uint32_t events)
 		// C64 Reset
 		// Normalerweise erst wenn RESET 10 Zyklen auf Lo war
         sid.Reset();
-		printf("Reset.");
     }
 	else if (events & GPIO_IRQ_EDGE_RISE) 
 	{
@@ -77,9 +77,29 @@ void C64Reset(uint gpio, uint32_t events)
     }
 }
 
-void CheckConfig(uint8_t adress, uint8_t value)
+void CheckConfig(uint8_t address, uint8_t value)
 {
 	static bool is_ready = false;
+	static char incomming_str[11] = {0,0,0,0,0,0,0,0,0,0,0};
+
+	switch(address)
+	{
+		case 0x1d:
+			for(int i=0; i<9; i++)
+				incomming_str[i] = incomming_str[i+1];
+			incomming_str[9] = value;
+			if(strcmp(incomming_str, "THEPICOSID") == 0)
+			{
+				gpio_put(PICO_LED_PIN, false);
+			}
+		break;
+
+		case 0x1e:
+		break;
+		
+		case 0x1f:
+		break;
+	}
 }
 
 void WriteSidReg()
@@ -89,7 +109,7 @@ void WriteSidReg()
 		pio0_hw->irq = 1;
 
 		uint16_t incomming = pio->rxf[sm0];
-		uint8_t sid_reg = (incomming >> 2) & 0x31;
+		uint8_t sid_reg = (incomming >> 2) & 0x1f;
 		uint8_t sid_value = (incomming >> 7) & 0xff;
 
 		sid.WriteReg(sid_reg, sid_value);
