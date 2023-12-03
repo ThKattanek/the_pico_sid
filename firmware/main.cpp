@@ -77,6 +77,11 @@ void C64Reset(uint gpio, uint32_t events)
     }
 }
 
+void CheckConfig(uint8_t adress, uint8_t value)
+{
+	static bool is_ready = false;
+}
+
 void WriteSidReg()
 {
 	if (pio0_hw->irq & 1) 
@@ -84,7 +89,11 @@ void WriteSidReg()
 		pio0_hw->irq = 1;
 
 		uint16_t incomming = pio->rxf[sm0];
-		sid.WriteReg(incomming >> 2, (incomming >> 7) & 0xff);
+		uint8_t sid_reg = (incomming >> 2) & 0x31;
+		uint8_t sid_value = (incomming >> 7) & 0xff;
+
+		sid.WriteReg(sid_reg, sid_value);
+		CheckConfig(sid_reg, sid_value);
 	}
 }
 
