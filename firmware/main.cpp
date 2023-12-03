@@ -175,9 +175,10 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	sid.SetSidType(MOS_6581);
+	sid.SetSidType(MOS_8580);
 	sid.EnableFilter(true);
-	sid.EnableExtFilter(true);
+	sid.EnableExtFilter(false);
+	sid.EnableDigiBoost8580(true);
 
 	for(int i=0; i<32; i++)
 	{
@@ -200,6 +201,12 @@ int main()
 
 	printf("ExtFilter is: ");
 	if(sid.extfilter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+
+	printf("Digiboost 8580 is: ");
+	if(sid.digi_boost_enable)
 		printf("on\n");
 	else
 		printf("off\n");

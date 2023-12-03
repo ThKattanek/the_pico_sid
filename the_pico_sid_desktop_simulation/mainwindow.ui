@@ -125,6 +125,17 @@
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QCheckBox" name="DigiBoost">
+        <property name="text">
+         <string>8580 DigiBoost</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Oscillators</string>

@@ -17,16 +17,23 @@
 
 PICO_SID::PICO_SID()
 {
-    SetSidType(MOS_6581);
-
     voice[0].SetSyncSource(&voice[2]);
     voice[1].SetSyncSource(&voice[0]);
     voice[2].SetSyncSource(&voice[1]);
 
 	Reset();
 
+    ext_in = 0;
 	filter_enable = true;
 	extfilter_enable = true;
+	digi_boost_enable = false;
+
+	digi_level[0][0] = 18000;	// MOS6581 Digiboos off
+	digi_level[0][1] = 18000;	// MOS6581 Digiboos on
+	digi_level[1][0] = 1000;	// MOS8580 Digiboos off
+	digi_level[1][1] = 20000;	// MOS8580 Digiboos on
+
+	SetSidType(MOS_6581);
 }
 
 PICO_SID::~PICO_SID()
@@ -38,6 +45,11 @@ uint8_t PICO_SID::ReadReg(uint8_t)
     return 0;
 }
 
+void PICO_SID::Input(int sample)
+{
+    ext_in = (sample << 4)*3;
+}
+
 void PICO_SID::SetSidType(sid_type type)
 {
     sid_model = type;
@@ -47,6 +59,8 @@ void PICO_SID::SetSidType(sid_type type)
 
     filter.SetSidType(type);
 	extfilter.SetSidType(type);
+
+	SetExtIn();
 }
 
 void PICO_SID::EnableFilter(bool enable)
@@ -59,6 +73,12 @@ void PICO_SID::EnableExtFilter(bool enable)
 {
 	extfilter_enable = enable;
 	extfilter.EnableFilter(extfilter_enable);
+}
+
+void PICO_SID::EnableDigiBoost8580(bool enable)
+{
+	digi_boost_enable = enable;
+	SetExtIn();
 }
 
 void PICO_SID::Reset()

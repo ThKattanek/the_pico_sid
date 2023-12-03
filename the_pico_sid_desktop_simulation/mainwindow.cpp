@@ -261,3 +261,16 @@ void MainWindow::on_ExtFilter_toggled(bool checked)
     sid.EnableExtFilter(checked);
 }
 
+
+
+void MainWindow::on_digiboost_level_valueChanged(int value)
+{
+    sid.Input(value);
+}
+
+
+void MainWindow::on_DigiBoost_toggled(bool checked)
+{
+    sid.EnableDigiBoost8580(checked);
+}
+
