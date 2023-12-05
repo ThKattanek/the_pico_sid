@@ -80,24 +80,78 @@ void C64Reset(uint gpio, uint32_t events)
 void CheckConfig(uint8_t address, uint8_t value)
 {
 	static bool is_ready = false;
+	static bool is_command = false;
+	static uint8_t last_command = 0x88;
 	static char incomming_str[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
 	switch(address)
 	{
 		case 0x1d:
+			if(!is_ready)
+			{
 			for(int i=0; i<9; i++)
 				incomming_str[i] = incomming_str[i+1];
 			incomming_str[9] = value;
-			if(strcmp(incomming_str, "THEPICOSID") == 0)
+				if(strcmp(incomming_str, "THEPICOSID") == 0)
+					is_ready = true;
+			}
+			else 
 			{
-				gpio_put(PICO_LED_PIN, false);
+				if(!is_command)	
+				{
+					// check of command
+					switch (value)
+					{
+					case 0x00:
+						last_command = value;
+						is_command = true;
+						break;
+					
+					case 0xfd:
+						sid_io[0x1d] = VERSION_MAJOR;
+						break;
+
+					case 0xfe:
+						sid_io[0x1d] = VERSION_MINOR;
+						break;
+
+					case 0xff:
+						sid_io[0x1d] = VERSION_PATCH;
+						break;
+
+					default:
+						is_ready = false;
+						break;
+					}
+				}
+				else
+				{
+					// execude command with value
+					switch (last_command)
+					{
+					case 0x00:
+						sid_io[0x1d] = value ^ 0x88;
+						break;
+						
+					}
+						is_command = false;
+						is_ready = false;
+				}
 			}
 		break;
 
 		case 0x1e:
+			if(is_ready)
+			{
+				is_ready = false;
+			}
 		break;
 		
 		case 0x1f:
+			if(is_ready)
+			{
+				is_ready = false;
+			}
 		break;
 	}
 }
