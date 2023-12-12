@@ -84,6 +84,8 @@ void CheckConfig(uint8_t address, uint8_t value)
 	static uint8_t last_command = 0x88;
 	static char incomming_str[11] = {0,0,0,0,0,0,0,0,0,0,0};
 
+	uint8_t val = 0;
+
 	switch(address)
 	{
 		case 0x1d:
@@ -102,11 +104,28 @@ void CheckConfig(uint8_t address, uint8_t value)
 					// check of command
 					switch (value)
 					{
-					case 0x00:
+					case 0x00:	// ThePicoSidCheck
 						last_command = value;
 						is_command = true;
 						break;
 					
+					case 0x01:	// Config01_Write
+						last_command = value;
+						is_command = true;
+						break;
+
+					case 0x02: 	// Config01_Read
+						if(sid.sid_model == MOS_8580)
+							val |= 0x01;
+						if(sid.filter_enable)
+							val |= 0x02;
+						if(sid.extfilter_enable)
+							val |= 0x04;
+						if(sid.digi_boost_enable)
+							val |= 0x08;
+						sid_io[0x1d] = val;
+						break;
+
 					case 0xfd:
 						sid_io[0x1d] = VERSION_MAJOR;
 						break;
@@ -129,10 +148,18 @@ void CheckConfig(uint8_t address, uint8_t value)
 					// execude command with value
 					switch (last_command)
 					{
-					case 0x00:
+					case 0x00:	// XOR von Value zurückgeben
 						sid_io[0x1d] = value ^ 0x88;
 						break;
-						
+					case 0x01:	// Configuration lesen
+						if(value & 0x01)
+							sid.SetSidType(MOS_8580);
+						else	
+							sid.SetSidType(MOS_6581);
+						sid.EnableFilter(value & 0x02);
+						sid.EnableExtFilter(value & 0x04);
+						sid.EnableDigiBoost8580(value & 0x08);
+						break;
 					}
 						is_command = false;
 						is_ready = false;

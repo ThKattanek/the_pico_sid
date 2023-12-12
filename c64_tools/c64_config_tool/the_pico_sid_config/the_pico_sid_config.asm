@@ -1,6 +1,7 @@
 PICO_SID_REG = $d400+29
-PRINT = $ab1e ; basic textausgabe AC/YR Pointer zum Text
 
+PRINT = $ab1e ; basic textausgabe AC/YR Pointer zum Text
+CLEAR_SCREEN = $e544
 *=$0801
 
 !byte $0b,$08,$e7,$07,$9e
@@ -10,7 +11,7 @@ PRINT = $ab1e ; basic textausgabe AC/YR Pointer zum Text
 start:	
 	jsr exist_thepicosid
 	cmp #$01
-	bne not_found
+	beq not_found	; normal bne nur zum test beq
 	jmp start_01
 not_found:	
 	lda #<error_txt_pico_not_found	
@@ -18,6 +19,7 @@ not_found:
 	jsr PRINT	
 	rts	
 start_01:
+	jsr CLEAR_SCREEN
 	lda #$00
 	sta $d020
 	sta $d021
@@ -46,6 +48,11 @@ start_01:
 	lda #<version_txt
 	ldy #>version_txt
 	jsr PRINT
+	
+	lda #$02
+	jsr write_command
+	jsr read_picosid
+	
 	
 ende:
 	rts
