@@ -128,14 +128,17 @@ void CheckConfig(uint8_t address, uint8_t value)
 
 					case 0xfd:
 						sid_io[0x1d] = VERSION_MAJOR;
+						is_ready = false;
 						break;
 
 					case 0xfe:
 						sid_io[0x1d] = VERSION_MINOR;
+						is_ready = false;
 						break;
 
 					case 0xff:
 						sid_io[0x1d] = VERSION_PATCH;
+						is_ready = false;
 						break;
 
 					default:
