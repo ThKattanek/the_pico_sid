@@ -13,9 +13,9 @@ PICO_SID_REG = $d400+$1d
 
 PRINT = $ab1e ; basic text output AC/YR Pointer to text
 CLEAR_SCREEN = $e544
-SET_CURSOR = $e50a ; CARRY = 0, XR=Zeile /YR=Spalte
+SET_CURSOR = $e50a ; CARRY = 0, XR=row /YR=coloumn
 GETIN = $FFE4
-CLEAR_SCREEN_LINE = $e9ff ; AX=Zeile
+CLEAR_SCREEN_LINE = $e9ff ; AX=row
 PRINT_COLOR = $0286 ; Current Print Color
 
 *=$0801
@@ -30,7 +30,7 @@ start:
 	
 	jsr exist_thepicosid
 	cmp #$01
-	beq not_found	; normal bne nur zum test beq
+	bne not_found	; normal bne nur zum test beq
 	jmp start_01
 not_found:	
 	lda #<error_txt_pico_not_found	
@@ -84,7 +84,7 @@ start_01:
 	jsr PRINT
 	
 	; -----------------------------------------------------------------
-	; Title und Autor ausgeben
+	; print title and author
 	
 	clc
 	ldx #02
@@ -105,7 +105,7 @@ start_01:
 	jsr PRINT
 	
 	; -----------------------------------------------------------------
-	; Menü zeichnen
+	; draw menu
 
 	lda #<menu
 	ldy #>menu
@@ -119,7 +119,7 @@ start_01:
 	
 key_wait:	
 	jsr GETIN
-	cmp #$00
+	cmp #$00	
 	beq key_wait
 	
 	cmp #$91
@@ -128,11 +128,27 @@ key_wait:
 	beq key_down
 	cmp #$0D
 	beq key_return
+	cmp #$20
+	beq key_return
 	jmp key_wait
 	
 key_up:
+	lda #<menu
+	ldy #>menu
+	jsr menu_control_up
+	jmp new_draw_menu
 key_down:
+	lda #<menu
+	ldy #>menu
+	jsr menu_control_down
+	jmp new_draw_menu
 key_return:
+	lda #<menu
+	ldy #>menu
+	jsr menu_control_action
+	bcs ende
+	;jmp key_wait
+new_draw_menu:	
 	lda #<menu
 	ldy #>menu
 	jsr draw_menu
@@ -140,6 +156,7 @@ key_return:
 	jmp key_wait
 	
 ende:
+	jsr $ff81
 	rts
 
 ; #################################
@@ -231,7 +248,7 @@ draw_menu_entry:
 	tya	
 	pha
 	tax
-	jsr CLEAR_SCREEN_LINE	; clear line
+	;jsr CLEAR_SCREEN_LINE	; clear line
 	pla
 	tax
 	ldy #$00				; get x pos
@@ -249,7 +266,11 @@ draw_menu_entry:
 	txa
 	jsr PRINT
 		
-	ldy #$04				; get current selected value
+	ldy #$03				; value count	
+	lda ($03),y	
+	beq draw_menu_entry_00	
+		
+	iny						; get current selected value
 	lda ($03),y
 	
 	asl						; mul 2
@@ -266,6 +287,8 @@ draw_menu_entry:
 	tay
 	txa
 	jsr PRINT
+	
+draw_menu_entry_00:
 	
 	rts
 	
@@ -299,7 +322,7 @@ draw_menu_00:
 	pha
 	
 	lda $bd			
-	cpx	$b4			; farbe ermitteln
+	cpx	$b4			; set draw color
 	bne color_01 
 	lsr
 	lsr
@@ -341,6 +364,117 @@ color_01
 	bne draw_menu_00
 	
 	rts
+	
+; ##################################	
+; menu control up	
+; AC = lobyte from pointer to the menu
+; YR = hibyte from pointer to the menu
+
+menu_control_up:
+	sta $05
+	sty $06
+	
+	ldy #$00		; load entry count 
+	lda ($05),y
+	sta $02
+	
+	iny				; load current selected entry
+	lda ($05),y
+	
+	cmp #$00
+	beq menu_control_up_end
+	
+	tax
+	dex
+	txa
+	sta ($05),y
+	
+menu_control_up_end:
+	rts
+
+; ##################################	
+; menu control down	
+; AC = lobyte from pointer to the menu
+; YR = hibyte from pointer to the menu
+
+menu_control_down:
+	sta $05
+	sty $06
+	
+	ldy #$00		; load entry count 
+	lda ($05),y
+	sta $02
+	dec $02
+	
+	iny				; load current selected entry
+	lda ($05),y
+	
+	cmp $02
+	beq menu_control_down_end
+	
+	tax
+	inx
+	txa
+	sta ($05),y
+	
+menu_control_down_end:
+	rts
+
+; ##################################	
+; menu control change value	
+; AC = lobyte from pointer to the menu
+; YR = hibyte from pointer to the menu
+
+menu_control_action:
+	sta $05
+	sty $06
+
+	ldy #$01		; load current entry 
+	lda ($05),y
+	asl
+	clc
+	adc #04
+	tay
+	
+	lda ($05),y		; set menu_entry
+	sta $03
+	iny
+	lda ($05),y
+	sta $04
+	
+	ldy #$03		; load current values
+	lda ($03),y
+	bne menu_control_action_00
+	sec
+	rts
+
+menu_control_action_00:	
+
+	; AC = current entry
+	tax
+	dex
+	stx $02
+	iny
+	lda ($03),y		; current value
+	
+	cmp $02
+	beq menu_control_action_01
+	
+	tax
+	inx
+	jmp menu_control_action_02
+	
+menu_control_action_01:		
+
+	ldx #$00
+	
+menu_control_action_02:	
+	
+	txa
+	sta ($03),y
+	
+	clc
+	rts
 
 code_str:
 !text "THEPICOSID"
@@ -355,12 +489,12 @@ author_txt:
 !text "BY THORSTEN KATTANEK (C)2023",0			
 
 menu:			
-!8 4				; entry count
+!8 5				; entry count
 !8 0				; current selected entry
 !8 8				; y start
 !8 $1c				; color lo-nibble normal color / hi-nibble selected color
 ; all pointers to menu_entrys
-!16	menu_entry_00, menu_entry_01, menu_entry_02, menu_entry_03		
+!16	menu_entry_00, menu_entry_01, menu_entry_02, menu_entry_03, menu_entry_04	
 
 menu_entry_00:
 !8 10 						; x-start
@@ -378,6 +512,7 @@ menu_entry_01:
 
 menu_entry_02:
 !8 8 						; x-start
+
 !16 menu_02					; entry text
 !8 2						; 2 values (0+1)
 !8 0						; current selected value
@@ -390,17 +525,26 @@ menu_entry_03:
 !8 0						; current selected value
 !16 no, yes
 
+menu_entry_04:
+!8 18 						; x-start
+!16 menu_04					; entry text
+!8 0						; 2 values (0+1)
+!8 0						; current selected value
+
 menu_00:
-!text "SID MODEL: ",0				; 19 Zeichen
+!text "SID MODEL: ",0				
 
 menu_01:
-!text "FILTER EMULATION: ",0				; 19 Zeichen
+!text "FILTER EMULATION: ",0				
 
 menu_02:
-!text "EXT FILTER EMULATION: ",0			; 23 Zeichen
+!text "EXT FILTER EMULATION: ",0			
 
 menu_03:
-!text "8580 DIGIBOOST: ",0					; 17 Zeichen
+!text "8580 DIGIBOOST: ",0					
+
+menu_04:
+!text "EXIT",0					
 
 model_6581:
 !text "MOS-6581",0
@@ -410,4 +554,4 @@ model_8580:
 yes:
 !text "YES",0
 no:
-!text "NO",0
+!text "NO ",0
