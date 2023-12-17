@@ -22,6 +22,7 @@
 #include <hardware/dma.h>
 #include <hardware/pwm.h>
 #include <hardware/adc.h>
+#include <hardware/flash.h>
 
 #include "write_sid_reg.pio.h"
 #include "read_sid_reg.pio.h"
@@ -63,6 +64,12 @@ PICO_SID sid;
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
 
+uint8_t configuration[32];
+bool config_is_new = false;
+
+#define FLASH_CONFIG_OFFSET (1024 * 1024)
+const uint8_t *pConfigXIP = (const uint8_t *)( XIP_BASE + FLASH_CONFIG_OFFSET );
+
 void C64Reset(uint gpio, uint32_t events) 
 {
     if (events & GPIO_IRQ_EDGE_FALL) 
@@ -75,6 +82,48 @@ void C64Reset(uint gpio, uint32_t events)
 	{
 		// C64 Reset Ende
     }
+}
+
+void WriteConfig()
+{
+	set_sys_clock_khz(125000, true);
+	sleep_ms(10);
+
+	flash_range_erase( FLASH_CONFIG_OFFSET, FLASH_SECTOR_SIZE );
+	flash_range_program( FLASH_CONFIG_OFFSET, configuration, FLASH_PAGE_SIZE );
+	
+	set_sys_clock_khz(300000, true);
+	sleep_ms(10);
+}
+
+void ReadConfig()
+{
+	set_sys_clock_khz(125000, true);
+	sleep_ms(2);
+
+	memcpy( configuration, pConfigXIP, 32 );
+
+	if(0 != strcmp((const char*)configuration, "THEPICOSID"))
+	{
+		// Default Variablen
+		printf("Keine Konfiguration gefunden!\n");
+		strcpy((char*)configuration, "THEPICOSID");
+		configuration[16] = 0x03;
+		WriteConfig();
+	}
+	
+
+	uint8_t value = configuration[16];
+	if(value & 0x01)
+		sid.SetSidType(MOS_8580);
+	else	
+		sid.SetSidType(MOS_6581);
+	sid.EnableFilter(value & 0x02);
+	sid.EnableExtFilter(value & 0x04);
+	sid.EnableDigiBoost8580(value & 0x08);
+	
+	set_sys_clock_khz(300000, true);
+	sleep_ms(2);
 }
 
 void ConfigOutput()
@@ -193,6 +242,10 @@ void CheckConfig(uint8_t address, uint8_t value)
 						sid_io[0x1d] = value ^ 0x88;
 						break;
 					case 0x01:	// Configuration lesen
+
+						configuration[16] = value;
+						config_is_new = true;
+
 						if(value & 0x01)
 							sid.SetSidType(MOS_8580);
 						else	
@@ -293,6 +346,9 @@ int main()
 
 	printf("Firmware Version: %d.%d.%d\n", v_major, v_minor, v_patch);
 	
+	// Read configuration
+	ReadConfig();
+
 	// PIO Program initialize
 	pio = pio0;
 
@@ -344,34 +400,14 @@ int main()
 	// Output Coniguration to Serial
 	ConfigOutput();
 
-	/*
-	printf("\n-Configuration-\n");
-	if(sid.sid_model == MOS_6581)
-		printf("SID Model is: MOS-6581\n");
-	else
-		printf("SID Model is: MOS-8580\n");
-	
-	printf("Filter is: ");
-	if(sid.filter_enable)
-		printf("on\n");
-	else
-		printf("off\n");
-
-	printf("ExtFilter is: ");
-	if(sid.extfilter_enable)
-		printf("on\n");
-	else
-		printf("off\n");
-
-	printf("Digiboost 8580 is: ");
-	if(sid.digi_boost_enable)
-		printf("on\n");
-	else
-		printf("off\n");
-	*/
-
     while (1)
     {
+		if(config_is_new)
+		{
+			config_is_new = false;
+			WriteConfig();
+		}
+
 		// ADC
 		sleep_us(1);
 
