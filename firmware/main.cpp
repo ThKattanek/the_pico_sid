@@ -77,6 +77,34 @@ void C64Reset(uint gpio, uint32_t events)
     }
 }
 
+void ConfigOutput()
+{
+	// Output Coniguration to Serial
+	printf("\n-Configuration-\n");
+	if(sid.sid_model == MOS_6581)
+		printf("SID Model is: MOS-6581\n");
+	else
+		printf("SID Model is: MOS-8580\n");
+	
+	printf("Filter is: ");
+	if(sid.filter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+
+	printf("ExtFilter is: ");
+	if(sid.extfilter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+
+	printf("Digiboost 8580 is: ");
+	if(sid.digi_boost_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+}
+
 void CheckConfig(uint8_t address, uint8_t value)
 {
 	static bool is_ready = false;
@@ -126,6 +154,16 @@ void CheckConfig(uint8_t address, uint8_t value)
 						sid_io[0x1d] = val;
 						break;
 
+					case 0x03: // LED On
+						gpio_put(PICO_LED_PIN, true);
+						is_ready = false;
+						break;
+
+					case 0x04: // LED Off
+						gpio_put(PICO_LED_PIN, false);
+						is_ready = false;
+						break;
+
 					case 0xfd:
 						sid_io[0x1d] = VERSION_MAJOR;
 						is_ready = false;
@@ -158,10 +196,13 @@ void CheckConfig(uint8_t address, uint8_t value)
 						if(value & 0x01)
 							sid.SetSidType(MOS_8580);
 						else	
-							sid.SetSidType(MOS_6581);
+						sid.SetSidType(MOS_6581);
 						sid.EnableFilter(value & 0x02);
 						sid.EnableExtFilter(value & 0x04);
 						sid.EnableDigiBoost8580(value & 0x08);
+
+						ConfigOutput();
+
 						break;
 					}
 						is_command = false;
@@ -299,7 +340,11 @@ int main()
 		sid_io[i] = 0;
 	}
 
+
 	// Output Coniguration to Serial
+	ConfigOutput();
+
+	/*
 	printf("\n-Configuration-\n");
 	if(sid.sid_model == MOS_6581)
 		printf("SID Model is: MOS-6581\n");
@@ -323,6 +368,7 @@ int main()
 		printf("on\n");
 	else
 		printf("off\n");
+	*/
 
     while (1)
     {

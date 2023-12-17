@@ -26,7 +26,7 @@ PRINT_COLOR = $0286 ; Current Print Color
 *=$0810
 start:	
 	; -----------------------------------------------------------------
-	; Check of a ThePicoSid in the sic sockel 
+	; Check of a ThePicoSid in the sid sockel 
 	
 	jsr exist_thepicosid
 	cmp #$01
@@ -40,7 +40,6 @@ not_found:
 	
 	; -----------------------------------------------------------------
 	; ThePicoSid is ready
-	
 start_01:
 	jsr CLEAR_SCREEN
 	lda #$00
@@ -49,6 +48,15 @@ start_01:
 	
 	lda #05
 	sta PRINT_COLOR
+	
+	lda #00
+	sta menu+1
+	
+	; -----------------------------------------------------------------
+	; PicoLED Off
+	
+	lda #$04
+	jsr write_command
 	
 	; -----------------------------------------------------------------
 	; Firmware Version auslesen und anzeigen
@@ -105,6 +113,55 @@ start_01:
 	jsr PRINT
 	
 	; -----------------------------------------------------------------
+	; get thepicosid config and set menu entry values
+	
+	lda #$02
+	jsr write_command
+	jsr read_picosid
+	
+	; AC = config_01 || Bit0 SID Model: 0=6581 / 1=8580, Bit1 Filter 0=An / 1=Aus, Bit2 ExtFilter 0=Aus / 1=An, Bit3 DigiFix 8580 0=Aus / 1=An, Bit4-7 Reserviert
+
+	; ---- SID Model
+	ldx #$00
+	lsr
+	bcs set_sid_model_0
+	jmp set_sid_model_1 
+set_sid_model_0
+	inx	
+set_sid_model_1
+	stx menu_entry_00+4
+	
+	; ---- Emualtion Filter
+	ldx #$00
+	lsr
+	bcs set_filter_0
+	jmp set_filter_1 
+set_filter_0
+	inx	
+set_filter_1
+	stx menu_entry_01+4
+	
+	; ---- Emualtion Ext Filter
+	ldx #$00
+	lsr
+	bcs set_extfilter_0
+	jmp set_extfilter_1 
+set_extfilter_0
+	inx	
+set_extfilter_1
+	stx menu_entry_02+4
+	
+	; ---- DigiBoost
+	ldx #$00
+	lsr
+	bcs set_digiboost_0
+	jmp set_digiboost_1 
+set_digiboost_0
+	inx	
+set_digiboost_1
+	stx menu_entry_03+4
+	
+	; -----------------------------------------------------------------
 	; draw menu
 
 	lda #<menu
@@ -147,7 +204,22 @@ key_return:
 	ldy #>menu
 	jsr menu_control_action
 	bcs ende
-	;jmp key_wait
+	
+	; create the config vale in XR
+	lda #$00
+	ora menu_entry_03+4
+	asl
+	ora menu_entry_02+4
+	asl
+	ora menu_entry_01+4
+	asl
+	ora menu_entry_00+4
+	tax
+	
+	; config send to thepicosid
+	lda #$01
+	jsr write_command
+	
 new_draw_menu:	
 	lda #<menu
 	ldy #>menu
@@ -156,6 +228,11 @@ new_draw_menu:
 	jmp key_wait
 	
 ende:
+	; -----------------------------------------------------------------
+	; PicoLED On
+	
+	lda #$03
+	jsr write_command
 	jsr $ff81
 	rts
 
@@ -234,6 +311,7 @@ write_command_01:
 
 ; ##################################	
 ; Read from ThePicoSid
+; Return: AC=value
 read_picosid:
 	lda PICO_SID_REG
 	rts
