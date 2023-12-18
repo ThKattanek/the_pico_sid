@@ -63,12 +63,13 @@ PICO_SID sid;
 
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
-
 uint8_t configuration[32];
-bool config_is_new = false;
+volatile bool config_is_new = false;
 
-#define FLASH_CONFIG_OFFSET (1024 * 1024)
-const uint8_t *pConfigXIP = (const uint8_t *)( XIP_BASE + FLASH_CONFIG_OFFSET );
+#define FLASH_CONFIG_OFFSET (256 * 1024)
+const uint8_t *flash_target_contents = (const uint8_t *)( XIP_BASE + FLASH_CONFIG_OFFSET );
+
+#define CONFIG_01 11
 
 void C64Reset(uint gpio, uint32_t events) 
 {
@@ -87,13 +88,17 @@ void C64Reset(uint gpio, uint32_t events)
 void WriteConfig()
 {
 	set_sys_clock_khz(125000, true);
-	sleep_ms(10);
+	sleep_ms(2);
+
+	multicore_lockout_start_blocking();		// Halt Core1
 
 	flash_range_erase( FLASH_CONFIG_OFFSET, FLASH_SECTOR_SIZE );
 	flash_range_program( FLASH_CONFIG_OFFSET, configuration, FLASH_PAGE_SIZE );
 	
+	multicore_lockout_end_blocking();		// Weiter Core1
+
 	set_sys_clock_khz(300000, true);
-	sleep_ms(10);
+	sleep_ms(2);
 }
 
 void ReadConfig()
@@ -101,19 +106,19 @@ void ReadConfig()
 	set_sys_clock_khz(125000, true);
 	sleep_ms(2);
 
-	memcpy( configuration, pConfigXIP, 32 );
+	memcpy( configuration, flash_target_contents, 32 );
 
 	if(0 != strcmp((const char*)configuration, "THEPICOSID"))
 	{
 		// Default Variablen
 		printf("Keine Konfiguration gefunden!\n");
 		strcpy((char*)configuration, "THEPICOSID");
-		configuration[16] = 0x03;
+		configuration[CONFIG_01] = 0x03;	// Default Config_1
 		WriteConfig();
 	}
 	
 
-	uint8_t value = configuration[16];
+	uint8_t value = configuration[CONFIG_01];
 	if(value & 0x01)
 		sid.SetSidType(MOS_8580);
 	else	
@@ -243,7 +248,7 @@ void CheckConfig(uint8_t address, uint8_t value)
 						break;
 					case 0x01:	// Configuration lesen
 
-						configuration[16] = value;
+						configuration[CONFIG_01] = value;	// Config_1
 						config_is_new = true;
 
 						if(value & 0x01)
@@ -297,9 +302,11 @@ void WriteSidReg()
 
 void Core1Entry() 
 {
+	multicore_lockout_victim_init(); 	// wird benötigt um den core1 anhalten zu können von Core 0
+
 	InitPWMAudio(AUDIO_PIN);
 
-    while (1)
+	while (1)
 	{
 	}
 }
@@ -321,7 +328,6 @@ int main()
 	// Pico LED
 	gpio_init(PICO_LED_PIN);
 	gpio_set_dir(PICO_LED_PIN, true);
-	gpio_put(PICO_LED_PIN, true);
 
 	// ADC
 	gpio_init(ADC_2KHz_PIN);
@@ -336,6 +342,8 @@ int main()
 	// Init SID
 	// memory for the sid io
 
+	ReadConfig();
+
 	sid_io = (uint8_t*)memalign(32,32);
 	
 	// UART Start Message PicoSID
@@ -345,9 +353,6 @@ int main()
 	GetVersionNumber(&v_major, &v_minor, &v_patch);
 
 	printf("Firmware Version: %d.%d.%d\n", v_major, v_minor, v_patch);
-	
-	// Read configuration
-	ReadConfig();
 
 	// PIO Program initialize
 	pio = pio0;
@@ -385,29 +390,19 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	sid.SetSidType(MOS_8580);
-	sid.EnableFilter(true);
-	sid.EnableExtFilter(false);
-	sid.EnableDigiBoost8580(true);
-
 	for(int i=0; i<32; i++)
 	{
 		sid.WriteReg(i, 0);
 		sid_io[i] = 0;
 	}
 
-
 	// Output Coniguration to Serial
 	ConfigOutput();
 
+	gpio_put(PICO_LED_PIN, true);
+
     while (1)
     {
-		if(config_is_new)
-		{
-			config_is_new = false;
-			WriteConfig();
-		}
-
 		// ADC
 		sleep_us(1);
 
@@ -425,6 +420,12 @@ int main()
 		if(adc1_compare_state && !adc1_compare_state_old)
 			sid_io[26] = (counter + ADC_OFFSET) & 0xff;
 		adc1_compare_state_old = adc1_compare_state;
+
+		if(config_is_new)
+		{
+			config_is_new = false;
+			WriteConfig();
+		}
     }
 }
 
@@ -505,7 +506,7 @@ void DmaReadInit(PIO pio, uint sm, uint8_t* base_address)
                           false);        // start later
 
     // Write channel: copy address from RX fifo to the read channel's READ_ADDR_TRIGGER
-    uint write_channel = 1;
+    uint write_channel =1;
     dma_channel_claim(write_channel);
     dma_channel_config write_config = dma_channel_get_default_config(write_channel);
     channel_config_set_read_increment(&write_config, false);
