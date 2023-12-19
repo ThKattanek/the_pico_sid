@@ -31,13 +31,17 @@ public:
 	void SetSidType(sid_type type);
 	void EnableFilter(bool enable);
 	void EnableExtFilter(bool enable);
+	void EnableDigiBoost8580(bool enable);
 
     void Clock(cycle_count delta_t);
 	void Reset();
     void WriteReg(uint8_t write_address, uint8_t bus_value);
 	uint8_t ReadReg(uint8_t address);
+    void Input(int sample);
     int AudioOut();
 	int AudioOut(int bits);
+
+	void SetExtIn();
 
     SID_VOICE voice[3];
     SID_FILTER filter;
@@ -50,7 +54,12 @@ public:
 
 	sid_type sid_model;
 	bool	filter_enable;
-	bool	extfilter_enable;
+    bool	extfilter_enable;
+
+	int		digi_boost_enable;			// 0=off 1=on (for 8580)
+	int		digi_level[2][2];
+
+    int     ext_in;
 };
 
 inline int PICO_SID::AudioOut()
@@ -79,6 +88,11 @@ inline int PICO_SID::AudioOut(int bits)
     	return -half;
   
   	return sample;
+}
+
+inline void PICO_SID::SetExtIn()
+{
+	Input(digi_level[sid_model][digi_boost_enable]);
 }
 
 inline void PICO_SID::Clock(cycle_count delta_t)
@@ -138,7 +152,7 @@ inline void PICO_SID::Clock(cycle_count delta_t)
     }
 
     // Clock filter.
-    filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output(), 0);
+    filter.Clock(delta_t, voice[0].Output(), voice[1].Output(), voice[2].Output(), ext_in);
 
     // Clock external filter.
     extfilter.Clock(delta_t, filter.Output());

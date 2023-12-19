@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     bufferSize = SOUND_BUFFER_SIZE * 2;
 
-    cycle_excact_sid = true;
+    cycle_excact_sid = false;
 
     this->setWindowTitle("ThePicoSID Desktop Simulation");
 
@@ -112,6 +112,14 @@ MainWindow::MainWindow(QWidget *parent)
         m_audioOutput->setVolume(1);
     }
 
+    ui->CycleExcact->setChecked(cycle_excact_sid);
+    ui->Filter->setChecked(sid.filter_enable);
+    ui->ExtFilter->setChecked(sid.extfilter_enable);
+    if(sid.sid_model == MOS_6581)
+        ui->mos6581->setChecked(true);
+    else
+        ui->mos8580->setChecked(true);
+
     ui->fw_version->setText("Firmware Version: " + QString::number(VERSION_MAJOR) + "." + QString::number(VERSION_MINOR) + "." + QString::number(VERSION_PATCH));
 }
 
@@ -143,20 +151,30 @@ void MainWindow::OnFillAudioData(char *data, qint64 len)
     {
         if(!cycle_excact_sid)
         {
-             /*
-            for(int i=0; i<6; i++)
+            if(!sid.extfilter_enable)
             {
-                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-                sid.Clock(4);
+                for(int i=0; i<6; i++)
+                {
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    sid.Clock(4);
+                }
             }
-            */
-             for(int i=0; i<24; i++)
-                 if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
-             sid.Clock(24);
-
+            else
+            {
+                for(int i=0; i<4; i++)
+                {
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    if(sid_dump->CycleTickPlay()) sid.WriteReg(sid_dump->RegOut, sid_dump->RegWertOut);
+                    sid.Clock(6);
+                }
+            }
         }
         else
         {
@@ -229,5 +247,30 @@ void MainWindow::on_mos6581_clicked()
 void MainWindow::on_mos8580_clicked()
 {
     sid.SetSidType(MOS_8580);
+}
+
+
+void MainWindow::on_Filter_toggled(bool checked)
+{
+    sid.EnableFilter(checked);
+}
+
+
+void MainWindow::on_ExtFilter_toggled(bool checked)
+{
+    sid.EnableExtFilter(checked);
+}
+
+
+
+void MainWindow::on_digiboost_level_valueChanged(int value)
+{
+    sid.Input(value);
+}
+
+
+void MainWindow::on_DigiBoost_toggled(bool checked)
+{
+    sid.EnableDigiBoost8580(checked);
 }
 

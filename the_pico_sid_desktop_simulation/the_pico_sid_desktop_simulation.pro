@@ -35,7 +35,8 @@ SOURCES += \
     ../firmware/sid_wave.cpp \
     ../firmware/sid_envelope.cpp \
     ../firmware/sid_dac.cpp \
-    ../firmware/sid_filter.cpp
+    ../firmware/sid_filter.cpp \
+    ../firmware/sid_extfilter.cpp
 
 HEADERS += \
     ../firmware/pico_sid.h \
@@ -45,6 +46,7 @@ HEADERS += \
     ../firmware/sid_envelope.h \
     ../firmware/sid_dac.h \
     ../firmware/sid_filter.h \
+    ../firmware/sid_extfilter.h \
     ../firmware/version.h
 
 FORMS += \

@@ -13,6 +13,7 @@
 
 #include <cstdio>
 #include <malloc.h>
+#include <cstring>
 #include <pico/stdio.h>
 #include <pico/stdlib.h>
 #include <hardware/vreg.h>
@@ -21,6 +22,7 @@
 #include <hardware/dma.h>
 #include <hardware/pwm.h>
 #include <hardware/adc.h>
+#include <hardware/flash.h>
 
 #include "write_sid_reg.pio.h"
 #include "read_sid_reg.pio.h"
@@ -61,6 +63,13 @@ PICO_SID sid;
 
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
+uint8_t configuration[32];
+volatile bool config_is_new = false;
+
+#define FLASH_CONFIG_OFFSET (256 * 1024)
+const uint8_t *flash_target_contents = (const uint8_t *)( XIP_BASE + FLASH_CONFIG_OFFSET );
+
+#define CONFIG_01 11
 
 void C64Reset(uint gpio, uint32_t events) 
 {
@@ -69,12 +78,211 @@ void C64Reset(uint gpio, uint32_t events)
 		// C64 Reset
 		// Normalerweise erst wenn RESET 10 Zyklen auf Lo war
         sid.Reset();
-		printf("Reset.");
     }
 	else if (events & GPIO_IRQ_EDGE_RISE) 
 	{
 		// C64 Reset Ende
     }
+}
+
+void WriteConfig()
+{
+	set_sys_clock_khz(125000, true);
+	sleep_ms(2);
+
+	multicore_lockout_start_blocking();		// Halt Core1
+
+	flash_range_erase( FLASH_CONFIG_OFFSET, FLASH_SECTOR_SIZE );
+	flash_range_program( FLASH_CONFIG_OFFSET, configuration, FLASH_PAGE_SIZE );
+	
+	multicore_lockout_end_blocking();		// Weiter Core1
+
+	set_sys_clock_khz(300000, true);
+	sleep_ms(2);
+}
+
+void ReadConfig()
+{
+	set_sys_clock_khz(125000, true);
+	sleep_ms(2);
+
+	memcpy( configuration, flash_target_contents, 32 );
+
+	if(0 != strcmp((const char*)configuration, "THEPICOSID"))
+	{
+		// Default Variablen
+		printf("Keine Konfiguration gefunden!\n");
+		strcpy((char*)configuration, "THEPICOSID");
+		configuration[CONFIG_01] = 0x03;	// Default Config_1
+		WriteConfig();
+	}
+	
+
+	uint8_t value = configuration[CONFIG_01];
+	if(value & 0x01)
+		sid.SetSidType(MOS_8580);
+	else	
+		sid.SetSidType(MOS_6581);
+	sid.EnableFilter(value & 0x02);
+	sid.EnableExtFilter(value & 0x04);
+	sid.EnableDigiBoost8580(value & 0x08);
+	
+	set_sys_clock_khz(300000, true);
+	sleep_ms(2);
+}
+
+void ConfigOutput()
+{
+	// Output Coniguration to Serial
+	printf("\n-Configuration-\n");
+	if(sid.sid_model == MOS_6581)
+		printf("SID Model is: MOS-6581\n");
+	else
+		printf("SID Model is: MOS-8580\n");
+	
+	printf("Filter is: ");
+	if(sid.filter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+
+	printf("ExtFilter is: ");
+	if(sid.extfilter_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+
+	printf("Digiboost 8580 is: ");
+	if(sid.digi_boost_enable)
+		printf("on\n");
+	else
+		printf("off\n");
+}
+
+void CheckConfig(uint8_t address, uint8_t value)
+{
+	static bool is_ready = false;
+	static bool is_command = false;
+	static uint8_t last_command = 0x88;
+	static char incomming_str[11] = {0,0,0,0,0,0,0,0,0,0,0};
+
+	uint8_t val = 0;
+
+	switch(address)
+	{
+		case 0x1d:
+			if(!is_ready)
+			{
+			for(int i=0; i<9; i++)
+				incomming_str[i] = incomming_str[i+1];
+			incomming_str[9] = value;
+				if(strcmp(incomming_str, "THEPICOSID") == 0)
+					is_ready = true;
+			}
+			else 
+			{
+				if(!is_command)	
+				{
+					// check of command
+					switch (value)
+					{
+					case 0x00:	// ThePicoSidCheck
+						last_command = value;
+						is_command = true;
+						break;
+					
+					case 0x01:	// Config01_Write
+						last_command = value;
+						is_command = true;
+						break;
+
+					case 0x02: 	// Config01_Read
+						if(sid.sid_model == MOS_8580)
+							val |= 0x01;
+						if(sid.filter_enable)
+							val |= 0x02;
+						if(sid.extfilter_enable)
+							val |= 0x04;
+						if(sid.digi_boost_enable)
+							val |= 0x08;
+						sid_io[0x1d] = val;
+						break;
+
+					case 0x03: // LED On
+						gpio_put(PICO_LED_PIN, true);
+						is_ready = false;
+						break;
+
+					case 0x04: // LED Off
+						gpio_put(PICO_LED_PIN, false);
+						is_ready = false;
+						break;
+
+					case 0xfd:
+						sid_io[0x1d] = VERSION_MAJOR;
+						is_ready = false;
+						break;
+
+					case 0xfe:
+						sid_io[0x1d] = VERSION_MINOR;
+						is_ready = false;
+						break;
+
+					case 0xff:
+						sid_io[0x1d] = VERSION_PATCH;
+						is_ready = false;
+						break;
+
+					default:
+						is_ready = false;
+						break;
+					}
+				}
+				else
+				{
+					// execude command with value
+					switch (last_command)
+					{
+					case 0x00:	// XOR von Value zurückgeben
+						sid_io[0x1d] = value ^ 0x88;
+						break;
+					case 0x01:	// Configuration lesen
+
+						configuration[CONFIG_01] = value;	// Config_1
+						config_is_new = true;
+
+						if(value & 0x01)
+							sid.SetSidType(MOS_8580);
+						else	
+						sid.SetSidType(MOS_6581);
+						sid.EnableFilter(value & 0x02);
+						sid.EnableExtFilter(value & 0x04);
+						sid.EnableDigiBoost8580(value & 0x08);
+
+						ConfigOutput();
+
+						break;
+					}
+						is_command = false;
+						is_ready = false;
+				}
+			}
+		break;
+
+		case 0x1e:
+			if(is_ready)
+			{
+				is_ready = false;
+			}
+		break;
+		
+		case 0x1f:
+			if(is_ready)
+			{
+				is_ready = false;
+			}
+		break;
+	}
 }
 
 void WriteSidReg()
@@ -84,15 +292,21 @@ void WriteSidReg()
 		pio0_hw->irq = 1;
 
 		uint16_t incomming = pio->rxf[sm0];
-		sid.WriteReg(incomming >> 2, (incomming >> 7) & 0xff);
+		uint8_t sid_reg = (incomming >> 2) & 0x1f;
+		uint8_t sid_value = (incomming >> 7) & 0xff;
+
+		sid.WriteReg(sid_reg, sid_value);
+		CheckConfig(sid_reg, sid_value);
 	}
 }
 
 void Core1Entry() 
 {
+	multicore_lockout_victim_init(); 	// wird benötigt um den core1 anhalten zu können von Core 0
+
 	InitPWMAudio(AUDIO_PIN);
 
-    while (1)
+	while (1)
 	{
 	}
 }
@@ -114,7 +328,6 @@ int main()
 	// Pico LED
 	gpio_init(PICO_LED_PIN);
 	gpio_set_dir(PICO_LED_PIN, true);
-	gpio_put(PICO_LED_PIN, true);
 
 	// ADC
 	gpio_init(ADC_2KHz_PIN);
@@ -127,7 +340,7 @@ int main()
 	gpio_set_dir(ADC1_COMPARE_PIN, false);	// Input
 
 	// Init SID
-	// memory for the sid io
+	// memory for the sid i
 
 	sid_io = (uint8_t*)memalign(32,32);
 	
@@ -138,7 +351,7 @@ int main()
 	GetVersionNumber(&v_major, &v_minor, &v_patch);
 
 	printf("Firmware Version: %d.%d.%d\n", v_major, v_minor, v_patch);
-	
+
 	// PIO Program initialize
 	pio = pio0;
 
@@ -175,34 +388,19 @@ int main()
 	volatile bool	adc1_compare_state;
 	volatile bool	adc1_compare_state_old;
 
-	sid.SetSidType(MOS_6581);
-	sid.EnableFilter(true);
-	sid.EnableExtFilter(true);
-
 	for(int i=0; i<32; i++)
 	{
 		sid.WriteReg(i, 0);
 		sid_io[i] = 0;
 	}
 
-	// Output Coniguration to Serial
-	printf("\n-Configuration-\n");
-	if(sid.sid_model == MOS_6581)
-		printf("SID Model is: MOS-6581\n");
-	else
-		printf("SID Model is: MOS-8580\n");
-	
-	printf("Filter is: ");
-	if(sid.filter_enable)
-		printf("on\n");
-	else
-		printf("off\n");
+	// ReadConfig
+	ReadConfig();
 
-	printf("ExtFilter is: ");
-	if(sid.extfilter_enable)
-		printf("on\n");
-	else
-		printf("off\n");
+	// Output Coniguration to Serial
+	ConfigOutput();
+
+	gpio_put(PICO_LED_PIN, true);
 
     while (1)
     {
@@ -223,6 +421,12 @@ int main()
 		if(adc1_compare_state && !adc1_compare_state_old)
 			sid_io[26] = (counter + ADC_OFFSET) & 0xff;
 		adc1_compare_state_old = adc1_compare_state;
+
+		if(config_is_new)
+		{
+			config_is_new = false;
+			WriteConfig();
+		}
     }
 }
 
@@ -303,7 +507,7 @@ void DmaReadInit(PIO pio, uint sm, uint8_t* base_address)
                           false);        // start later
 
     // Write channel: copy address from RX fifo to the read channel's READ_ADDR_TRIGGER
-    uint write_channel = 1;
+    uint write_channel =1;
     dma_channel_claim(write_channel);
     dma_channel_config write_config = dma_channel_get_default_config(write_channel);
     channel_config_set_read_increment(&write_config, false);
