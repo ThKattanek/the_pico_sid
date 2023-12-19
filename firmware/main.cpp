@@ -434,6 +434,15 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
+		for(int i=0; i<4; i++) 	// 300MHz // with extfilter enabled
+		{
+			sid.Clock(6);			
+
+			sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
+			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
+		}
+
+	/*
 	if(sid.extfilter_enable)
 	{
 		for(int i=0; i<4; i++) 	// 300MHz // with extfilter enabled
@@ -452,6 +461,7 @@ void pwm_irq_handle()
 			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
 		}
 	}
+	*/
 	
 	uint16_t out = sid.AudioOut(11) + 1024;
 
