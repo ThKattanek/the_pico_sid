@@ -340,9 +340,7 @@ int main()
 	gpio_set_dir(ADC1_COMPARE_PIN, false);	// Input
 
 	// Init SID
-	// memory for the sid io
-
-	ReadConfig();
+	// memory for the sid i
 
 	sid_io = (uint8_t*)memalign(32,32);
 	
@@ -395,6 +393,9 @@ int main()
 		sid.WriteReg(i, 0);
 		sid_io[i] = 0;
 	}
+
+	// ReadConfig
+	ReadConfig();
 
 	// Output Coniguration to Serial
 	ConfigOutput();
