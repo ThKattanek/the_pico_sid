@@ -1,5 +1,5 @@
 # ThePicoSID
-This is a MOS-6581 / MOS-8580 replacement on the base from reSID on the raspberry pi picp or rp2040.
+This is a MOS-6581 / MOS-8580 replacement on the base from reSID on the raspberry pi pico or rp2040.
 The first pcb prototype, for stable testings.
 
 
