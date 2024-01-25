@@ -46,7 +46,7 @@
 
 #define PICO_LED_PIN 25
 
-#define ADC_OFFSET -5
+#define ADC_OFFSET -9	// OLD -5
 
 volatile bool reset_state = true;
 
