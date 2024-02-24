@@ -1,0 +1,106 @@
+
+(rules PCB the_pico_sid
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 11351)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.8)
+      (against_preferred_direction_trace_costs 3.8)
+    )
+    (layer_rule In1.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.5)
+    )
+    (layer_rule In2.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 3.0)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.8)
+      (against_preferred_direction_trace_costs 2.3)
+    )
+  )
+  (rule
+    (width 100.0)
+    (clearance 100.2)
+    (clearance 50.0 (type smd_to_turn_gap))
+    (clearance 100.2 (type smd))
+    (clearance 100.2 (type "kicad_default"))
+    (clearance 100.2 (type kicad))
+  )
+  (padstack "Via[0-3]_350:200_um"
+    (shape
+      (circle F.Cu 350.0 0.0 0.0)
+    )
+    (shape
+      (circle In1.Cu 350.0 0.0 0.0)
+    )
+    (shape
+      (circle In2.Cu 350.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 350.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-3]_350:200_um" "Via[0-3]_350:200_um" default
+  )
+  (via 
+    "Via[0-3]_350:200_um-kicad_default" "Via[0-3]_350:200_um" "kicad_default"
+  )
+  (via_rule
+    default "Via[0-3]_350:200_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-3]_350:200_um-kicad_default"
+  )
+  (class default
+    "9-12V" GND POTX POTY +5V "AUDIO_OUT" "RES_C64" "CLK_C64"
+    "RW_C64" "CS_C64" "A0_C64" "A1_C64" "A2_C64" "A3_C64" "A4_C64" "D0_C64"
+    "D1_C64" "D2_C64" "D3_C64" "D4_C64" "D5_C64" "D6_C64" "D7_C64" "unconnected-(U1-Pad1)"
+    "unconnected-(U1-Pad2)" "unconnected-(U1-Pad3)" "unconnected-(U1-Pad4)" "unconnected-(U1-Pad26)" +3.3V +1V1 "Net-(C11-Pad1)" XIN
+    "Net-(C15-Pad1)" "AUDIO_PWM" "Net-(C17-Pad2)" "Net-(D1-Pad2)" GPIO22 GPIO26 GPIO27 SWCLK
+    SWD "ADC_2KHZ" LED XOUT "Net-(R3-Pad2)" "Net-(R5-Pad2)" "QSPI_SS" "QSPI_SD1"
+    "QSPI_SD2" "QSPI_SD0" "QSPI_SCLK" "QSPI_SD3" "ADC1_COMPARE" "ADC0_COMPARE" D7 D6
+    D5 D4 D3 D2 D1 D0 A4 A3
+    A2 A1 A0 RW CS CLK RES "ADC0_CMP"
+    "ADC1_CMP" "unconnected-(U7-Pad14)" "unconnected-(U7-Pad15)" "unconnected-(U2-Pad47)" "unconnected-(U2-Pad46)" "unconnected-(U2-Pad41)" "unconnected-(U2-Pad36)" "unconnected-(U2-Pad35)"
+    "unconnected-(U2-Pad26)" "unconnected-(U2-Pad3)" "unconnected-(U2-Pad2)"
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 100.0)
+    )
+    (circuit 
+      (use_layer F.Cu In1.Cu In2.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    (clearance_class "kicad_default")
+    (via_rule "kicad_default")
+    (rule
+      (width 100.0)
+    )
+    (circuit 
+      (use_layer F.Cu In1.Cu In2.Cu B.Cu)
+    )
+  )
+)
