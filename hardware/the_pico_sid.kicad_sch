@@ -6,7 +6,7 @@
 	(paper "A3")
 	(title_block
 		(title "ThePicoSID")
-		(date "2024-02-20")
+		(date "2024-03-17")
 		(rev "2.0")
 		(company "Thorsten Kattanek")
 	)
@@ -1304,108 +1304,6 @@
 				)
 			)
 		)
-		(symbol "Connector:TestPoint"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0.762) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "TP"
-				(at 0 6.858 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TestPoint"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "test point"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "test point tp"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Pin* Test*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "TestPoint_0_1"
-				(circle
-					(center 0 3.302)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "TestPoint_1_1"
-				(pin passive line
-					(at 0 0 90)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Connector_Generic:Conn_01x06"
 			(pin_names
 				(offset 1.016) hide)
@@ -1759,164 +1657,6 @@
 				)
 			)
 			(symbol "C_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 2.794)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 2.794)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "Device:C_Polarized"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0.254)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "C"
-				(at 0.635 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "C_Polarized"
-				(at 0.635 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0.9652 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Polarized capacitor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "cap capacitor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "CP_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "C_Polarized_0_1"
-				(rectangle
-					(start -2.286 0.508)
-					(end 2.286 1.016)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.778 2.286) (xy -0.762 2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 2.794) (xy -1.27 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 2.286 -0.508)
-					(end -2.286 -1.016)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-			)
-			(symbol "C_Polarized_1_1"
 				(pin passive line
 					(at 0 3.81 270)
 					(length 2.794)
@@ -3606,9 +3346,6 @@
 			)
 		)
 		(symbol "Regulator_Linear:AMS1117-3.3"
-			(pin_names
-				(offset 0.254)
-			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3779,7 +3516,7 @@
 				)
 			)
 			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/NDS7002A-D.PDF"
-				(at 0 0 0)
+				(at 5.08 -3.81 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -4815,9 +4552,9 @@
 		)
 		(symbol "power:+1V1"
 			(power)
+			(pin_numbers hide)
 			(pin_names
-				(offset 0)
-			)
+				(offset 0) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -4915,8 +4652,8 @@
 			(symbol "+1V1_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
-					(name "+1V1"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4935,9 +4672,9 @@
 		)
 		(symbol "power:+3.3V"
 			(power)
+			(pin_numbers hide)
 			(pin_names
-				(offset 0)
-			)
+				(offset 0) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -5035,8 +4772,8 @@
 			(symbol "+3.3V_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
-					(name "+3.3V"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5055,9 +4792,9 @@
 		)
 		(symbol "power:+5V"
 			(power)
+			(pin_numbers hide)
 			(pin_names
-				(offset 0)
-			)
+				(offset 0) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -5155,8 +4892,8 @@
 			(symbol "+5V_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
-					(name "+5V"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5175,9 +4912,9 @@
 		)
 		(symbol "power:GND"
 			(power)
+			(pin_numbers hide)
 			(pin_names
-				(offset 0)
-			)
+				(offset 0) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -5251,8 +4988,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 270)
-					(length 0) hide
-					(name "GND"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5289,6 +5026,12 @@
 		(uuid "05586538-b209-4a49-8e49-9b9320f7bc61")
 	)
 	(junction
+		(at 172.72 36.83)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0a8d1d67-7097-4e58-b196-ddba944fa54b")
+	)
+	(junction
 		(at 97.79 180.34)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5319,7 +5062,13 @@
 		(uuid "40c69bdd-ceff-4949-b705-1cb9ed36cb67")
 	)
 	(junction
-		(at 67.31 116.84)
+		(at 33.02 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4ac15e4c-4a5b-4b84-8e1a-406ff70b9f6e")
+	)
+	(junction
+		(at 68.58 135.89)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4efca74b-bb5a-46d1-970f-d198eab21ff4")
@@ -5399,10 +5148,6 @@
 		(uuid "3bb2fefe-cd27-4cb3-ae20-5e66cb93a594")
 	)
 	(no_connect
-		(at 203.2 46.99)
-		(uuid "400c5917-a6e4-4549-b97d-27b74e5cbb1e")
-	)
-	(no_connect
 		(at 60.96 36.83)
 		(uuid "49e7694b-7aef-4a50-aac2-93f1dc564b02")
 	)
@@ -5416,11 +5161,11 @@
 	)
 	(no_connect
 		(at 152.4 46.99)
-		(uuid "5e509ded-93aa-4908-9a6f-eedf6bd66a37")
+		(uuid "60308cce-ea63-4e3f-8eed-144590006ded")
 	)
 	(no_connect
-		(at 203.2 49.53)
-		(uuid "654f1195-2e7a-4ecf-9082-138692ed5192")
+		(at 203.2 115.57)
+		(uuid "6129b609-133e-4fcf-ae33-59d2f10bdbd2")
 	)
 	(no_connect
 		(at 35.56 36.83)
@@ -5438,6 +5183,10 @@
 		(at 203.2 105.41)
 		(uuid "b734abbb-4884-4563-b3c3-b9c13a42bfb7")
 	)
+	(no_connect
+		(at 203.2 118.11)
+		(uuid "ddb8b831-819a-41fe-ac23-a01c56c2c7e3")
+	)
 	(wire
 		(pts
 			(xy 354.33 78.74) (xy 354.33 80.01)
@@ -5450,7 +5199,7 @@
 	)
 	(polyline
 		(pts
-			(xy 321.31 142.24) (xy 321.31 100.33)
+			(xy 325.12 153.67) (xy 325.12 100.33)
 		)
 		(stroke
 			(width 0)
@@ -5570,7 +5319,7 @@
 	)
 	(polyline
 		(pts
-			(xy 276.86 142.24) (xy 321.31 142.24)
+			(xy 276.86 153.67) (xy 325.12 153.67)
 		)
 		(stroke
 			(width 0)
@@ -5640,7 +5389,7 @@
 	)
 	(polyline
 		(pts
-			(xy 276.86 100.33) (xy 321.31 100.33)
+			(xy 276.86 100.33) (xy 325.12 100.33)
 		)
 		(stroke
 			(width 0)
@@ -5680,7 +5429,7 @@
 	)
 	(wire
 		(pts
-			(xy 31.75 128.27) (xy 31.75 130.81)
+			(xy 33.02 147.32) (xy 33.02 149.86)
 		)
 		(stroke
 			(width 0)
@@ -5700,6 +5449,16 @@
 	)
 	(wire
 		(pts
+			(xy 172.72 36.83) (xy 172.72 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a79e479-295f-4d23-be72-e605b58a9cf7")
+	)
+	(wire
+		(pts
 			(xy 35.56 273.05) (xy 36.83 273.05)
 		)
 		(stroke
@@ -5707,16 +5466,6 @@
 			(type default)
 		)
 		(uuid "1b55d736-f0e9-4831-a730-bf90901821b3")
-	)
-	(wire
-		(pts
-			(xy 234.95 256.54) (xy 234.95 260.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1b79fb74-72eb-4ed0-9135-cd410ae1ee75")
 	)
 	(wire
 		(pts
@@ -5767,6 +5516,16 @@
 			(type default)
 		)
 		(uuid "1f0bea2c-80d6-41e5-bdca-a8225b1bc4a4")
+	)
+	(wire
+		(pts
+			(xy 234.95 256.54) (xy 234.95 260.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1f8061c9-573c-476a-9805-3015eafc244f")
 	)
 	(wire
 		(pts
@@ -5890,7 +5649,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 119.38) (xy 43.18 130.81)
+			(xy 44.45 138.43) (xy 44.45 149.86)
 		)
 		(stroke
 			(width 0)
@@ -5988,6 +5747,16 @@
 		)
 		(uuid "30035a29-b641-4a3b-8d74-073b5b07da7f")
 	)
+	(wire
+		(pts
+			(xy 33.02 124.46) (xy 33.02 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "314fa92b-5d97-4eab-8c14-8636f2e001d0")
+	)
 	(polyline
 		(pts
 			(xy 233.68 168.91) (xy 233.68 204.47)
@@ -6050,7 +5819,7 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 113.03) (xy 67.31 116.84)
+			(xy 68.58 133.35) (xy 68.58 135.89)
 		)
 		(stroke
 			(width 0)
@@ -6077,6 +5846,26 @@
 			(type default)
 		)
 		(uuid "39bc2e69-c9be-45ef-89fd-94821335013c")
+	)
+	(polyline
+		(pts
+			(xy 95.25 114.3) (xy 95.25 163.83)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+		)
+		(uuid "3c468be2-e9e6-4f1c-bff0-0b71f7eda54f")
+	)
+	(wire
+		(pts
+			(xy 175.26 36.83) (xy 175.26 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c68218c-206d-4c1d-8d9a-689db272b9d8")
 	)
 	(wire
 		(pts
@@ -6120,7 +5909,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 119.38) (xy 43.18 119.38)
+			(xy 45.72 138.43) (xy 44.45 138.43)
 		)
 		(stroke
 			(width 0)
@@ -6230,16 +6019,6 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 34.29) (xy 175.26 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "55697815-174e-4759-9fb4-181f23d17f9a")
-	)
-	(wire
-		(pts
 			(xy 97.79 179.07) (xy 97.79 180.34)
 		)
 		(stroke
@@ -6310,6 +6089,16 @@
 	)
 	(wire
 		(pts
+			(xy 172.72 36.83) (xy 175.26 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58b2c6b9-a127-4452-bb10-3e5c452f537a")
+	)
+	(wire
+		(pts
 			(xy 115.57 242.57) (xy 116.84 242.57)
 		)
 		(stroke
@@ -6317,6 +6106,16 @@
 			(type default)
 		)
 		(uuid "58d6534b-6ff5-400f-8004-6227b77498df")
+	)
+	(wire
+		(pts
+			(xy 203.2 102.87) (xy 208.28 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59a7cf41-a0b8-4439-920a-adad7ddc2c27")
 	)
 	(wire
 		(pts
@@ -6387,6 +6186,16 @@
 			(type default)
 		)
 		(uuid "5f2b89ee-691e-4f61-b3c9-ebbe75178a37")
+	)
+	(wire
+		(pts
+			(xy 203.2 46.99) (xy 208.28 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "62f18ade-ae1d-4567-b3c6-da96eb75386a")
 	)
 	(wire
 		(pts
@@ -6640,7 +6449,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 124.46) (xy 69.85 124.46)
+			(xy 66.04 143.51) (xy 71.12 143.51)
 		)
 		(stroke
 			(width 0)
@@ -6808,6 +6617,16 @@
 		)
 		(uuid "8aa78924-785c-4133-98f7-2848603727a9")
 	)
+	(polyline
+		(pts
+			(xy 95.25 163.83) (xy 21.59 163.83)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+		)
+		(uuid "8aae17f7-3559-48b2-a716-c657448ce4fa")
+	)
 	(wire
 		(pts
 			(xy 29.21 59.69) (xy 35.56 59.69)
@@ -6817,16 +6636,6 @@
 			(type default)
 		)
 		(uuid "8ba39a82-f2c4-443d-b2e6-dd2c08fb36a7")
-	)
-	(wire
-		(pts
-			(xy 203.2 118.11) (xy 208.28 118.11)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8efb26b3-7335-4600-b4d7-c9d57701637d")
 	)
 	(wire
 		(pts
@@ -6860,7 +6669,7 @@
 	)
 	(polyline
 		(pts
-			(xy 276.86 100.33) (xy 276.86 142.24)
+			(xy 276.86 100.33) (xy 276.86 153.67)
 		)
 		(stroke
 			(width 0)
@@ -6890,7 +6699,7 @@
 	)
 	(wire
 		(pts
-			(xy 172.72 34.29) (xy 172.72 39.37)
+			(xy 172.72 34.29) (xy 172.72 36.83)
 		)
 		(stroke
 			(width 0)
@@ -6990,7 +6799,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 119.38) (xy 69.85 119.38)
+			(xy 66.04 138.43) (xy 71.12 138.43)
 		)
 		(stroke
 			(width 0)
@@ -7137,16 +6946,6 @@
 			(type default)
 		)
 		(uuid "a94ed7a1-c8d6-427c-a22f-3dc1c3143b19")
-	)
-	(wire
-		(pts
-			(xy 203.2 115.57) (xy 208.28 115.57)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ad311dfc-ae1a-4fb5-a7ef-83bc1d6fa2e8")
 	)
 	(wire
 		(pts
@@ -7298,6 +7097,16 @@
 		)
 		(uuid "b900a843-074e-4d84-ade2-d24fc0a211c5")
 	)
+	(wire
+		(pts
+			(xy 68.58 124.46) (xy 68.58 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc68094f-e096-4c62-bb1a-a203ebfe200b")
+	)
 	(polyline
 		(pts
 			(xy 327.66 67.31) (xy 327.66 96.52)
@@ -7378,15 +7187,25 @@
 		)
 		(uuid "c39f795f-3c80-470a-8c2f-657450cbb87f")
 	)
+	(polyline
+		(pts
+			(xy 21.59 114.3) (xy 21.59 163.83)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+		)
+		(uuid "c42f195e-9d27-4bfc-bdea-62acbd09ef9c")
+	)
 	(wire
 		(pts
-			(xy 203.2 102.87) (xy 208.28 102.87)
+			(xy 203.2 49.53) (xy 208.28 49.53)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c4479e00-af77-4a07-a67f-2426943d9d48")
+		(uuid "c4f42689-bb00-4eab-a7a6-f189944be939")
 	)
 	(wire
 		(pts
@@ -7450,7 +7269,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 127) (xy 69.85 127)
+			(xy 66.04 146.05) (xy 71.12 146.05)
 		)
 		(stroke
 			(width 0)
@@ -7590,7 +7409,7 @@
 	)
 	(wire
 		(pts
-			(xy 31.75 116.84) (xy 31.75 120.65)
+			(xy 33.02 135.89) (xy 33.02 139.7)
 		)
 		(stroke
 			(width 0)
@@ -7680,7 +7499,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 116.84) (xy 31.75 116.84)
+			(xy 45.72 135.89) (xy 33.02 135.89)
 		)
 		(stroke
 			(width 0)
@@ -7737,6 +7556,16 @@
 			(type default)
 		)
 		(uuid "dc2d93be-6081-4ccd-bb69-566fd66ad579")
+	)
+	(wire
+		(pts
+			(xy 232.41 256.54) (xy 232.41 260.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dc4c7f1d-f33d-4874-b63b-1a916ee105b6")
 	)
 	(polyline
 		(pts
@@ -7807,6 +7636,16 @@
 			(type default)
 		)
 		(uuid "e12f7609-0ec3-451c-9c5c-7c4d092eea81")
+	)
+	(polyline
+		(pts
+			(xy 21.59 114.3) (xy 95.25 114.3)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+		)
+		(uuid "e3038869-dabd-4b14-a105-26bbf753604c")
 	)
 	(wire
 		(pts
@@ -7990,7 +7829,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 129.54) (xy 69.85 129.54)
+			(xy 66.04 148.59) (xy 71.12 148.59)
 		)
 		(stroke
 			(width 0)
@@ -8000,7 +7839,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 121.92) (xy 69.85 121.92)
+			(xy 66.04 140.97) (xy 71.12 140.97)
 		)
 		(stroke
 			(width 0)
@@ -8030,7 +7869,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 116.84) (xy 67.31 116.84)
+			(xy 66.04 135.89) (xy 68.58 135.89)
 		)
 		(stroke
 			(width 0)
@@ -8050,17 +7889,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.41 256.54) (xy 232.41 260.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f3783896-3c6b-417a-979d-b194afb8e239")
-	)
-	(wire
-		(pts
-			(xy 67.31 116.84) (xy 69.85 116.84)
+			(xy 68.58 135.89) (xy 71.12 135.89)
 		)
 		(stroke
 			(width 0)
@@ -8170,7 +7999,7 @@
 		)
 		(uuid "2d8b8d8e-95a2-4e00-b6f0-4681a0e2a5df")
 	)
-	(text "(22p)"
+	(text "(10p)"
 		(exclude_from_sim no)
 		(at 289.56 134.62 0)
 		(effects
@@ -8205,7 +8034,7 @@
 	)
 	(text "Audio Out"
 		(exclude_from_sim no)
-		(at 22.86 171.45 0)
+		(at 22.86 171.958 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8214,7 +8043,7 @@
 		)
 		(uuid "4cace512-0cbd-483a-be5d-d8f2b81b8fa5")
 	)
-	(text "(22p)"
+	(text "(10p)"
 		(exclude_from_sim no)
 		(at 312.42 134.62 0)
 		(effects
@@ -8247,6 +8076,36 @@
 		)
 		(uuid "5584a45f-dae3-40c7-9943-8d4a83ad7c34")
 	)
+	(text "Flashspeicher"
+		(exclude_from_sim no)
+		(at 29.21 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5bbabdb1-20be-42a2-a5b7-22d7fb62483d")
+	)
+	(text "R3 -> Kann auch kleiner sein, muss man evtl.\nausprobieren. Bedrahteter lief mit ... Ohm\n"
+		(exclude_from_sim no)
+		(at 300.99 150.876 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5bd6fbc2-3de5-44a7-bb6b-2a1a31be2417")
+	)
+	(text "R2 -> Manche Flash's benötigen beim Start einen High Pegel an ~{CS}\nFür den W25Q16JVS wäre er eigtl. nicht nötig."
+		(exclude_from_sim no)
+		(at 58.674 160.528 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "744c9320-d039-4399-a8b5-4cb9542738ad")
+	)
 	(text "Pegelwandlung"
 		(exclude_from_sim no)
 		(at 74.93 213.36 0)
@@ -8269,16 +8128,16 @@
 		)
 		(uuid "7ceda11e-4b78-4cfc-ab35-01d3dfa35831")
 	)
-	(text "3 Zusäzliche Pad um USB und USB BOOT nachzurüsten\nsiehe pico docu / hw design with rp2040"
+	(text "C14+C15 für Breadboard 10p verwenden. Mit \n22p oder 27p schwang der Quarz nicht an."
 		(exclude_from_sim no)
-		(at 300.99 250.19 0)
+		(at 278.13 145.034 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify left)
 		)
-		(uuid "8093f361-787f-4cff-9cc0-a8d4dba6e234")
+		(uuid "b3ac741d-ffad-44a8-b0df-d6c8cf035ef5")
 	)
 	(text "Ungenutzte GPIO's nach aussen führen"
 		(exclude_from_sim no)
@@ -8293,7 +8152,7 @@
 	)
 	(text "ADC"
 		(exclude_from_sim no)
-		(at 130.81 171.45 0)
+		(at 130.81 171.958 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8581,9 +8440,41 @@
 			)
 		)
 	)
+	(global_label "GPIO22"
+		(shape input)
+		(at 208.28 102.87 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0e2f21af-1744-4f8f-9f58-d057a4c08ca8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 218.1595 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
+			(at 208.28 105.0608 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "QSPI_SS"
 		(shape input)
-		(at 69.85 116.84 0)
+		(at 71.12 135.89 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8593,7 +8484,7 @@
 		)
 		(uuid "0effce4f-dfcb-4f30-8c79-9cfb003ce432")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 116.84 0)
+			(at 71.12 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8602,7 +8493,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 80.0645 116.7606 0)
+			(at 81.3345 135.8106 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8732,6 +8623,38 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GPIO00"
+		(shape input)
+		(at 208.28 46.99 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1879d1c4-7b01-44e7-bf58-4262ba4a1ca0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 218.1595 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
+			(at 208.28 49.1808 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 				(hide yes)
 			)
 		)
@@ -8986,7 +8909,7 @@
 	)
 	(global_label "QSPI_SCLK"
 		(shape input)
-		(at 69.85 119.38 0)
+		(at 71.12 138.43 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8996,7 +8919,7 @@
 		)
 		(uuid "2a369ea5-463d-4501-ab63-7280dbd802b4")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 119.38 0)
+			(at 71.12 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9005,7 +8928,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 82.4231 119.3006 0)
+			(at 83.6931 138.3506 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9079,7 +9002,7 @@
 	)
 	(global_label "QSPI_SD3"
 		(shape input)
-		(at 69.85 129.54 0)
+		(at 71.12 148.59 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -9089,7 +9012,7 @@
 		)
 		(uuid "2df67cc9-7ed6-4b90-848e-644a35f9a813")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 129.54 0)
+			(at 71.12 148.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9098,7 +9021,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 81.3345 129.4606 0)
+			(at 82.6045 148.5106 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9203,7 +9126,7 @@
 	)
 	(global_label "QSPI_SD2"
 		(shape input)
-		(at 69.85 127 0)
+		(at 71.12 146.05 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -9213,7 +9136,7 @@
 		)
 		(uuid "37c448cd-5322-4e97-8a61-7cbd7a9f2592")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 127 0)
+			(at 71.12 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9222,7 +9145,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 81.3345 126.9206 0)
+			(at 82.6045 145.9706 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9513,7 +9436,7 @@
 	)
 	(global_label "QSPI_SD0"
 		(shape input)
-		(at 69.85 121.92 0)
+		(at 71.12 140.97 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -9523,7 +9446,7 @@
 		)
 		(uuid "482cef01-6cf5-458d-ac5d-e83a70c92fdd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 121.92 0)
+			(at 71.12 140.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9532,7 +9455,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 81.3345 121.8406 0)
+			(at 82.6045 140.8906 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9728,37 +9651,6 @@
 			)
 		)
 	)
-	(global_label "GPIO26"
-		(shape input)
-		(at 208.28 115.57 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "560bebb8-a7ef-407c-997d-c6d2f174baa9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 208.28 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 217.5874 115.4906 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "A0"
 		(shape input)
 		(at 208.28 62.23 0)
@@ -9781,6 +9673,38 @@
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
 			(at 212.9912 62.1506 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GPIO01"
+		(shape input)
+		(at 208.28 49.53 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5ff7c376-9a14-4676-92d0-396392386d0e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 218.1595 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
+			(at 208.28 51.7208 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10007,9 +9931,9 @@
 			)
 		)
 	)
-	(global_label "GPIO26"
+	(global_label "GPIO00"
 		(shape input)
-		(at 234.95 260.35 270)
+		(at 232.41 260.35 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10019,16 +9943,17 @@
 		)
 		(uuid "67df51e2-d25f-460e-8ee8-e74a0960bdd9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 234.95 260.35 0)
+			(at 232.41 270.2295 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 				(hide yes)
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 235.0294 269.6574 90)
+			(at 234.6008 260.35 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10193,37 +10118,6 @@
 			)
 		)
 	)
-	(global_label "GPIO27"
-		(shape input)
-		(at 208.28 118.11 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "75bab26c-6815-408c-bb70-796e8c562b2b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 208.28 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 217.5874 118.0306 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "D5"
 		(shape input)
 		(at 166.37 246.38 180)
@@ -10277,37 +10171,6 @@
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
 			(at 76.8593 49.4506 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "GPIO22"
-		(shape input)
-		(at 208.28 102.87 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "7c435529-f01b-4e0c-8953-29352f260db6")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 208.28 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 217.5874 102.7906 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10432,37 +10295,6 @@
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
 			(at 26.1921 262.8106 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "GPIO27"
-		(shape input)
-		(at 237.49 260.35 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "8ad1cc37-4f23-4118-b93e-c7d364c140b3")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 237.49 260.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 237.5694 269.6574 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10720,6 +10552,38 @@
 			)
 		)
 	)
+	(global_label "GPIO01"
+		(shape input)
+		(at 234.95 260.35 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "98ce6248-a4da-43dc-b9b2-5a92bed47d56")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 234.95 270.2295 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
+			(at 237.1408 260.35 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "AUDIO_PWM"
 		(shape input)
 		(at 208.28 120.65 0)
@@ -10908,7 +10772,7 @@
 	)
 	(global_label "QSPI_SD1"
 		(shape input)
-		(at 69.85 124.46 0)
+		(at 71.12 143.51 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10918,7 +10782,7 @@
 		)
 		(uuid "a816fbea-ec59-45dc-8b64-7e4c0ad3b9c5")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 124.46 0)
+			(at 71.12 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10927,7 +10791,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 81.3345 124.3806 0)
+			(at 82.6045 143.4306 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11962,7 +11826,7 @@
 	)
 	(global_label "GPIO22"
 		(shape input)
-		(at 232.41 260.35 270)
+		(at 237.49 260.35 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -11972,7 +11836,7 @@
 		)
 		(uuid "fcaddebc-d982-43dd-adbe-67f23662bf68")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 232.41 260.35 0)
+			(at 237.49 260.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11981,7 +11845,7 @@
 			)
 		)
 		(property "Referenzen zwischen Schaltplänen" "${INTERSHEET_REFS}"
-			(at 232.4894 269.6574 90)
+			(at 237.5694 269.6574 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12035,7 +11899,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 237.49 251.46 0)
 			(effects
 				(font
@@ -12115,7 +11979,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor"
 			(at 41.91 87.63 0)
 			(effects
 				(font
@@ -12149,7 +12013,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0ab03540-b7de-4b1c-b89c-7d8dbefa8697")
-		(property "Reference" "#PWR051"
+		(property "Reference" "#PWR053"
 			(at 76.2 236.22 0)
 			(effects
 				(font
@@ -12185,7 +12049,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 76.2 232.41 0)
 			(effects
 				(font
@@ -12200,7 +12064,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR051")
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -12216,7 +12080,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0e74a4a1-1c8c-4d0e-9b2d-44170aaf9c1e")
-		(property "Reference" "#PWR059"
+		(property "Reference" "#PWR032"
 			(at 140.97 123.19 0)
 			(effects
 				(font
@@ -12251,7 +12115,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 147.32 123.19 0)
 			(effects
 				(font
@@ -12266,75 +12130,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR059")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Polarized")
-		(at 45.72 186.69 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0f6c87f9-a900-43a9-a50e-f4c32507822b")
-		(property "Reference" "C17"
-			(at 44.831 179.07 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1u"
-			(at 44.831 181.61 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
-			(at 49.53 185.7248 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 45.72 186.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 45.72 186.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "71e5d5a2-0278-4908-aa14-61614e9031e3")
-		)
-		(pin "2"
-			(uuid "64799cf7-4f8f-4fa1-b8b6-c3875c50c4fb")
-		)
-		(instances
-			(project "the_pico_sid"
-				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "C17")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -12385,7 +12181,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 76.2 247.65 0)
 			(effects
 				(font
@@ -12446,6 +12242,139 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3.3V")
+		(at 33.02 124.46 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1136da32-c834-4f2a-ae1a-659262bcc371")
+		(property "Reference" "#PWR027"
+			(at 33.02 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 33.02 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 33.02 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 33.02 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8a6291fc-fc28-4be9-a412-911d0f6c08c6")
+		)
+		(instances
+			(project "the_pico_sid"
+				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
+					(reference "#PWR027")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 45.72 186.69 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1169456c-3d7a-4024-8f1c-84ea5ee89831")
+		(property "Reference" "C17"
+			(at 45.72 179.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1u"
+			(at 45.72 181.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 49.53 185.7248 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 45.72 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 45.72 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dc779bfb-73cf-4afb-add2-74245633fff4")
+		)
+		(pin "2"
+			(uuid "4a1ae1ff-21d8-4eac-abd6-b04358d86f90")
+		)
+		(instances
+			(project "the_pico_sid"
+				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
+					(reference "C17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Amplifier_Operational:LM324")
 		(at 156.21 190.5 0)
 		(unit 2)
@@ -12488,7 +12417,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
 			(at 156.21 190.5 0)
 			(effects
 				(font
@@ -12549,71 +12478,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+1V1")
-		(at 175.26 34.29 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "14ab5814-101a-4b6e-a440-ae4cb2c87cc2")
-		(property "Reference" "#PWR062"
-			(at 175.26 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+1V1"
-			(at 178.562 30.988 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 175.26 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 175.26 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 175.26 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "659832c5-5716-43b9-8df5-930264c7ba28")
-		)
-		(instances
-			(project "the_pico_sid"
-				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR062")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 340.36 88.9 0)
 		(unit 1)
@@ -12657,7 +12521,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 340.36 88.9 0)
 			(effects
 				(font
@@ -12721,7 +12585,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 44.45 262.89 0)
 			(effects
 				(font
@@ -12825,7 +12689,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 318.77 45.72 0)
 			(effects
 				(font
@@ -12856,7 +12720,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1a95c152-ac54-4d56-848e-ff41356926d8")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR046"
 			(at 207.01 198.12 0)
 			(effects
 				(font
@@ -12892,7 +12756,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
 			(at 210.82 198.12 0)
 			(effects
 				(font
@@ -12907,7 +12771,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR044")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -12957,7 +12821,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 110.49 180.34 0)
 			(effects
 				(font
@@ -13024,7 +12888,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 44.45 252.73 0)
 			(effects
 				(font
@@ -13093,7 +12957,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1c6f6b9b-bab3-45d7-b184-ba7b80ee92c7")
-		(property "Reference" "#PWR063"
+		(property "Reference" "#PWR03"
 			(at 187.96 38.1 0)
 			(effects
 				(font
@@ -13128,7 +12992,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 187.96 34.29 0)
 			(effects
 				(font
@@ -13143,7 +13007,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR063")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -13159,7 +13023,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1cc9811a-3ee3-4f2c-8f78-2be37957068a")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR044"
 			(at 156.21 198.12 0)
 			(effects
 				(font
@@ -13195,7 +13059,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
 			(at 160.02 198.12 0)
 			(effects
 				(font
@@ -13210,7 +13074,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR042")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -13260,7 +13124,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
 			(at 240.03 227.33 0)
 			(effects
 				(font
@@ -13365,7 +13229,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
 			(at 336.55 114.3 0)
 			(effects
 				(font
@@ -13396,7 +13260,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "205ea527-fe8b-4c6a-9942-1b85fa181319")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR012"
 			(at 293.37 62.23 0)
 			(effects
 				(font
@@ -13431,7 +13295,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 293.37 55.88 0)
 			(effects
 				(font
@@ -13446,7 +13310,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR013")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -13498,7 +13362,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 354.33 83.82 0)
 			(effects
 				(font
@@ -13532,7 +13396,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "24c7c412-04cb-4da0-95c0-0a990c66eee1")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR042"
 			(at 123.19 180.34 0)
 			(effects
 				(font
@@ -13568,7 +13432,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 116.84 180.34 0)
 			(effects
 				(font
@@ -13583,7 +13447,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR040")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -13599,7 +13463,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "25fe0c2c-f914-419a-97b4-13848761e4ab")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR038"
 			(at 309.88 140.97 0)
 			(effects
 				(font
@@ -13634,7 +13498,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 309.88 134.62 0)
 			(effects
 				(font
@@ -13649,7 +13513,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR037")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -13700,7 +13564,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 148.59 247.65 0)
 			(effects
 				(font
@@ -13770,7 +13634,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "282ae14c-bea3-46dc-9bdd-c310cae2fa1d")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR051"
 			(at 255.27 227.33 0)
 			(effects
 				(font
@@ -13806,7 +13670,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 248.92 227.33 0)
 			(effects
 				(font
@@ -13821,7 +13685,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR049")
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -13871,7 +13735,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 306.07 45.72 0)
 			(effects
 				(font
@@ -13935,7 +13799,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 107.95 262.89 0)
 			(effects
 				(font
@@ -14041,7 +13905,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 318.77 50.8 0)
 			(effects
 				(font
@@ -14109,7 +13973,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 280.67 45.72 0)
 			(effects
 				(font
@@ -14125,6 +13989,71 @@
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
 					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 68.58 124.46 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3ce4cc2f-8c3e-482f-8ab4-ca77da2de5e8")
+		(property "Reference" "#PWR028"
+			(at 68.58 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 68.58 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 68.58 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 68.58 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2676f562-e245-4669-97b2-e53529cbe620")
+		)
+		(instances
+			(project "the_pico_sid"
+				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -14173,7 +14102,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 44.45 232.41 0)
 			(effects
 				(font
@@ -14281,7 +14210,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "0.115A Id, 60V Vds, N-Channel MOSFET, SOT-23"
 			(at 200.66 179.07 0)
 			(effects
 				(font
@@ -14352,7 +14281,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 331.47 45.72 0)
 			(effects
 				(font
@@ -14417,7 +14346,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 293.37 45.72 0)
 			(effects
 				(font
@@ -14482,7 +14411,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 175.26 224.79 0)
 			(effects
 				(font
@@ -14551,7 +14480,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 290.83 88.9 0)
 			(effects
 				(font
@@ -14618,7 +14547,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 306.07 50.8 0)
 			(effects
 				(font
@@ -14686,7 +14615,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 298.45 118.11 0)
 			(effects
 				(font
@@ -14717,7 +14646,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4f984b25-87b3-4178-8d73-f5efffb2cb2b")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR022"
 			(at 64.77 87.63 0)
 			(effects
 				(font
@@ -14753,7 +14682,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 58.42 87.63 0)
 			(effects
 				(font
@@ -14768,7 +14697,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR018")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -14820,7 +14749,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 280.67 50.8 0)
 			(effects
 				(font
@@ -14854,7 +14783,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "51725767-2131-489e-89be-16d2d35b2a05")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR014"
 			(at 318.77 62.23 0)
 			(effects
 				(font
@@ -14889,7 +14818,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 318.77 55.88 0)
 			(effects
 				(font
@@ -14904,7 +14833,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR015")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -14920,7 +14849,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5186ff00-24e3-4053-8fd7-9a8c9fdcf683")
-		(property "Reference" "U4"
+		(property "Reference" "U3"
 			(at 349.25 106.68 0)
 			(effects
 				(font
@@ -14954,7 +14883,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223"
 			(at 349.25 114.3 0)
 			(effects
 				(font
@@ -14975,7 +14904,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "U4")
+					(reference "U3")
 					(unit 1)
 				)
 			)
@@ -15024,7 +14953,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 44.45 242.57 0)
 			(effects
 				(font
@@ -15086,7 +15015,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 31.75 130.81 0)
+		(at 33.02 149.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15094,8 +15023,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "565113fd-eb56-4000-b50c-742c82284251")
-		(property "Reference" "#PWR027"
-			(at 31.75 137.16 0)
+		(property "Reference" "#PWR034"
+			(at 33.02 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15104,7 +15033,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 31.75 135.89 0)
+			(at 33.02 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15112,7 +15041,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 31.75 130.81 0)
+			(at 33.02 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15121,7 +15050,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 31.75 130.81 0)
+			(at 33.02 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15129,8 +15058,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 31.75 130.81 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 33.02 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15144,7 +15073,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR027")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -15193,7 +15122,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 44.45 222.25 0)
 			(effects
 				(font
@@ -15262,7 +15191,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5b03de6a-f68d-4d73-a978-3777bbbf8fb1")
-		(property "Reference" "R4"
+		(property "Reference" "R5"
 			(at 156.21 195.58 90)
 			(effects
 				(font
@@ -15296,7 +15225,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor"
 			(at 154.94 198.12 0)
 			(effects
 				(font
@@ -15314,7 +15243,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "R4")
+					(reference "R5")
 					(unit 1)
 				)
 			)
@@ -15330,7 +15259,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5db63b49-42b4-43cf-b90d-eecd94975e2d")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR033"
 			(at 349.25 132.08 0)
 			(effects
 				(font
@@ -15365,7 +15294,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 349.25 125.73 0)
 			(effects
 				(font
@@ -15380,7 +15309,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR032")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -15395,7 +15324,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6562ac88-41b7-4930-9e2c-5fb00d98a604")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR011"
 			(at 280.67 62.23 0)
 			(effects
 				(font
@@ -15430,7 +15359,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 280.67 55.88 0)
 			(effects
 				(font
@@ -15445,7 +15374,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR012")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -15460,7 +15389,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "68ae3ac2-9387-4b22-84f4-bd5b1f212a63")
-		(property "Reference" "#PWR054"
+		(property "Reference" "#PWR056"
 			(at 132.08 233.68 0)
 			(effects
 				(font
@@ -15496,7 +15425,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 138.43 233.68 0)
 			(effects
 				(font
@@ -15511,7 +15440,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR054")
+					(reference "#PWR056")
 					(unit 1)
 				)
 			)
@@ -15526,7 +15455,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6c97d0fb-83db-478f-972c-7c98b020a81a")
-		(property "Reference" "#PWR057"
+		(property "Reference" "#PWR060"
 			(at 242.57 276.86 0)
 			(effects
 				(font
@@ -15561,7 +15490,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 242.57 270.51 0)
 			(effects
 				(font
@@ -15576,7 +15505,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR057")
+					(reference "#PWR060")
 					(unit 1)
 				)
 			)
@@ -15626,7 +15555,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
 			(at 60.96 189.23 0)
 			(effects
 				(font
@@ -15729,7 +15658,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 107.95 242.57 0)
 			(effects
 				(font
@@ -15799,7 +15728,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7188b8f7-2a66-4930-b89b-67271f7a0c15")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR057"
 			(at 76.2 267.97 0)
 			(effects
 				(font
@@ -15834,7 +15763,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 76.2 261.62 0)
 			(effects
 				(font
@@ -15849,7 +15778,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR055")
+					(reference "#PWR057")
 					(unit 1)
 				)
 			)
@@ -15899,7 +15828,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 344.17 45.72 0)
 			(effects
 				(font
@@ -15965,7 +15894,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 308.61 88.9 0)
 			(effects
 				(font
@@ -15995,7 +15924,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "75ed2f46-185f-4d98-bc6e-9d733503b2c6")
-		(property "Reference" "#PWR050"
+		(property "Reference" "#PWR052"
 			(at 224.79 229.87 0)
 			(effects
 				(font
@@ -16031,7 +15960,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 231.14 229.87 0)
 			(effects
 				(font
@@ -16046,7 +15975,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR050")
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -16061,7 +15990,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "78f4fc57-21ba-432f-b71e-507befe53fad")
-		(property "Reference" "#PWR053"
+		(property "Reference" "#PWR055"
 			(at 59.69 233.68 0)
 			(effects
 				(font
@@ -16097,7 +16026,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 66.04 233.68 0)
 			(effects
 				(font
@@ -16112,7 +16041,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR053")
+					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -16128,7 +16057,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "79fae765-2b3c-4ce9-a418-67088d374e6e")
-		(property "Reference" "R2"
+		(property "Reference" "R3"
 			(at 312.42 118.1099 0)
 			(effects
 				(font
@@ -16164,7 +16093,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor"
 			(at 309.88 119.38 0)
 			(effects
 				(font
@@ -16182,7 +16111,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "R2")
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -16197,7 +16126,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7acfeb77-1de8-4421-abc2-135b7274449f")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR021"
 			(at 354.33 82.55 0)
 			(effects
 				(font
@@ -16232,7 +16161,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+1V1\""
 			(at 354.33 78.74 0)
 			(effects
 				(font
@@ -16247,7 +16176,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR022")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -16263,7 +16192,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7f04bbe1-b617-4f31-865b-43e82f45f809")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR040"
 			(at 147.32 166.37 0)
 			(effects
 				(font
@@ -16299,7 +16228,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 147.32 172.72 0)
 			(effects
 				(font
@@ -16314,7 +16243,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR038")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
@@ -16329,7 +16258,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "81649c43-29bd-46d8-b79a-e420ca2ce355")
-		(property "Reference" "R6"
+		(property "Reference" "R7"
 			(at 207.01 195.58 90)
 			(effects
 				(font
@@ -16363,7 +16292,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor"
 			(at 205.74 198.12 0)
 			(effects
 				(font
@@ -16381,7 +16310,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "R6")
+					(reference "R7")
 					(unit 1)
 				)
 			)
@@ -16431,7 +16360,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 354.33 88.9 0)
 			(effects
 				(font
@@ -16495,7 +16424,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 107.95 222.25 0)
 			(effects
 				(font
@@ -16565,7 +16494,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8211bd2f-0b30-49d5-89bf-ac960abc6fa5")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR017"
 			(at 33.02 73.66 0)
 			(effects
 				(font
@@ -16600,7 +16529,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 33.02 67.31 0)
 			(effects
 				(font
@@ -16615,7 +16544,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR011")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -16664,7 +16593,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 44.45 273.05 0)
 			(effects
 				(font
@@ -16770,7 +16699,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
 			(at 66.04 39.37 0)
 			(effects
 				(font
@@ -16800,7 +16729,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8f635830-c076-4859-8b75-6f7277421c92")
-		(property "Reference" "R3"
+		(property "Reference" "R4"
 			(at 142.24 195.58 90)
 			(effects
 				(font
@@ -16834,7 +16763,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor"
 			(at 142.24 198.12 0)
 			(effects
 				(font
@@ -16852,7 +16781,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "R3")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -16904,7 +16833,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 340.36 83.82 0)
 			(effects
 				(font
@@ -16937,7 +16866,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "929267a3-ab43-4955-8500-76873e7dcaa9")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR045"
 			(at 179.07 198.12 0)
 			(effects
 				(font
@@ -16973,7 +16902,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 185.42 198.12 0)
 			(effects
 				(font
@@ -16988,7 +16917,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR043")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -17003,7 +16932,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9608d2a4-99a4-420e-a515-cc0e3cb14145")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR043"
 			(at 128.27 198.12 0)
 			(effects
 				(font
@@ -17039,7 +16968,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 134.62 198.12 0)
 			(effects
 				(font
@@ -17054,7 +16983,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR041")
+					(reference "#PWR043")
 					(unit 1)
 				)
 			)
@@ -17069,7 +16998,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "98165d77-2d72-4a02-a37e-b33e7e4bbd14")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR019"
 			(at 308.61 82.55 0)
 			(effects
 				(font
@@ -17104,7 +17033,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 308.61 78.74 0)
 			(effects
 				(font
@@ -17119,7 +17048,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR020")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -17135,7 +17064,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9e1cedef-54d7-4b20-a1f5-824ef8cef955")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR058"
 			(at 148.59 267.97 0)
 			(effects
 				(font
@@ -17170,7 +17099,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 148.59 261.62 0)
 			(effects
 				(font
@@ -17185,7 +17114,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR056")
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
@@ -17237,7 +17166,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 290.83 83.82 0)
 			(effects
 				(font
@@ -17270,7 +17199,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a0929834-6eea-40eb-a636-b1822ba7817e")
-		(property "Reference" "C13"
+		(property "Reference" "C12"
 			(at 364.49 119.38 0)
 			(effects
 				(font
@@ -17306,7 +17235,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 360.68 119.38 0)
 			(effects
 				(font
@@ -17324,7 +17253,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "C13")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -17340,7 +17269,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a1cb9bd9-add7-4e19-8dfa-d0ea6d9f13d0")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR049"
 			(at 162.56 224.79 0)
 			(effects
 				(font
@@ -17376,7 +17305,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 168.91 224.79 0)
 			(effects
 				(font
@@ -17391,7 +17320,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR047")
+					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -17407,7 +17336,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a33879a1-1acb-4121-b289-27cf5688fd58")
-		(property "Reference" "#PWR060"
+		(property "Reference" "#PWR039"
 			(at 177.8 142.24 0)
 			(effects
 				(font
@@ -17442,7 +17371,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 177.8 135.89 0)
 			(effects
 				(font
@@ -17457,7 +17386,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR060")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -17465,7 +17394,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 43.18 130.81 0)
+		(at 44.45 149.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17473,8 +17402,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a5c88fb8-2f9a-436d-9c34-8d91bebda62a")
-		(property "Reference" "#PWR028"
-			(at 43.18 137.16 0)
+		(property "Reference" "#PWR035"
+			(at 44.45 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17483,7 +17412,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 43.18 135.89 0)
+			(at 44.45 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17491,7 +17420,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 43.18 130.81 0)
+			(at 44.45 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17500,7 +17429,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 130.81 0)
+			(at 44.45 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17508,8 +17437,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 43.18 130.81 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 44.45 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17523,7 +17452,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR028")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -17531,7 +17460,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 31.75 124.46 0)
+		(at 33.02 143.51 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17539,8 +17468,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a6efa22f-97aa-4243-8341-e24f10c45f14")
-		(property "Reference" "C11"
-			(at 35.56 123.1899 0)
+		(property "Reference" "C13"
+			(at 36.83 142.2399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17549,7 +17478,7 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 35.56 125.7299 0)
+			(at 36.83 144.7799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17558,7 +17487,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 32.7152 128.27 0)
+			(at 33.9852 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17567,7 +17496,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 31.75 124.46 0)
+			(at 33.02 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17575,8 +17504,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 31.75 124.46 0)
+		(property "Description" "Unpolarized capacitor"
+			(at 33.02 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17593,7 +17522,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "C11")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -17645,7 +17574,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 293.37 50.8 0)
 			(effects
 				(font
@@ -17712,7 +17641,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 107.95 232.41 0)
 			(effects
 				(font
@@ -17774,7 +17703,7 @@
 	)
 	(symbol
 		(lib_id "ic_tk:W25Q16JVUXIQ")
-		(at 54.61 123.19 0)
+		(at 55.88 142.24 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17782,8 +17711,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a8c0f2e1-51e3-4281-8b7e-b031f4aa690a")
-		(property "Reference" "U3"
-			(at 54.61 109.22 0)
+		(property "Reference" "U4"
+			(at 55.88 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17791,7 +17720,7 @@
 			)
 		)
 		(property "Value" "W25Q16JVS"
-			(at 54.61 111.76 0)
+			(at 55.88 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17799,7 +17728,7 @@
 			)
 		)
 		(property "Footprint" "Package_SO:SO-8_5.3x6.2mm_P1.27mm"
-			(at 49.53 114.3 0)
+			(at 50.8 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17808,7 +17737,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 114.3 0)
+			(at 50.8 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17817,7 +17746,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 54.61 123.19 0)
+			(at 55.88 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17852,7 +17781,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "U3")
+					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -17867,7 +17796,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a905e6cd-4e12-406f-ad78-4430fad77548")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR020"
 			(at 340.36 82.55 0)
 			(effects
 				(font
@@ -17902,7 +17831,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+1V1\""
 			(at 340.36 78.74 0)
 			(effects
 				(font
@@ -17917,7 +17846,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR021")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -17932,7 +17861,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ad91dc51-7f80-4079-a2fb-60a61575f066")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR050"
 			(at 224.79 224.79 0)
 			(effects
 				(font
@@ -17968,7 +17897,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 231.14 224.79 0)
 			(effects
 				(font
@@ -17983,7 +17912,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR048")
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -17998,7 +17927,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b0d82d5b-c44c-4d48-8669-80e379aca1fe")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR018"
 			(at 290.83 82.55 0)
 			(effects
 				(font
@@ -18033,7 +17962,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+1V1\""
 			(at 290.83 78.74 0)
 			(effects
 				(font
@@ -18048,7 +17977,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR019")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -18098,7 +18027,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Light emitting diode"
 			(at 52.07 87.63 0)
 			(effects
 				(font
@@ -18165,7 +18094,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 107.95 273.05 0)
 			(effects
 				(font
@@ -18235,7 +18164,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b6290b44-0ec4-4306-8a9c-e64f6a8e0789")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR037"
 			(at 287.02 140.97 0)
 			(effects
 				(font
@@ -18270,7 +18199,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 287.02 134.62 0)
 			(effects
 				(font
@@ -18285,7 +18214,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR036")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -18335,7 +18264,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 71.12 233.68 0)
 			(effects
 				(font
@@ -18403,7 +18332,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Hex Buffer"
 			(at 107.95 252.73 0)
 			(effects
 				(font
@@ -18472,7 +18401,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c3218261-783b-43b7-8931-b5e51e0a35e3")
-		(property "Reference" "C12"
+		(property "Reference" "C11"
 			(at 330.2 119.38 0)
 			(effects
 				(font
@@ -18508,7 +18437,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 337.82 119.38 0)
 			(effects
 				(font
@@ -18526,7 +18455,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "C12")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -18541,7 +18470,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c339dda8-004b-4c29-b5ab-577b17fcd28d")
-		(property "Reference" "R5"
+		(property "Reference" "R6"
 			(at 193.04 195.58 90)
 			(effects
 				(font
@@ -18575,7 +18504,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor"
 			(at 193.04 198.12 0)
 			(effects
 				(font
@@ -18593,7 +18522,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "R5")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -18645,7 +18574,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 309.88 129.54 0)
 			(effects
 				(font
@@ -18715,7 +18644,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
 			(at 100.33 189.23 0)
 			(effects
 				(font
@@ -18818,7 +18747,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Four pin crystal, GND on pins 2 and 4"
 			(at 298.45 124.46 0)
 			(effects
 				(font
@@ -18858,7 +18787,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9b28270-65cb-4e2f-a128-59fd6e3dbcb2")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR016"
 			(at 344.17 62.23 0)
 			(effects
 				(font
@@ -18893,7 +18822,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 344.17 55.88 0)
 			(effects
 				(font
@@ -18908,7 +18837,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR017")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -18924,7 +18853,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ca3b8801-0f80-46e1-b4cc-3efb6a3ed1df")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR013"
 			(at 306.07 62.23 0)
 			(effects
 				(font
@@ -18959,7 +18888,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 306.07 55.88 0)
 			(effects
 				(font
@@ -18974,7 +18903,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR014")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -18989,7 +18918,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cb93d38e-1bcd-4840-8168-9cebe2f32fb0")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR036"
 			(at 298.45 137.16 0)
 			(effects
 				(font
@@ -19024,7 +18953,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 298.45 130.81 0)
 			(effects
 				(font
@@ -19039,7 +18968,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR035")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -19091,7 +19020,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Octal BUS Transceivers, 3-State outputs"
 			(at 181.61 246.38 0)
 			(effects
 				(font
@@ -19179,7 +19108,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cfea8c6a-6259-415a-9ad6-651a3c044d11")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR048"
 			(at 181.61 227.33 0)
 			(effects
 				(font
@@ -19215,7 +19144,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 181.61 223.52 0)
 			(effects
 				(font
@@ -19230,7 +19159,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR046")
+					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -19246,7 +19175,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d0fddb84-36d4-4772-a8ee-e78b1bc9b81d")
-		(property "Reference" "#PWR052"
+		(property "Reference" "#PWR054"
 			(at 148.59 236.22 0)
 			(effects
 				(font
@@ -19282,7 +19211,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 148.59 232.41 0)
 			(effects
 				(font
@@ -19297,7 +19226,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR052")
+					(reference "#PWR054")
 					(unit 1)
 				)
 			)
@@ -19346,7 +19275,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
 			(at 207.01 190.5 0)
 			(effects
 				(font
@@ -19651,7 +19580,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "db1eb508-31fb-4dd0-8d6a-b955ee573c8e")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR047"
 			(at 97.79 205.74 0)
 			(effects
 				(font
@@ -19687,7 +19616,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 97.79 199.39 0)
 			(effects
 				(font
@@ -19702,74 +19631,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR045")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 67.31 113.03 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dcabffed-ea54-40b1-97af-ea653625c295")
-		(property "Reference" "TP1"
-			(at 69.85 108.4579 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "QSPI_SS"
-			(at 69.85 110.9979 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.5x1.5mm"
-			(at 72.39 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 72.39 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 67.31 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a834b617-6ee9-4340-9f13-ad28c6376f7b")
-		)
-		(instances
-			(project "the_pico_sid"
-				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "TP1")
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -19922,6 +19784,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 68.58 129.54 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e0e79754-ed69-4c01-bc8a-1acb8a5c7ebb")
+		(property "Reference" "R2"
+			(at 71.12 128.2699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 71.12 130.8099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 66.802 129.54 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 68.58 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 68.58 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bbbca6d5-242b-4331-a75e-2460d8674555")
+		)
+		(pin "2"
+			(uuid "ebfb8321-a1e8-43de-8744-c8eda30f4e61")
+		)
+		(instances
+			(project "the_pico_sid"
+				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
+					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Transistor_FET:2N7002")
 		(at 149.86 179.07 180)
 		(unit 1)
@@ -19969,7 +19901,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "0.115A Id, 60V Vds, N-Channel MOSFET, SOT-23"
 			(at 149.86 179.07 0)
 			(effects
 				(font
@@ -20005,7 +19937,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e4c468f0-0474-427c-aabc-918b8987bf3a")
-		(property "Reference" "#PWR058"
+		(property "Reference" "#PWR059"
 			(at 181.61 275.59 0)
 			(effects
 				(font
@@ -20040,7 +19972,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 181.61 269.24 0)
 			(effects
 				(font
@@ -20055,7 +19987,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR058")
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -20070,7 +20002,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e8f608c2-4849-4b09-a856-7be19f08cea5")
-		(property "Reference" "#PWR061"
+		(property "Reference" "#PWR01"
 			(at 172.72 38.1 0)
 			(effects
 				(font
@@ -20105,7 +20037,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+1V1\""
 			(at 172.72 34.29 0)
 			(effects
 				(font
@@ -20120,7 +20052,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR061")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -20170,7 +20102,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
 			(at 361.95 114.3 0)
 			(effects
 				(font
@@ -20235,7 +20167,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 143.51 233.68 0)
 			(effects
 				(font
@@ -20305,7 +20237,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 287.02 129.54 0)
 			(effects
 				(font
@@ -20375,7 +20307,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 308.61 83.82 0)
 			(effects
 				(font
@@ -20445,7 +20377,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 344.17 50.8 0)
 			(effects
 				(font
@@ -20479,7 +20411,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f92c463d-639a-4d29-ac46-722d21c795ce")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR041"
 			(at 198.12 166.37 0)
 			(effects
 				(font
@@ -20515,7 +20447,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 198.12 172.72 0)
 			(effects
 				(font
@@ -20530,7 +20462,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR039")
+					(reference "#PWR041")
 					(unit 1)
 				)
 			)
@@ -20582,7 +20514,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 331.47 50.8 0)
 			(effects
 				(font
@@ -20616,7 +20548,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fd4bbdc3-57c3-491e-b405-ab98f8c311b7")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR015"
 			(at 331.47 62.23 0)
 			(effects
 				(font
@@ -20651,7 +20583,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 331.47 55.88 0)
 			(effects
 				(font
@@ -20666,7 +20598,7 @@
 		(instances
 			(project "the_pico_sid"
 				(path "/e83f656b-f117-4f01-bb9c-f173bd96adee"
-					(reference "#PWR016")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
