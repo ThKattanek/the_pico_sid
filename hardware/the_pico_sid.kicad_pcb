@@ -1931,10 +1931,7 @@
 				)
 			)
 		)
-		(property ki_fp_filters "Crystal*")
 		(path "/c7db9ccc-0f17-4f61-857b-ddc724984cd4")
-		(sheetname "Root")
-		(sheetfile "the_pico_sid.kicad_sch")
 		(attr smd)
 		(fp_line
 			(start 2.7 -0.4)
@@ -2173,7 +2170,7 @@
 			(pintype "passive")
 			(uuid "244f500a-2793-4ebe-84a3-5fd344e82f68")
 		)
-		(model "${KICAD6_3DMODEL_DIR}/Crystal.3dshapes/Crystal_SMD_EuroQuartz_MJ-4Pin_5.0x3.2mm.wrl"
+		(model "${TK_3DMOD}/EURO_QUARZ_5.0x3.2x1.step"
 			(offset
 				(xyz 0 0 0)
 			)
