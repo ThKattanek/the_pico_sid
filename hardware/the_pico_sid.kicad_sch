@@ -5199,7 +5199,7 @@
 	)
 	(polyline
 		(pts
-			(xy 325.12 153.67) (xy 325.12 100.33)
+			(xy 325.12 158.75) (xy 325.12 100.33)
 		)
 		(stroke
 			(width 0)
@@ -5319,7 +5319,7 @@
 	)
 	(polyline
 		(pts
-			(xy 276.86 153.67) (xy 325.12 153.67)
+			(xy 276.86 158.75) (xy 325.12 158.75)
 		)
 		(stroke
 			(width 0)
@@ -6669,7 +6669,7 @@
 	)
 	(polyline
 		(pts
-			(xy 276.86 100.33) (xy 276.86 153.67)
+			(xy 276.86 100.33) (xy 276.86 158.75)
 		)
 		(stroke
 			(width 0)
@@ -8088,7 +8088,7 @@
 	)
 	(text "R3 -> Kann auch kleiner sein, muss man evtl.\nausprobieren. Bedrahteter lief mit ... Ohm\n"
 		(exclude_from_sim no)
-		(at 300.99 150.876 0)
+		(at 300.99 155.956 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8128,9 +8128,9 @@
 		)
 		(uuid "7ceda11e-4b78-4cfc-ab35-01d3dfa35831")
 	)
-	(text "C14+C15 für Breadboard 10p verwenden. Mit \n22p oder 27p schwang der Quarz nicht an."
+	(text "C14+C15 für Breadboard 10p verwenden. Mit \n22p oder 27p schwang der Quarz nicht an.\n\nPlatine -> Quarz mit 18pF = 2x 27pF\nPlatine -> Quarz mit 12pF = 2x 14pF"
 		(exclude_from_sim no)
-		(at 278.13 145.034 0)
+		(at 277.876 147.066 0)
 		(effects
 			(font
 				(size 1.27 1.27)
