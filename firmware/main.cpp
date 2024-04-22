@@ -61,6 +61,8 @@ uint8_t* sid_io;
 
 PICO_SID sid;
 
+#define SYSTEM_CLOCK 292000		// 292000 geht noch
+
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
 uint8_t configuration[32];
@@ -97,7 +99,7 @@ void WriteConfig()
 	
 	multicore_lockout_end_blocking();		// Weiter Core1
 
-	set_sys_clock_khz(300000, true);
+	set_sys_clock_khz(SYSTEM_CLOCK, true);
 	sleep_ms(2);
 }
 
@@ -127,7 +129,7 @@ void ReadConfig()
 	sid.EnableExtFilter(value & 0x04);
 	sid.EnableDigiBoost8580(value & 0x08);
 	
-	set_sys_clock_khz(300000, true);
+	set_sys_clock_khz(SYSTEM_CLOCK, true);
 	sleep_ms(2);
 }
 
@@ -322,7 +324,8 @@ int main()
 {		
 	vreg_set_voltage( VREG_VOLTAGE_1_30 );
 	sleep_ms(100);
-	set_sys_clock_khz(300000, true);
+	set_sys_clock_khz(SYSTEM_CLOCK, true);
+
 	stdio_init_all();	
 
 	// Pico LED
