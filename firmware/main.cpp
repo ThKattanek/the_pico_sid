@@ -61,7 +61,7 @@ uint8_t* sid_io;
 
 PICO_SID sid;
 
-#define SYSTEM_CLOCK 292000		// 292000 geht noch
+#define SYSTEM_CLOCK 280000		// 292000 geht noch
 
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
@@ -322,7 +322,7 @@ void GetVersionNumber(uint8_t *major, uint8_t *minor, uint8_t *patch)
 
 int main() 
 {		
-	vreg_set_voltage( VREG_VOLTAGE_1_30 );
+	vreg_set_voltage( VREG_VOLTAGE_1_30);
 	sleep_ms(100);
 	set_sys_clock_khz(SYSTEM_CLOCK, true);
 
@@ -437,9 +437,9 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-		for(int i=0; i<4; i++) 	// 300MHz // with extfilter enabled
+		for(int i=0; i<3; i++) 	// 300MHz // with extfilter enabled
 		{
-			sid.Clock(6);			
+			sid.Clock(8);			
 
 			sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
 			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
