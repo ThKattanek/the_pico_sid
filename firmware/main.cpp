@@ -49,6 +49,7 @@
 #define ADC_OFFSET -9	// OLD -5
 
 volatile bool reset_state = true;
+volatile bool adc_enable = true;
 
 volatile PIO pio;
 volatile uint sm0;	// write sid
@@ -61,7 +62,7 @@ uint8_t* sid_io;
 
 PICO_SID sid;
 
-#define SYSTEM_CLOCK 280000		// 292000 geht noch
+#define SYSTEM_CLOCK 279000
 
 void InitPWMAudio(uint audio_out_gpio);
 void DmaReadInit(PIO pio, uint sm, uint8_t* base_address);
@@ -407,23 +408,26 @@ int main()
 
     while (1)
     {
-		// ADC
-		sleep_us(1);
+		if(adc_enable)
+		{
+			// ADC
+			sleep_us(1);
 
-		counter++;
-		gpio_put(ADC_2KHz_PIN, counter & 0x100);	// Create 2KHz Signal for the mosfet
+			counter++;
+			gpio_put(ADC_2KHz_PIN, counter & 0x100);	// Create 2KHz Signal for the mosfet
 
-		// AX
-		adc0_compare_state = gpio_get(ADC0_COMPARE_PIN);
-		if(adc0_compare_state && !adc0_compare_state_old)
-			sid_io[25] = (counter + ADC_OFFSET) & 0xff;
-		adc0_compare_state_old = adc0_compare_state;
+			// AX
+			adc0_compare_state = gpio_get(ADC0_COMPARE_PIN);
+			if(adc0_compare_state && !adc0_compare_state_old)
+				sid_io[25] = (counter + ADC_OFFSET) & 0xff;
+			adc0_compare_state_old = adc0_compare_state;
 
-		// AY
-		adc1_compare_state = gpio_get(ADC1_COMPARE_PIN);
-		if(adc1_compare_state && !adc1_compare_state_old)
-			sid_io[26] = (counter + ADC_OFFSET) & 0xff;
-		adc1_compare_state_old = adc1_compare_state;
+			// AY
+			adc1_compare_state = gpio_get(ADC1_COMPARE_PIN);
+			if(adc1_compare_state && !adc1_compare_state_old)
+				sid_io[26] = (counter + ADC_OFFSET) & 0xff;
+			adc1_compare_state_old = adc1_compare_state;
+		}
 
 		if(config_is_new)
 		{
@@ -437,9 +441,9 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-		for(int i=0; i<3; i++) 	// 300MHz // with extfilter enabled
+		for(int i=0; i<4; i++) 	// 279MHz // with extfilter enabled (Wenn es probleme gibt 4 -> 3)
 		{
-			sid.Clock(8);			
+			sid.Clock(6);			// (Wenn es probleme gibt 6 -> 8)
 
 			sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
 			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
@@ -480,8 +484,8 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	//pwm_set_clkdiv_int_frac(slice_num, 2,15);	// PWM Frequency of 41223Hz when Systemclock is 248MHz.
-	pwm_set_clkdiv_int_frac(slice_num, 3, 9);	// PWM Frequency of 41118Hz when Systemclock is 300MHz.
+	//pwm_set_clkdiv_int_frac(slice_num, 3, 5);	// PWM Frequency of 41126Hz when Systemclock is 279MHz.	// PAL
+	pwm_set_clkdiv_int_frac(slice_num, 3, 3);	// PWM Frequency of 42738Hz when Systemclock is 279MHz.	// NTSC
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit
