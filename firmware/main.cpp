@@ -441,10 +441,10 @@ void pwm_irq_handle()
 {
 	pwm_clear_irq(slice_num);
 
-		for(int i=0; i<4; i++) 	// 279MHz // with extfilter enabled (Wenn es probleme gibt 4 -> 3)
+		for(int i=0; i<3; i++) 	// 279MHz // with extfilter enabled
 		{
-			sid.Clock(6);			// (Wenn es probleme gibt 6 -> 8)
-
+			sid.Clock(8);			
+			
 			sid_io[0x1b] = sid.voice[2].wave.ReadOSC();
 			sid_io[0x1c] = sid.voice[2].envelope.ReadEnv();
 		}
@@ -484,8 +484,8 @@ void InitPWMAudio(uint audio_out_gpio)
 	slice_num = pwm_gpio_to_slice_num(audio_out_gpio);
 
 	// Set pwm frequenz
-	//pwm_set_clkdiv_int_frac(slice_num, 3, 5);	// PWM Frequency of 41126Hz when Systemclock is 279MHz.	// PAL
-	pwm_set_clkdiv_int_frac(slice_num, 3, 3);	// PWM Frequency of 42738Hz when Systemclock is 279MHz.	// NTSC
+	pwm_set_clkdiv_int_frac(slice_num, 3, 5);	// PWM Frequency of 41126Hz when Systemclock is 279MHz.	// PAL
+	//pwm_set_clkdiv_int_frac(slice_num, 3, 3);	// PWM Frequency of 42738Hz when Systemclock is 279MHz.	// NTSC
 
 	// Set period of 4 cycles (0 to 3 inclusive)
 	pwm_set_wrap(slice_num, 0x07ff);	// 11Bit
