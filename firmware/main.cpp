@@ -11,6 +11,8 @@
 
 #pragma GCC optimize( "Ofast", "omit-frame-pointer", "modulo-sched", "modulo-sched-allow-regmoves", "gcse-sm", "gcse-las", "inline-small-functions", "delete-null-pointer-checks", "expensive-optimizations" ) 
 
+#define SYSTEM_CLOCK 270000		// ThePicoSid runs withe 300MHz
+
 #include <cstdio>
 #include <malloc.h>
 #include <cstring>
@@ -18,6 +20,7 @@
 #include <pico/stdlib.h>
 #include <hardware/vreg.h>
 #include <pico/multicore.h>
+#include <hardware/clocks.h>
 #include <hardware/pio.h>
 #include <hardware/dma.h>
 #include <hardware/pwm.h>
@@ -97,7 +100,7 @@ void WriteConfig()
 	
 	multicore_lockout_end_blocking();		// Weiter Core1
 
-	set_sys_clock_khz(300000, true);
+	set_sys_clock_khz(SYSTEM_CLOCK, true);
 	sleep_ms(2);
 }
 
@@ -127,7 +130,7 @@ void ReadConfig()
 	sid.EnableExtFilter(value & 0x04);
 	sid.EnableDigiBoost8580(value & 0x08);
 	
-	set_sys_clock_khz(300000, true);
+	set_sys_clock_khz(SYSTEM_CLOCK, true);
 	sleep_ms(2);
 }
 
@@ -322,7 +325,7 @@ int main()
 {		
 	vreg_set_voltage( VREG_VOLTAGE_1_30 );
 	sleep_ms(100);
-	set_sys_clock_khz(300000, true);
+	set_sys_clock_khz(SYSTEM_CLOCK, true);
 	stdio_init_all();	
 
 	// Pico LED
