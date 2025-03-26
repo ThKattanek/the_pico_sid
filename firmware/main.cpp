@@ -11,7 +11,7 @@
 
 #pragma GCC optimize( "Ofast", "omit-frame-pointer", "modulo-sched", "modulo-sched-allow-regmoves", "gcse-sm", "gcse-las", "inline-small-functions", "delete-null-pointer-checks", "expensive-optimizations" ) 
 
-#define SYSTEM_CLOCK 270000		// ThePicoSid runs withe 300MHz
+#define SYSTEM_CLOCK 270000		// ThePicoSid Prototype 2 runs withe 300MHz
 
 #include <cstdio>
 #include <malloc.h>
